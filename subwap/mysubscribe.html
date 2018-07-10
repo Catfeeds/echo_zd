@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>我的订阅</title>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/mysubscribe.css">
+</head>
+<body ng-app="mysubscribe" ng-controller="listCtrl">
+	<ul>
+		<li class="subscribelist" ng-cloak ng-repeat="item in list" data-id="{{item.id}}" ng-click="turnlist(item)">
+			<div class="location clearfloat">
+				<span ng-if="item.area=item.area?item.area:'不限城市'">{{item.area}}</span>
+				<span ng-if="item.street=item.street?item.street:'不限区域'">{{item.street}}</span>
+			</div>
+			<div class="price clearfloat">
+				<span>满足条件的房源共有 <b style="color: rgb(223,82,37)">{{item.num}}</b> 条</span>
+			</div>
+			<ul class="tags clearfloat">
+				<li class="tag color1" ng-if="item.wylx=item.wylx?item.wylx:'不限类型'">{{item.wylx}}</li>
+				<li class="tag color2" ng-if="item.zxzt=item.zxzt?item.zxzt:'不限装修'">{{item.zxzt}}</li>
+				<!-- <li class="tag color3"></li> -->
+			</ul>
+			<img class="detail" src="./img/).png">
+			<img class="canclesubscribe" src="./img/canclesubscribe.png" ng-click="canclesubscribe($event)" data-id="">
+		</li>
+		<div class="nomore">
+			<img class="nomoreimg" src="./img/nomore.png">
+			<div class="nomoretext">暂时还没有数据呦~</div>
+		</div>
+	</ul>
+	<a onclick="addSubscribe()">
+		<div class="add">
+			<div class="addsubscribe">添加订阅</div>
+		</div>
+	</a>
+
+
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/rem.js"></script>
+	<script type="text/javascript" src="js/mysubscribe.js"></script>
+	<script>
+		$(document).ready(function() {
+			$.get('/api/index/getQfUid',function(data) {
+				if(data.status=='error') {
+					alert('请登录后操作');
+					history.back();
+				}
+			});
+		});
+		function addSubscribe() {
+			$.get('/api/plot/checkCanSubscribe',function(data) {
+				
+				if(data.status=='success') {
+					location.href = 'subscribe.html';
+				} else {
+					if(data.msg=='请登录后操作') {
+						alert(data.msg);
+					} else {
+						alert(data.msg);
+						location.href = 'payforsubscribe.html';
+					}
+				}
+			});
+		}
+	</script>
+</body>
+</html>

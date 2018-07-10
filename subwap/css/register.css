@@ -1,0 +1,234 @@
+body{
+	width: 20rem;
+	background-color: #efeff4;
+}
+
+
+.register-head-bg{
+	position: relative;
+	width: 20.0rem;
+	height: 0.533rem;
+	background-color: #efeff4;
+}
+
+.register-textarea{
+	position: relative;
+	width: 20rem;
+	height: 2.64rem;
+	background-color: #fff;
+}
+
+.register-logo{
+	position: absolute;
+	top: 0.8rem;
+	left: 0.88rem;
+	width: 0.96rem;
+	height: 1.067rem;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+color:#c3c3c3;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+color:#c3c3c3;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+color:#c3c3c3;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+color:#c3c3c3;
+}
+
+.register-text{
+	position: absolute;	
+	top: 0.88rem;
+	left: 2.587rem;
+	font-size: 0.8rem;
+	width: 11.0rem;
+	border:none;
+	color: #414141;
+}
+
+.line{
+	position: relative;
+	left: 0.64rem;
+	height: 0.027rem;
+	width: 18.747rem;
+	background-color: #eeeeee;
+}
+
+.register-getmessage{
+	position: absolute;
+	width: 4.8rem;
+	height: 1.76rem;
+	background-color: #00b7ee;
+	border-radius: 0.267rem;
+	color: #fff;
+	text-align: center;
+	line-height: 1.76rem;
+	top: 0.453rem;
+	left: 14.56rem;
+	font-size: 0.8rem;
+	border:none;
+	display: block;
+}
+
+.register-clock{
+	position: absolute;
+	width: 4.8rem;
+	height: 1.76rem;
+	background-color: #c3c3c3;
+	border-radius: 0.267rem;
+	color: #fff;
+	text-align: center;
+	line-height: 1.76rem;
+	top: 0.453rem;
+	left: 14.56rem;
+	font-size: 0.8rem;
+	border:none;
+	display: none;
+}
+
+.regisiter-usertype{
+	position: relative;
+	background-color: #fff;
+}
+
+.regisiter-usertype-container{
+	position: relative;
+	width: 20rem;
+	height: 2.64rem;
+	background-color: #fff;
+}
+
+.regisiter-usertype-text{
+	position: absolute;	
+	top: 0.8rem;
+	left: 1.5rem;
+	font-size: 0.8rem;
+	width: 3.4rem;
+	color: #c3c3c3;
+}
+
+.regisiter-usertype-choose{
+	position: absolute;
+	width: 12.43rem;
+	height: 1.733rem;
+	top: 0.4rem;
+	left: 6.8rem;
+	font-size: 0.693rem;
+	border-style: solid;
+	border-color: #dfdfdf;
+	border-radius: 0.267rem;
+	border-width: 0.027rem;
+	overflow: hidden;
+}
+
+.regisiter-usertype-choice-strip{
+	position: absolute;
+	width: 13rem;
+	height: 1.733rem;
+	top: 0rem;
+	left: 0rem;
+	font-size: 0.693rem;
+	border-width: 0.027rem;
+}
+
+.regisiter-usertype-choice{
+	position: relative;
+	top: -0.133rem;
+	width: 4.12rem;
+	font-size: 0.693rem;
+	text-align: center;
+	line-height: 2rem;;
+	float: left;
+}
+
+.regisiter-usertype-choice1{	
+	border-right: 0.027rem solid #dfdfdf;
+	color: #414141;
+	background-color: #fff;
+}
+
+.regisiter-usertype-choice2{	
+	color: #414141;
+	background-color: #fff;
+}
+
+.regisiter-usertype-choice3{
+	border-left: 0.027rem solid #dfdfdf;
+	color: #414141;
+	background-color: #fff;
+}
+
+.register-textarea-invitor{
+	position: relative;
+	width: 20rem;
+	height: 2.64rem;
+	background-color: #fff;
+	display: block;
+}
+
+/*.register-cardupload{
+	position: relative;
+	top: 1.04rem;
+	left: 0.613rem;
+	width: 18.72rem;
+	height: 2.347rem;
+	background-color: #00b7ee;
+	border-radius: 0.267rem;
+	text-align: center;
+	color: #fff;
+	font-size: 0.747rem;
+	line-height: 2.347rem;
+	border:none;
+}*/
+
+.register-attention{
+	position: relative;
+	top: 1.04rem;
+	height: 1.893rem;
+	width: 20rem;
+	font-size: 0.64rem;
+	color: #999999;
+}
+
+.register-attention-img{
+	position: absolute;
+	height: 0.8rem;
+	width: 0.8rem;
+	top: 0.533rem;
+	left: 0.4rem;
+}
+
+.register-attention-text{
+	position: absolute;
+	top: 0.533rem;
+	left: 1.4rem;
+	width: 18.3rem;
+	font-size: 0.747rem;
+}
+
+.register-register{
+	position: fixed;
+	/*top: 1.04rem;*/
+	bottom: 0.613rem;
+	left: 0.613rem;
+	width: 18.72rem;
+	height: 2.347rem;
+	background-color: #fff;
+	border-radius: 0.267rem;
+	text-align: center;
+	color: #00b7ee;
+	font-size: 0.747rem;
+	line-height: 2.347rem;
+	border:none;
+}
+
+form label.error { 
+	position: absolute;
+	top: 0.7rem;
+	left: 9.5rem;
+	color: red;
+	font-size: 0.8rem;
+}

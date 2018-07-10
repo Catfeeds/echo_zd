@@ -1,0 +1,63 @@
+.weui_cells{
+    margin-top:0;
+}
+.img-text{
+    text-align: center;
+    padding:15px;
+    color: rgb(155,154,155);
+}
+.weui_label{
+    color: rgb(155,154,155);
+}
+.weui_uploader_bd{
+    text-align: center;
+}
+.weui_cell_ft{
+    font-size: inherit!important;
+}
+.weui_input{
+    color:#4b4b4b;
+}
+.weui_cell_select{
+    padding: 10px 15px;
+}
+.weui_select{
+    height: inherit!important;
+    line-height: inherit!important;
+    z-index: inherit;
+    padding-left:0px!important;
+}
+.selectBox{
+   position: relative;   
+}
+.select:after{
+    content: " ";
+    display: inline-block;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    height: 6px;
+    width: 6px;
+    border-width: 2px 2px 0 0;
+    border-color: #c8c8cd;
+    border-style: solid;
+    position: relative;
+    top: -2px;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    margin-top: -3px;
+}
+.weui_cells_title{
+    font-size: 17px;
+    color: rgb(155,154,155);
+    /*border-top: 1px solid #d9d9d9;*/
+    padding:10px 15px;
+    margin:0;
+}
+.is_cover {
+    width: 38px;
+    height: 20px;
+    background: url(../img/cover.png) no-repeat;
+    background-size: 100%;
+    margin-top: -36px;
+}

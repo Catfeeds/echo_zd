@@ -1,0 +1,133 @@
+/*点评列表*/
+body{
+	background-color: #efeff4;
+	margin:0;
+}
+.comment-list{
+	background-color: #fff;
+	margin-bottom:50px;
+}
+.loaddiv{
+	text-align: center;
+}
+.comment-message{
+	display: -webkit-box;
+	padding:0.747rem;
+	border-bottom:1px solid #ccc;
+}
+.comment-message img{
+	position: relative;
+	display: block;
+	margin-right: 10px;
+	height: 30px;
+	width: 30px;
+	border-radius: 15px;
+}
+.comment-info {
+	display: block;
+	width: 100%;
+	-webkit-box-flex: 1;
+	box-flex: 1;
+}
+.comment-info .username{
+	position: relative;
+	font-size: 0.8rem;
+	display: inline-block;
+	color: #999;
+	height: 15px;
+	line-height: 15px;
+	margin-top: 5px;
+}
+.comment-info .usercontent {
+	word-wrap: break-word;
+	font-size: 0.8rem;
+	display: -webkit-box;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	white-space: inherit;
+	color: #333;
+}
+.comment-info .time{
+	font-size: 0.6rem;
+	color: #999;
+}
+.que-footer {
+	z-index: 10001;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	height: 50px;
+	line-height: 50px;
+	width: 100%;
+	color: #fff;
+	background-color: #00b7ee;
+	text-align: center;
+}
+.que-footer img {
+	width:1.2rem;
+	height:1.2rem;
+	color: #fff;
+}
+.que-footer a {
+	font-size: 1.2rem;
+	color: #fff;
+}
+/*提交问题*/
+.que-panel{
+	background-color: #fff;
+}
+.writebox {
+	border: 0;
+	padding: 15px 15px;
+	height: 105px;
+	resize: none;
+	font-size: 1.1rem;
+	width: 92%;
+	outline: 0;
+}
+.que-panel .que-ops {
+	display: -webkit-box;
+	padding: 0 10px 10px 0;
+}
+.que-panel .counter {
+	display: -webkit-box;
+	width: 100%;
+	-webkit-box-flex: 1;
+	-webkit-box-pack: end;
+	color: #999;
+}
+.remark{
+	display: -webkit-box;
+	height: 40px;
+	line-height: 40px;
+	background-color: #00b7ee;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	margin:20px 0.7rem;
+	-webkit-box-pack: center;
+	-webkit-box-align: center;
+}
+.remark .remark-btn{
+	font-size: 0.8rem;
+	color: #fff;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	text-align: center;
+}
+
+.anonymity-box{
+    display: -webkit-box;
+    position: relative;
+    border-top: 1px solid #ddd;
+    padding:10px;
+}
+.anonymity-box .radio-box{
+    position: absolute;
+    right:0;
+    display: -webkit-box;
+}
+.radio-box .radio-text{
+    padding-right:2rem;
+}

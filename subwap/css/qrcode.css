@@ -1,0 +1,134 @@
+.qrcode-head-img{
+	position: relative;
+	width: 20.0rem;
+	height: 13.067rem;
+}
+
+.qrcode-head-title{
+	position: absolute;
+	top: 0.0rem;
+	width: 20.0rem;
+	font-size: 0.8rem;
+	top: 0.8rem;
+	color: #fff;
+	text-align: center;
+	z-index: 1;
+}
+
+.qrcode-mid{
+	position: relative;
+	height: 9rem;
+	width: 20.0rem;
+}
+
+.qrcode-container{
+	position: absolute;
+	width: 7rem;
+	height: 7rem;
+	border: solid 0.08rem #c3c3c3;
+	left: 1rem;
+	top: 1rem;
+}
+
+.qrcode-img{
+	position: relative;
+	width: 6.5rem;
+	height: 6.5rem;
+	left: 0.25rem;
+	top: 0.25rem;
+}
+
+.line{
+	position: relative;
+	width: 18.667rem;
+	height: 0.053rem;
+	background-color: #c3c3c3;
+	left: 0.666rem;
+}
+
+.qrcode-text{
+	position:relative;
+	font-size: 0.747rem;
+	padding: 0rem 1rem;
+	color: #333;
+	margin-top: 0.5rem;
+}
+
+
+.qrcode-head-price{
+	position: absolute;
+	line-height: 2.347rem;
+	color: #ef7158;
+	font-size: 0.96rem;
+	top: 0.3rem;
+	left: 9.4rem;
+}
+
+.qrcode-head-status{
+	position: absolute;
+	line-height: 2.347rem;
+	color: #ef7158;
+	font-size: 0.747rem;
+	top: 0.3rem;
+	left: 16.4rem;
+}
+
+.head-price-tags{
+	position: absolute;
+	width: 10rem;
+	height: 0.9rem;
+	top: 2.8rem;
+	left: 9.4rem;
+	margin: 0 auto;
+	display: block;
+	overflow: hidden;
+}
+
+.head-price-tags li{
+	position: relative;
+	border-radius: 0.16rem;
+	text-align: center;
+	float: left;
+	font-size: 0.64rem;
+	margin-right: 0.4rem;
+	padding: 0.08rem 0.267rem;
+	top: -0.1rem;
+}
+
+.color1{
+	background-color: #d9f4fc;
+	color: #00b7ee;
+}
+.color2{
+	background-color: #fdf0e6;
+	color: #ffab58;
+}
+.color3{
+	background-color: #e9fdda;
+	color: #9dd072;
+}
+
+.company-name{
+	position: absolute;
+	width: 10rem;
+	left: 9.4rem;
+	top: 4.3rem;
+	font-size: 0.8rem;
+}
+
+.distribution{
+	position: absolute;
+	width: 5rem;
+	left: 9.4rem;
+	top: 6.3rem;
+	font-size: 1.067rem;
+	font-weight: 700;
+}
+
+.qrcode-powerd{
+	position: fixed;
+	left: 5rem;
+	bottom: 0.5rem;
+	font-size: 0.747rem;
+	color: #c3c3c3;
+}

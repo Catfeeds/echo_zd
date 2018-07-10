@@ -1,0 +1,161 @@
+body{
+	background-color: #f5f5f5;
+}
+
+.line{
+	width: 20.0rem;
+	height: 0.053rem;
+	position: relative;
+	background-color: #E8E8E9;
+}
+
+.commission-head{
+	position: relative;
+	width: 20.0rem;
+	min-height: 5.4rem;
+	height: auto;
+	background-color: #fff;
+}
+
+.commission-head-logo{
+	position: absolute;
+	height: 1rem;
+	width: 1rem;
+	left: 0.64rem;
+	top: 0.8rem;
+}
+
+.commission-head1{
+	position: relative;
+	padding-top: 0.773rem;
+	padding-left: 2rem;
+	font-size: 0.747rem;
+	color: #333333;
+	height: auto;
+	width: 17rem;
+}
+
+.commission-head2{
+	position: relative;
+	padding-top: 0.5rem;
+	padding-left: 0.64rem;
+	font-size: 0.747rem;
+	color: #333333;
+	height: auto;
+	width: 18rem;
+}
+.commission-head3{
+	position: relative;
+	padding: 0.5rem 0.64rem 0.64rem 0.64rem;
+	font-size: 0.747rem;
+	width: 18rem;
+	height: auto;
+	color: #00b7ee;
+}
+
+.jieyong-rules{
+	position: relative;
+	width: 20.0rem;
+	height: 7.947rem;
+	background-color: #fff;
+}
+.jieyong-rules-title{
+	position: absolute;
+	font-size: 0.747rem;
+	color: #333333;
+	top: 0.853rem;
+	left: 0.64rem;
+}
+.jieyong-rules-img1{
+	position: absolute;
+	height: 1.867rem;
+	width: 1.867rem;
+	top: 2.32rem;
+	left: 0.64rem;
+}
+.jieyong-text1{
+	position: absolute;
+	top: 2.22rem;
+	font-size: 0.747rem;
+	width: 16.373rem;
+	left: 2.987rem;
+	color: #666666;
+}
+.jieyong-rules-img2{
+	position: absolute;
+	height: 1.867rem;
+	width: 1.867rem;
+	top: 5.253rem;
+	left: 0.64rem;
+}
+.jieyong-text2{
+	position: absolute;
+	top: 5.153rem;
+	font-size: 0.747rem;
+	left: 2.987rem;
+	color: #666666;
+}
+.qianyong-text{
+	position: absolute;
+	font-size: 0.64rem;
+	color: #fff;
+	top: 0rem;
+	left: 0rem;
+	width: 1.867rem;
+	height: 1.867rem;
+	line-height: 1.867rem;
+	text-align: center;
+}
+.houyong-text{
+	position: absolute;
+	font-size: 0.64rem;
+	color: #fff;
+	top: 0rem;
+	left: 0rem;
+	width: 1.867rem;
+	height: 1.867rem;
+	line-height: 1.867rem;
+	text-align: center;
+}
+
+.developer-rules{
+	position: relative;
+	background-color: #fff;
+	width: 20.0rem;
+	height: 4.907rem;
+}
+.developer-rules-title{
+	position: absolute;
+	font-size: 0.747rem;
+	color: #333333;
+	top: 0.853rem;
+	left: 0.64rem;
+}
+.developer-name1{
+	position: absolute;
+	font-size: 0.747rem;
+	top: 2.133rem;
+	left: 0.64rem;
+	color: #666666;
+}
+.developer-name2{
+	position: absolute;
+	font-size: 0.747rem;
+	top: 3.413rem;
+	left: 0.64rem;
+	color: #666666;
+}
+.developer-value1{
+	position: absolute;
+	font-size: 0.747rem;
+	top: 2.133rem;
+	left: 5.013rem;
+	color: #666666;
+}
+.developer-value2{
+	position: absolute;
+	font-size: 0.747rem;
+	top: 3.413rem;
+	left: 5.013rem;
+	color: #666666;
+}

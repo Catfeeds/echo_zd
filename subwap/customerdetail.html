@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/customerdetail.css">
+</head>
+<body ng-app="cApp" ng-controller="customerCtrl">
+	<div class="customer">
+		<img class="customer-img" src="./img/headimg.png">
+		<div class="customer-name" ng-cloak>{{cusmessage.name}}</div>
+		<div class="customer-phone" ng-cloak>{{cusmessage.phone}}</div>
+		<a id="phone"><img class="phone-img" src="./img/telimg.png"></a>
+	</div>
+	<div class="line"></div>
+	<div class="house">
+		<div class="buywill">其他信息</div>
+		<div class="dktime" ng-cloak>预计到访时间：{{cusmessage.dk_time}}</div>
+		<div class="note" ng-cloak>{{cusmessage.note}}</div>
+	</div>
+	<div class="line"></div>
+	<div class="house">
+		<div class="buywill">中介信息</div>
+		<div class="dktime" ng-cloak>姓名：{{cusmessage.zj_name}}</div>
+		<div class="zjphone" ng-cloak>手机号：{{cusmessage.zj_phone}}</div>
+		<div class="note" ng-cloak>公司名：{{cusmessage.company}}</div>
+	</div>
+	<div class="line"></div>
+	<div class="report-small-tag acxs">
+		<div class="report-smalltag-title" style="font-size: 0.9rem">案场销售</div>
+		<select class="report-contacter" onchange="setSale()">
+		</select>
+	</div>
+
+	<div class="blank"></div>
+	<div class="company clearfloat">
+		<img class="companyimg" src="./img/companyimg.png">
+		<div class="company-name" ng-cloak>{{cusmessage.plot_name}}</div>
+		<div class="del">失效</div>
+		<div id="genjin" class="genjin" onclick="genjin()">跟进</div>
+		<div id="tuidi" class="tuiding" onclick="tuiding()">退定</div>
+	</div>
+	<div class="line"></div>
+	<div class="process">
+		<ul>
+			<li class="processli">报备</li>
+			<div class="heng"></div>
+			<li class="processli" onclick="process(this)" data-id='1'>到访</li>
+			<div class="heng"></div>
+			<li class="processli" onclick="process(this)" data-id='2'>认筹</li>
+			<div class="heng"></div>
+			<li class="processli" onclick="process(this)" data-id='3'>认购</li>
+			<div class="heng"></div>
+			<li class="processli" onclick="process(this)" data-id='4'>签约</li>
+			<div class="heng"></div>
+			<li class="processli" onclick="process(this)" data-id='5'>结佣</li>
+		</ul>
+	</div>
+	<div class="blank"></div>
+	<div class="remark">
+		<textarea class="remark-textarea"></textarea>
+		<button class="remark-submit" type="submit" ng-click="postmsg()">提 交</button>
+	</div>
+	<div class="blank"></div>
+	<div class="state">
+		<ul>
+			<li ng-repeat="note in notelist">
+				<div class="state-text-off" onclick="spread(this)" ng-cloak>{{note.note}}</div>
+				<div class="state-status" ng-cloak>{{note.status}}</div>
+				<div class="state-time" ng-cloak>{{note.time}}</div>
+				<div class="line"></div>
+			</li>
+		</ul>
+	</div>
+
+
+
+
+
+
+
+<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/rem.js"></script>
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script type="text/javascript" src="js/customerdetail.js"></script>
+<script src="https://s19.cnzz.com/z_stat.php?id=1265807816&web_id=1265807816" language="JavaScript"></script>
+<script type="text/javascript" src="js/common.js"></script>
+</body>
+</html>

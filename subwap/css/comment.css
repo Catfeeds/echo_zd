@@ -1,0 +1,60 @@
+body{
+	background-color: #f5f5f5;
+}
+.comment-item{
+	position: relative;
+	width: 20.0rem;
+	height: auto;
+	background-color: #fff;
+}
+.line{
+	width: 20.0rem;
+	height: 0.053rem;
+	position: relative;
+	background-color: #E8E8E9;
+}
+.user-pic{
+	position: absolute;
+	height: 1.813rem;
+	width: 1.813rem;
+	left: 0.64rem;
+	top: 0.8rem;
+}
+.user-name{
+	position: absolute;
+	color: #c3c3c3;
+	top: 0.853rem;
+	left: 2.853rem;
+	font-size: 0.693rem;
+}
+.user-comment{
+	position: relative;
+	font-size: 0.747rem;
+	left: 2.827rem;
+	height: auto;
+	margin-top: 2.027rem;
+	width: 16.587rem;
+	color: #333333;
+	line-height: 1.1rem;
+}
+
+.date-time{
+	position: relative;
+	height: 1rem;
+	width:20.0rem;	
+}
+.date{
+	position: absolute;
+	font-size: 0.64rem;
+	top: 0rem;
+	left: 2.827rem;
+	width: 3rem;
+	color: #c3c3c3;
+}
+.time{
+	position: absolute;
+	font-size: 0.64rem;
+	top: 0rem;
+	left: 5.227rem;
+	color: #c3c3c3;
+}

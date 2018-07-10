@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/rem.js"></script>
+	<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="js/messages_zh.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/register.css">
+
+
+
+	<link href="../../views/images/favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" href="../../views/styles/main.css">
+    <link rel="stylesheet" href="../../views/styles/highlight.css">
+
+
+
+	<title>绑定门店码</title>
+</head>
+<body>
+<form id="form" onsubmit="return false;">
+	<div class="register-head-bg"></div>
+
+	<div class="register-area">
+		<div class="register-textarea">
+			<img class="register-logo" src="./img/user.png">
+			<input name="UserExt[name]" id="username" class="register-text" type="text" placeholder="请填写个人真实姓名" required minlength="2" maxlength="4">
+		</div>
+
+		<div class="line"></div>
+
+		<div class="register-textarea nophone">
+			<img class="register-logo" src="./img/phonenumber-img.png">
+			<input name="UserExt[phone]"  id="writephonenumber" class="register-text" type="text" placeholder="请输入手机号码" required>
+			<button class="register-getmessage" type="button">获取验证码</button>
+			<div class="register-clock" id="clock"></div>
+		</div>
+
+		<div class="line"></div>
+
+		<div class="register-textarea nophone">
+			<img class="register-logo" src="./img/identify.png">
+			<input id="code" class="register-text" type="text" placeholder="请输入验证码" required maxlength="4" minlength="4">
+		</div>
+
+		<div class="line"></div>
+
+		<div class="register-textarea nophone">
+			<img class="register-logo" src="./img/password-img.png">
+			<input name="UserExt[pwd]"  id="password" class="register-text" type="password" placeholder="请输入8-16位密码" required minlength="8" maxlength="16">
+		</div>
+	</div>
+
+	<div class="register-head-bg"></div>
+
+	<div class="regisiter-usertype">
+		<div class="regisiter-usertype-container">
+			<div class="regisiter-usertype-text">用户类型</div>
+			<div class="regisiter-usertype-choose clearfloat">
+				<div class="regisiter-usertype-choice-strip">
+					<div class="regisiter-usertype-choice regisiter-usertype-choice1" data-type="1">总代公司</div>
+					<div class="regisiter-usertype-choice regisiter-usertype-choice2" data-type="2">分销公司</div>
+					<div class="regisiter-usertype-choice regisiter-usertype-choice3" data-type="3">独立经纪人</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="UserExt[type]" id="form-type">
+		<input type="hidden" name="UserExt[image]" id="img-url">
+
+		<div class="line"></div>
+
+		<div class="register-textarea-invitor">
+			<img class="register-logo" src="./img/inviter.png">
+			<input name="UserExt[companyCode]" id="companycode" class="register-text" type="text" placeholder="请填写门店码" required>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="container container-big">
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="demo" aria-labelledby="demo-tab">   
+                <div class="row">  
+                    <input type="hidden" id="domain" value="http://oofuaem2b.bkt.clouddn.com/">
+                    <input type="hidden" id="uptoken_url" value="">
+
+                    <div class="col-md-12 upload-btn">
+
+                        <div id="container">
+                        
+                            <a class="btn-default" id="pickfiles2" href="#" >
+                                <i class="glyphicon glyphicon-plus"></i>
+                                上传身份证
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 upload-detail">
+                        <table class="table table-striped table-hover text-left" style="display:none">
+                            <tbody id="fsUploadProgress">
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- <button class="register-cardupload" type="button">证件上传</button> -->
+	<div class="register-attention">
+		<img class="register-attention-img" src="./img/i.png">
+		<div class="register-attention-text"></div>
+	</div>
+	<button class="register-register" type="submit">提 交</button>
+
+</form>
+
+	<script type="text/javascript">
+		$('.regisiter-usertype-choice1').click(function(){
+			$('.container-big').css('display','none');
+			$('#companycode').attr('required');
+			$('#form-type').val($('.regisiter-usertype-choice1').data('type'));
+			$('.register-textarea-invitor').css({"display":"block"});
+			$('.regisiter-usertype-choice1').css({"background-color":"#00b7ee"});
+			$('.regisiter-usertype-choice1').css({"color":"#fff"});
+			$('.regisiter-usertype-choice2').css({"background-color":"#fff"});
+			$('.regisiter-usertype-choice2').css({"color":"#414141"});
+			$('.regisiter-usertype-choice3').css({"background-color":"#fff"});
+			$('.regisiter-usertype-choice3').css({"color":"#414141"});
+		});
+		$('.regisiter-usertype-choice2').click(function(){
+			$('.container-big').css('display','none');
+			$('#companycode').attr('required');
+			$('#form-type').val($('.regisiter-usertype-choice2').data('type'));
+			$('.register-textarea-invitor').css({"display":"block"});
+			$('.regisiter-usertype-choice2').css({"background-color":"#00b7ee"});
+			$('.regisiter-usertype-choice2').css({"color":"#fff"});
+			$('.regisiter-usertype-choice1').css({"background-color":"#fff"});
+			$('.regisiter-usertype-choice1').css({"color":"#414141"});
+			$('.regisiter-usertype-choice3').css({"background-color":"#fff"});
+			$('.regisiter-usertype-choice3').css({"color":"#414141"});
+		});
+		$('.regisiter-usertype-choice3').click(function(){
+			$('.container-big').css('display','block');
+			$('#companycode').removeAttr('required');
+			$('#form-type').val($('.regisiter-usertype-choice3').data('type'));
+			$('.register-textarea-invitor').css({"display":"none"});
+			$('.regisiter-usertype-choice3').css({"background-color":"#00b7ee"});
+			$('.regisiter-usertype-choice3').css({"color":"#fff"});
+			$('.regisiter-usertype-choice1').css({"background-color":"#fff"});
+			$('.regisiter-usertype-choice1').css({"color":"#414141"});
+			$('.regisiter-usertype-choice2').css({"background-color":"#fff"});
+			$('.regisiter-usertype-choice2').css({"color":"#414141"});
+		});
+	</script>
+	<script type="text/javascript" src="js/register.js"></script>
+
+
+
+
+
+	<script type="text/javascript" src="../../views/bower_components/plupload/js/moxie.js"></script>
+	<script type="text/javascript" src="../../views/bower_components/plupload/js/plupload.dev.js"></script>
+	<script type="text/javascript" src="../../views/bower_components/plupload/js/i18n/zh_CN.js"></script>
+	<script type="text/javascript" src="../../views/scripts/ui.js"></script>
+	<script type="text/javascript" src="../../views/src/qiniu.js"></script>
+	<script type="text/javascript" src="../../views/scripts/highlight.js"></script>
+	<script type="text/javascript" src="../../views/scripts/main2.js"></script>
+	<script type="text/javascript">
+	hljs.initHighlightingOnLoad();
+	</script>
+	<script src="https://s19.cnzz.com/z_stat.php?id=1265807816&web_id=1265807816" language="JavaScript"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+
+
+
+
+
+
+</body>
+</html>

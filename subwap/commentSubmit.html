@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/commentList.css">
+    <title>点评</title>
+</head>
+<body>
+
+<div class="que-panel">
+    <form>
+        <textarea class="writebox" name="content" placeholder="对本楼盘的案场销售和市场对接人的服务满意吗？" maxlength="225"></textarea>
+        <!--<div class="que-ops">-->
+            <!--<span id="counter" class="counter">0/35</span>-->
+        <!--</div>-->
+        <div class="anonymity-box">
+            <div class="anonymity-text">匿名点评</div>
+            <div class="radio-box">
+                <input class="radio" type="radio" name="radio" value="1">
+                <div class="radio-text">是</div>
+                <input class="radio" type="radio" name="radio" value="0" checked="checked">
+                <div class="radio-text">否</div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="remark">
+    <a class="remark-btn">提交</a>
+</div>
+
+
+<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var hid=GetQueryString('hid');
+        $('.remark').click(function(){
+            var note = $('.writebox').val();
+            var is_nm = $("input[name='radio']:checked").val();
+            if(note){
+                $('.remark-btn').attr('disable',true);
+                $('.remark').css({'background':'#ccc'});
+                $.post("/api/plot/addDp", {
+                        hid: hid,
+                        note: note,
+                        is_nm: is_nm,
+                    },
+                    function(data, status) {
+                        if (data.status == "success") {
+                            alert("提交成功,待管理员审核！");
+                            location.href = 'http://'+document.domain+'/api/index/detail?id='+hid;
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                );
+            }else{
+                alert('点评内容不能为空哦！')
+            }
+        })
+    })
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(decodeURI(r[2]));
+        return null;
+    }
+
+</script>
+</body>
+</html>

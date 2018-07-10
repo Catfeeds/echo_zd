@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>成为VIP会员</title>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1, minimum-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/payvip.css">
+</head>
+<body>
+	<div class="customer">
+		<div class="head-container">
+			<img class="head-img" src="./img/user-pic.png">
+		</div>
+		<!-- 
+		<div class="phonenum">{{item.title}}</div>
+		<div class="status">{{item.title}}</div> -->
+		<div class="phonenum"></div>
+		<div class="status">你还不是会员身份</div>
+	</div>
+	<div class="blank"></div>
+	<div class="choose">
+		<!-- <div class="choose-head">{{item.title}}</div> -->
+		<div class="choose-head">选择套餐</div>
+		<!-- 
+			<div class="tag" ng-cloak ng-repeat="item in itemlist">
+			<div class="tittle">{{item.tittle}}</div>
+			<div class="detail">{{item.tittle}}</div>
+			<div class="tag-status">{{item.tittle}}</div>
+			<div class="price">{{item.tittle}}</div>
+		</div>
+		 -->
+		 <div class="tag vipli" id="recom" onclick="findprices(this)">
+			<div class="tittle">2年VIP会员(限时特惠)</div>
+			<div class="detail">赠送60次刷新</div>
+			<div class="tag-status">推荐</div>
+			<div class="price"><span class="nowp">2199</span><span style="font-size:0.747rem">元</span></div>
+		</div>
+		<div class="tag vipli" onclick="findprices(this)">
+			<div class="tittle">1年VIP会员</div>
+			<div class="detail">赠送25次刷新</div>
+			
+			<div class="price"><span class="nowp">1299</span><span style="font-size:0.747rem">元</span></div>
+		</div>
+		<div class="tag vipli" onclick="findprices(this)">
+			<div class="tittle">6个月VIP会员</div>
+			<div class="detail">赠送10次刷新</div>
+			
+			<div class="price"><span class="nowp">699</span><span style="font-size:0.747rem">元</span></div>
+		</div>
+		<div class="tag vipli" onclick="findprices(this)">
+			<div class="tittle">3个月VIP会员</div>
+			<!-- <div class="detail">133元/月</div> -->
+			
+			<div class="price"><span class="nowp">399</span><span style="font-size:0.747rem">元</span></div>
+		</div>
+		
+	
+		<!-- <div class="tag">
+			<div class="tittle">三年VIP会员(限时特惠)</div>
+			<div class="detail">另赠500元报告抵扣券</div>
+			<div class="price">720元</div>
+		</div> -->
+	</div>
+	<div class="register-attention">
+		<img class="register-attention-img" src="./img/i.png">
+		<div class="register-attention-text"></div>
+	</div>
+	<div class="pay">
+		<div class="left">
+			<div class="jine">金额:</div>
+			<div class="pricenum"><span id="finp">-</span><span style="font-size:0.747rem">元</span><span id="note" style="font-size: 0.64rem;color: #999;margin-left: 0.2rem"></span></div>
+		</div>
+		<div class="gotopay">去支付</div>
+	</div>
+
+
+
+
+
+
+
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/rem.js"></script>
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/payvip.js"></script>
+	<script src="https://s22.cnzz.com/z_stat.php?id=1264496573&web_id=1264496573" language="JavaScript"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+</body>
+</html>
