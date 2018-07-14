@@ -543,7 +543,8 @@ class IndexController extends ApiController
 
         if ($errCode == 0) {
             $data = json_decode($data,true);
-            $this->frame['data'] = $data['phoneNumber'];
+            preg_match('/[0-9]+/', $data['phoneNumber'],$matchs);
+            $this->frame['data'] = $matchs[0];
             // echo $data['phoneNumber'];
             // Yii::app()->end();
             // print($data . "\n");
