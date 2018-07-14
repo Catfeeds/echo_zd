@@ -33,6 +33,7 @@ class PlotController extends ApiController{
 		$zxzt = (int)Yii::app()->request->getQuery('zxzt',0);
 		$limit = (int)Yii::app()->request->getQuery('limit',20);
 		$toptag = (int)Yii::app()->request->getQuery('toptag',0);
+		$infoid = (int)Yii::app()->request->getQuery('infoid',0);
 		$company = (int)Yii::app()->request->getQuery('company',0);
 		$showPay = Yii::app()->request->getQuery('showPay',1);
 		$uid = (int)Yii::app()->request->getQuery('uid',0);
@@ -260,6 +261,9 @@ class PlotController extends ApiController{
 			// }
 			if($datares = $plots->data) {
 				foreach ($datares as $key => $value) {
+					if($infoid && $value->id==$infoid) {
+						continue;
+					}
 					if(isset($areaslist[$value->area]))
 						$areaName = $areaslist[$value->area];
 					else
