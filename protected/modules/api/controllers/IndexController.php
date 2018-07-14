@@ -31,14 +31,14 @@ class IndexController extends ApiController
             foreach ($ress as $key => $value) {
                 if($value->cid==1 && count($data['recomLong'])<1) {
                     $thisObj = $value->getObj();
-                    $data['recomLong'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金'];
+                    $data['recomLong'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金','image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image)];
                 } elseif ($value->cid==2 && count($data['recomLong'])<2) {
                     $thisObj = $value->getObj();
-                    $data['recomShort'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金'];
+                    $data['recomShort'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金','image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image)];
                 } elseif ($value->cid==3 && count($data['recomLong'])<5) {
                     $thisObj = $value->getObj();
                     // var_dump($thisObj->pa);exit;
-                    $data['recomYou'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金'];
+                    $data['recomYou'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金','image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image)];
                 }
             }
         }

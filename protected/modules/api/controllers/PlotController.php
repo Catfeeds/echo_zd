@@ -329,7 +329,7 @@ class PlotController extends ApiController{
 						'status'=>$value->status,
 						'zd_company'=>$value->address,
 						'pay'=>$showPay?$value->first_pay:'暂无权限查看',
-						'sort'=>$value->sort?'置顶房源':'',
+						'sort'=>$value->sort?SiteExt::getAttr('qjpz','topword'):'',
 						'can_edit'=>$can_edit,
 						'expire'=>$this->staff&&$expire,
 						'distance'=>round($this->getDistance($value),2),
@@ -2695,6 +2695,15 @@ class PlotController extends ApiController{
     			}
 	    			
     		}
+    	}
+    }
+
+    public function actionGetNewsList($hid='')
+    {
+    	if($plot = PlotExt::model()->findByPk($hid)) {
+    		
+    	} else {
+    		$this->returnError('楼盘不存在');
     	}
     }
 
