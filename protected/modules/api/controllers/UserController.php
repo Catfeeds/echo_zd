@@ -226,6 +226,98 @@ class UserController extends ApiController{
 					}
 				}
 			}
+		} elseif ($user_type==1) {
+			// 搜项目和客户电话
+			$criteria = new CDbCriteria;
+			$criteria->addCondition("uid=$uid");
+			$criteria->order = 'updated desc';
+			if(is_numeric($kw)) {
+				$criteria->addSearchCondition('phone',$kw);
+			} else {
+				$ids = [];
+				$cre = new CDbCriteria;
+				$cre->addSearchCondition('title',$kw);
+				$ress = PlotExt::model()->findAll($cre);
+				if($ress) {
+					foreach ($ress as $key => $value) {
+						$ids[] = $value->id;
+					}
+				}
+				$criteria->addInCondition('hid',$ids);
+			}
+			$subs = SubExt::model()->findAll($criteria);
+			if($subs) {
+				foreach ($subs as $key => $value) {
+					$market_user = $value->user;
+					$all[] = [
+						'id'=>$value->id,
+						'userName'=>$value->name,
+						'userPhone'=>$value->phone,
+						'isShowCode'=>1,
+						'type'=>$value->status,
+						'staffName'=>$market_user?$market_user->name:'暂无',
+						'StaffPhone'=>$market_user?$market_user->phone:'暂无',
+						'time'=>date("m-d H:i",$value->created),
+						'thirdLine'=>$market_user->companyinfo?$value->companyinfo->name:'暂无',
+					];
+				}
+				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
+				if($all) {
+					foreach (SubExt::$status as $key => $value) {
+						$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
+					}
+					foreach ($all as $key => $value) {
+						$data[$value['type']+1]['num']++;
+						$data[$value['type']+1]['list'][] = $value;
+					}
+				}
+			} 
+		} else {
+			// 搜项目、客户电话、分销公司
+			$criteria = new CDbCriteria;
+			$criteria->addCondition("uid=$uid");
+			$criteria->order = 'updated desc';
+			if(is_numeric($kw)) {
+				$criteria->addSearchCondition('phone',$kw);
+			} else {
+				$ids = [];
+				$cre = new CDbCriteria;
+				$cre->addSearchCondition('title',$kw);
+				$ress = PlotExt::model()->findAll($cre);
+				if($ress) {
+					foreach ($ress as $key => $value) {
+						$ids[] = $value->id;
+					}
+				}
+				$criteria->addInCondition('hid',$ids);
+			}
+			$subs = SubExt::model()->findAll($criteria);
+			if($subs) {
+				foreach ($subs as $key => $value) {
+					$market_user = $value->user;
+					$all[] = [
+						'id'=>$value->id,
+						'userName'=>$value->name,
+						'userPhone'=>$value->phone,
+						'isShowCode'=>1,
+						'type'=>$value->status,
+						'staffName'=>$market_user?$market_user->name:'暂无',
+						'StaffPhone'=>$market_user?$market_user->phone:'暂无',
+						'time'=>date("m-d H:i",$value->created),
+						'thirdLine'=>$market_user->companyinfo?$value->companyinfo->name:'暂无',
+					];
+				}
+				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
+				if($all) {
+					foreach (SubExt::$status as $key => $value) {
+						$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
+					}
+					foreach ($all as $key => $value) {
+						$data[$value['type']+1]['num']++;
+						$data[$value['type']+1]['list'][] = $value;
+					}
+				}
+			}
 		}
 		$this->frame['data'] = $data;
 
