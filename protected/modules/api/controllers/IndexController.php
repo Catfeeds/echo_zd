@@ -589,14 +589,16 @@ class IndexController extends ApiController
                             'openid'=>$openid,
                             'session_key'=>$cont['session_key'],
                         ];
-                        // $this->frame['data'] = $data;
-                        echo json_encode($data);
+                        $this->frame['data'] = $data;
+                        // echo json_encode($data);
                     } else {
-                        // $this->frame['data'] = ['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>''];
-                        echo json_encode(['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'']);
+                        $this->frame['data'] = ['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>''];
+                        // echo json_encode(['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'']);
                     }
+                } else {
+                    $this->returnError($cont['errorMsg']);
                 }
-                Yii::app()->end();
+                // Yii::app()->end();
             }
                 
         }
