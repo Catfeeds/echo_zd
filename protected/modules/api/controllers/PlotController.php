@@ -2700,8 +2700,19 @@ class PlotController extends ApiController{
 
     public function actionGetNewsList($hid='')
     {
+    	$data = [];
     	if($plot = PlotExt::model()->findByPk($hid)) {
-    		
+    		if($news = $plot->news) {
+    			foreach ($news as $key => $value) {
+    				$data[] = [
+    					'id'=>$value->id,
+    					'author'=>$value->author,
+    					'content'=>$value->content,
+    					'time'=>date('Y-m-d H:i',$value->updated),
+    				];
+    			}
+    		}
+    		$this->frame['data'] = $data;
     	} else {
     		$this->returnError('楼盘不存在');
     	}

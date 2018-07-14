@@ -57,7 +57,7 @@ class IndexController extends ApiController
             }
             // var_dump($tmp);exit;
             foreach ($tmp as $key => $value) {
-                $value['pinyin'] && $data[$value['pinyin']] = $value;
+                $value['pinyin'] && $data[$value['pinyin']][] = $value;
             }
             ksort($data);
         }
