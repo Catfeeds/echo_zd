@@ -51,6 +51,7 @@ class UserExt extends User{
             'plotsales'=>array(self::HAS_MANY, 'PlotSaleExt', 'uid'),
             'subscribes'=>array(self::HAS_MANY, 'SubscribeExt', 'uid'),
             'plots'=>array(self::HAS_MANY, 'PlotExt', 'uid'),
+            'subs'=>array(self::HAS_MANY, 'SubExt', 'uid'),
         );
     }
 

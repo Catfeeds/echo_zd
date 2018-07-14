@@ -276,6 +276,7 @@ class IndexController extends ApiController
                         'status'=>$user->status,
                         'openid'=>$user->openid,
                         'avatarUrl'=>ImageTools::fixImage($user->ava,200,200),
+                        'wx_word'=>$user->companyinfo?$user->companyinfo->name:'独立经纪人',
                         // 'is_true'=>$user->is_true,
                         'company_name'=>$user->companyinfo?$user->companyinfo->name:'独立经纪人',
                     ];

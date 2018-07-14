@@ -2718,4 +2718,24 @@ class PlotController extends ApiController{
     	}
     }
 
+    public function actionGetUserList($uid='')
+    {
+    	$data = [];
+    	$user = UserExt::model()->findByPk($uid);
+
+    	if($uid) {
+    		return $this->returnError('参数错误');
+    	}
+    	if($subs = $user->subs) {
+    		foreach ($subs as $key => $value) {
+    			$data[] = [
+    				'phone'=>$value->phone,
+    				'name'=>$value->name,
+    				'sex'=>$value->sex,
+    			];
+    		}
+    	}
+    	$this->frame['data'] = $data;
+    }
+
 }
