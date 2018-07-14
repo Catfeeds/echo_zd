@@ -55,6 +55,22 @@ class SubExt extends Sub{
     }
 
     public function beforeValidate() {
+        if($this->hid && !$this->plot_title) {
+            $this->plot_title = $this->plot->title;
+        }
+        if($this->an_uid && !$this->an_phone) {
+            $this->an_phone = $this->an_user->phone;
+        }
+        if($this->sale_uid && !$this->sale_phone) {
+            $this->sale_phone = $this->sale_user->phone;
+        }
+        if($this->market_uid && !$this->market_phone) {
+            $this->market_phone = $this->market_user->phone;
+        }
+        if($this->uid && !$this->fx_phone) {
+            $this->fx_phone = $this->user->phone;
+        }
+
         if($this->getIsNewRecord()) {
             // $res = Yii::app()->controller->sendNotice(($this->plot?$this->plot->title:'').'有新的报备，请登陆后台审核','',1);
             $this->created = $this->updated = time();

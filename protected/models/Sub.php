@@ -7,8 +7,12 @@
  * @property integer $id
  * @property string $hid
  * @property integer $uid
+ * @property string $fx_phone
+ * @property string $plot_title
  * @property integer $an_uid
+ * @property string $an_phone
  * @property integer $market_uid
+ * @property string $market_phone
  * @property integer $time
  * @property string $market_staff
  * @property string $name
@@ -18,6 +22,7 @@
  * @property string $company_name
  * @property integer $visit_num
  * @property integer $visit_way
+ * @property string $sale_phone
  * @property integer $sale_uid
  * @property integer $sex
  * @property integer $is_check
@@ -49,14 +54,14 @@ class Sub extends CActiveRecord
 		return array(
 			array('uid, status, created, updated', 'required'),
 			array('uid, an_uid, market_uid, time, visit_num, visit_way, sale_uid, sex, is_check, is_only_sub, status, deleted, sort, created, updated', 'numerical', 'integerOnly'=>true),
-			array('hid, market_staff, name', 'length', 'max'=>100),
-			array('phone', 'length', 'max'=>20),
+			array('hid, plot_title, market_staff, name', 'length', 'max'=>100),
+			array('fx_phone, an_phone, market_phone, phone, sale_phone', 'length', 'max'=>20),
 			array('notice', 'length', 'max'=>12),
 			array('code', 'length', 'max'=>10),
 			array('company_name, note', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hid, uid, an_uid, market_uid, time, market_staff, name, phone, notice, code, company_name, visit_num, visit_way, sale_uid, sex, is_check, is_only_sub, note, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
+			array('id, hid, uid, fx_phone, plot_title, an_uid, an_phone, market_uid, market_phone, time, market_staff, name, phone, notice, code, company_name, visit_num, visit_way, sale_phone, sale_uid, sex, is_check, is_only_sub, note, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,8 +85,12 @@ class Sub extends CActiveRecord
 			'id' => 'ID',
 			'hid' => 'Hid',
 			'uid' => 'Uid',
+			'fx_phone' => 'Fx Phone',
+			'plot_title' => 'Plot Title',
 			'an_uid' => 'An Uid',
+			'an_phone' => 'An Phone',
 			'market_uid' => 'Market Uid',
+			'market_phone' => 'Market Phone',
 			'time' => 'Time',
 			'market_staff' => 'Market Staff',
 			'name' => 'Name',
@@ -91,6 +100,7 @@ class Sub extends CActiveRecord
 			'company_name' => 'Company Name',
 			'visit_num' => 'Visit Num',
 			'visit_way' => 'Visit Way',
+			'sale_phone' => 'Sale Phone',
 			'sale_uid' => 'Sale Uid',
 			'sex' => 'Sex',
 			'is_check' => 'Is Check',
@@ -125,8 +135,12 @@ class Sub extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('hid',$this->hid,true);
 		$criteria->compare('uid',$this->uid);
+		$criteria->compare('fx_phone',$this->fx_phone,true);
+		$criteria->compare('plot_title',$this->plot_title,true);
 		$criteria->compare('an_uid',$this->an_uid);
+		$criteria->compare('an_phone',$this->an_phone,true);
 		$criteria->compare('market_uid',$this->market_uid);
+		$criteria->compare('market_phone',$this->market_phone,true);
 		$criteria->compare('time',$this->time);
 		$criteria->compare('market_staff',$this->market_staff,true);
 		$criteria->compare('name',$this->name,true);
@@ -136,6 +150,7 @@ class Sub extends CActiveRecord
 		$criteria->compare('company_name',$this->company_name,true);
 		$criteria->compare('visit_num',$this->visit_num);
 		$criteria->compare('visit_way',$this->visit_way);
+		$criteria->compare('sale_phone',$this->sale_phone,true);
 		$criteria->compare('sale_uid',$this->sale_uid);
 		$criteria->compare('sex',$this->sex);
 		$criteria->compare('is_check',$this->is_check);

@@ -168,7 +168,7 @@ class UserController extends ApiController{
 		$this->frame['data'] = $data;
 	}
 
-	public function actionSubList($uid='',$user_type=0,$type='',$kw='')
+	public function actionSubList($uid='',$user_type=0,$type='',$kw='',$hid='')
 	{
 		$data = $all =  [];
 		if(!$user_type) {
@@ -179,12 +179,17 @@ class UserController extends ApiController{
 		if(!$user) {
 			return $this->returnError('用户不存在或禁用');
 		}
-
+		$criteria = new CDbCriteria;
+		$criteria->addCondition("uid=$uid");
+		if($hid) {
+			$criteria->addCondition("hid=$hid");
+		}
+		$criteria->order = 'updated desc';
 		if($user_type==0) {
 			// 搜项目和客户电话
-			$criteria = new CDbCriteria;
-			$criteria->addCondition("uid=$uid");
-			$criteria->order = 'updated desc';
+			// $criteria = new CDbCriteria;
+			// $criteria->addCondition("uid=$uid");
+			// $criteria->order = 'updated desc';
 			if(is_numeric($kw)) {
 				$criteria->addSearchCondition('phone',$kw);
 			} else {
@@ -228,9 +233,9 @@ class UserController extends ApiController{
 			}
 		} elseif ($user_type==1) {
 			// 搜项目和客户电话
-			$criteria = new CDbCriteria;
-			$criteria->addCondition("uid=$uid");
-			$criteria->order = 'updated desc';
+			// $criteria = new CDbCriteria;
+			// $criteria->addCondition("uid=$uid");
+			// $criteria->order = 'updated desc';
 			if(is_numeric($kw)) {
 				$criteria->addSearchCondition('phone',$kw);
 			} else {
@@ -273,24 +278,25 @@ class UserController extends ApiController{
 				}
 			} 
 		} else {
-			// 搜项目、客户电话、分销公司
-			$criteria = new CDbCriteria;
-			$criteria->addCondition("uid=$uid");
-			$criteria->order = 'updated desc';
-			if(is_numeric($kw)) {
-				$criteria->addSearchCondition('phone',$kw);
-			} else {
-				$ids = [];
-				$cre = new CDbCriteria;
-				$cre->addSearchCondition('title',$kw);
-				$ress = PlotExt::model()->findAll($cre);
-				if($ress) {
-					foreach ($ress as $key => $value) {
-						$ids[] = $value->id;
-					}
-				}
-				$criteria->addInCondition('hid',$ids);
-			}
+			// 搜项目、分销公司
+			// $criteria = new CDbCriteria;
+			$criteria->addCondition("company_name like '%$kw%' or plot_title like '%$kw%'");
+			// $criteria->order = 'updated desc';
+			// if(is_numeric($kw)) {
+			// 	$criteria->addSearchCondition('phone',$kw);
+			// } else {
+			// 	$ids = [];
+			// 	$cre = new CDbCriteria;
+			// 	$cre->addSearchCondition('title',$kw);
+			// 	$ress = PlotExt::model()->findAll($cre);
+			// 	if($ress) {
+			// 		foreach ($ress as $key => $value) {
+			// 			$ids[] = $value->id;
+			// 		}
+			// 	}
+			// 	$criteria->addInCondition('hid',$ids);
+			// }
+
 			$subs = SubExt::model()->findAll($criteria);
 			if($subs) {
 				foreach ($subs as $key => $value) {
