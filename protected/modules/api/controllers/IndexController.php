@@ -597,7 +597,7 @@ class IndexController extends ApiController
                     }
                 } else {
                     Yii::log(json_encode($cont));
-                    $this->returnError($cont['errorMsg']);
+                    // $this->returnError($cont['errorMsg']);
                 }
                 // Yii::app()->end();
             }
