@@ -81,7 +81,7 @@ if($parent) {
     <thead class="flip-content">
         <tr>
             <th class="text-center">排序</th>
-            <th class="text-center">城市排序</th>
+            <!-- <th class="text-center">城市排序</th> -->
             <th class="text-center">id</th>
             <th class="text-center">标题</th>
             <th class="text-center">区域</th>
@@ -97,8 +97,6 @@ if($parent) {
     <tbody>
     <?php foreach($infos as $v): $owner = $v->owner;$company = $v->company;$areaInfo = $v->areaInfo; $streetInfo = $v->streetInfo;?>
         <tr>
-            <td style="text-align:center;vertical-align: middle" class="warning sort_edit"
-                data-id="<?php echo $v['id'] ?>" data-type='qj'><?php echo $v['qjsort'] ?></td>
             <td style="text-align:center;vertical-align: middle" class="warning sort_edit"
                 data-id="<?php echo $v['id'] ?>" data-type='ct'><?php echo $v['sort'] ?></td>
             <td  class="text-center"><?php echo $v->id ?></td>

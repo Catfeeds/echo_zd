@@ -19,8 +19,6 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
     <label class="col-md-2 control-label">推荐位</label>
     <div class="col-md-4">
         <?php echo $form->dropDownList($article, 'cid', $cates, array('class' => 'form-control', 'encode' => false)); ?>
-        <?php echo $form->textField($article, 'related_id',  array('class' => 'form-control', 'encode' => false,'style'=>'display:none','value'=>$rid)); ?>
-        <?php echo $form->textField($article, 'type',  array('class' => 'form-control', 'encode' => false,'style'=>'display:none','value'=>$type)); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'cid') ?></div>
 </div>
@@ -30,6 +28,13 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
         <?php $this->widget('FileUpload',array('model'=>$article,'attribute'=>'image','inputName'=>'img','width'=>400,'height'=>300)); ?>
         <!-- <span class="help-block">建议尺寸：430*230</span>  -->
     </div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">关联房源</label>
+    <div class="col-md-4">
+        <?php echo $form->dropDownList($article, 'related_id', CHtml::listData(PlotExt::model()->findAll(),'id','title'), array('class' => 'form-control select2', 'encode' => false)); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'related_id') ?></div>
 </div>
 <div class="form-group">
     <label class="col-md-2 control-label">状态</label>

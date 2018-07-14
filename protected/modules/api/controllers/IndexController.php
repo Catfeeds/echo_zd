@@ -2,13 +2,68 @@
 
 class IndexController extends ApiController
 {
-    public function actionIndex($cid=0,$area='')
+    public function actionIndex()
     {
-        $this->showUser();
-        if($area) {
-            $this->redirect('/subwap/list.html?area='.$area);
-        }else
-            $this->redirect('/subwap/list.html');
+        $data = [];
+        $indeximgs = SiteExt::getAttr('qjpz','pcIndexImages');
+        if($indeximgs) {
+            foreach ($indeximgs as $key => $value) {
+                $data['indexImgs'][] = ImageTools::fixImage($value);
+            }
+        } else {
+            $data['indexImgs'] = [];
+        }
+        $data['cityName'] = AreaExt::model()->find(['condition'=>'parent='.AreaExt::model()->find(['condition'=>'parent=0','order'=>'sort asc'])->id,'order'=>'sort asc'])->name;
+        $data['tags'] = [];
+        if($ress = TagExt::model()->findAll("status=1 and cate='indextag'")) {
+            foreach ($ress as $key => $value) {
+                $data['tags'][] = [
+                    'name'=>$value->name,
+                    'image'=>ImageTools::fixImage($value->icon),
+                    'url'=>$value->url,
+                ];
+            }
+        }
+        $data['topNewsImage'] = ImageTools::fixImage(SiteExt::getAttr('qjpz','ttpic'));
+        $data['topNewsList'] = explode(' ', SiteExt::getAttr('qjpz','indexmarquee'));
+        $data['recomLong'] = $data['recomShort'] = $data['recomYou'] = [];
+        if($ress = RecomExt::model()->normal()->findAll('type=1')) {
+            foreach ($ress as $key => $value) {
+                if($value->cid==1 && count($data['recomLong'])<1) {
+                    $thisObj = $value->getObj();
+                    $data['recomLong'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金'];
+                } elseif ($value->cid==2 && count($data['recomLong'])<2) {
+                    $thisObj = $value->getObj();
+                    $data['recomShort'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金'];
+                } elseif ($value->cid==3 && count($data['recomLong'])<5) {
+                    $thisObj = $value->getObj();
+                    // var_dump($thisObj->pa);exit;
+                    $data['recomYou'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金'];
+                }
+            }
+        }
+        $this->frame['data'] = $data;
+
+    }
+
+    public function actionCityList()
+    {
+        $data = [];
+        $pares = AreaExt::model()->normal()->findAll('parent=0');
+        if($pares) {
+            $tmp = [];
+            foreach ($pares as $key => $value) {
+                $tmp = array_merge(Yii::app()->db->createCommand("select id,name,pinyin from area where parent=".$value->id." and status=1 order by sort asc,updated desc")->queryAll(),$tmp) ;
+            }
+            // var_dump($tmp);exit;
+            foreach ($tmp as $key => $value) {
+                $value['pinyin'] && $data[$value['pinyin']] = $value;
+            }
+            ksort($data);
+        }
+            
+            
+        $this->frame['data'] = $data;
     }
     public function actionPub()
     {
@@ -201,22 +256,28 @@ class IndexController extends ApiController
         }
     }
 
-    public function actionGetUserInfo($phone='')
+    public function actionGetUserInfo($kw='')
     {
-        if($phone) {
-            $user = UserExt::model()->find('phone="'.$phone.'"');
+        if($kw) {
+            if(strlen($kw)>10) {
+                $user = UserExt::model()->find('phone="'.$kw.'"');
+            } else {
+                $user = UserExt::model()->findByPk($kw);
+            }
+            // $user = UserExt::model()->find('phone="'.$kw.'"');
             if($user) {
-                if($user && $user->type<3) {
+                if($user) {
                     $data = [
                         'id'=>$user->id,
                         'phone'=>$user->phone,
                         'name'=>$user->name,
                         'type'=>$user->type,
+                        'typename'=>$user->type==2?'分销':($user->type==3?'独立经纪人':'总代'),
                         'status'=>$user->status,
                         'openid'=>$user->openid,
                         'avatarUrl'=>ImageTools::fixImage($user->ava,200,200),
-                        'is_true'=>$user->is_true,
-                        'company_name'=>$user->is_true==1?($user->companyinfo?$user->companyinfo->name:'独立经纪人'):'您尚未实名认证',
+                        // 'is_true'=>$user->is_true,
+                        'company_name'=>$user->companyinfo?$user->companyinfo->name:'独立经纪人',
                     ];
                     $this->frame['data'] = $data;
                    $this->returnSuccess('bingo');
@@ -503,7 +564,7 @@ class IndexController extends ApiController
 
     public function actionGetOpenId($code='')
     {
-        $appid='wxc4b995f8ee3ef609';$apps='48d79f6b24890a88ef5b53a5e5119f5a';
+        $appid=SiteExt::getAttr('qjpz','appid');$apps=SiteExt::getAttr('qjpz','appsecret');
         // $res = HttpHelper::get("https://api.weixin.qq.com/sns/jscode2session?appid=$appid&secret=$apps&js_code=$code&grant_type=authorization_code");
         $res = HttpHelper::getHttps("https://api.weixin.qq.com/sns/jscode2session?appid=$appid&secret=$apps&js_code=$code&grant_type=authorization_code");
         if($res){
@@ -515,25 +576,25 @@ class IndexController extends ApiController
                     $user = UserExt::model()->find("openid='$openid'");
                     if($user) {
                         $data = [
-                            'id'=>$user->id,
-                            'phone'=>$user->phone,
-                            'name'=>$user->name,
-                            'type'=>$user->type,
-                            'status'=>$user->status,
-                            'is_true'=>$user->is_true,
-                            'avatarUrl'=>ImageTools::fixImage($user->ava,200,200),
-                            'company_name'=>$user->companyinfo?$user->companyinfo->name:'独立经纪人',
+                            'uid'=>$user->id,
+                            // 'phone'=>$user->phone,
+                            // 'name'=>$user->name,
+                            // 'type'=>$user->type,
+                            // 'status'=>$user->status,
+                            // 'is_true'=>$user->is_true,
+                            // 'avatarUrl'=>ImageTools::fixImage($user->ava,200,200),
+                            // 'company_name'=>$user->companyinfo?$user->companyinfo->name:'独立经纪人',
                             'openid'=>$openid,
+                            'session_key'=>$cont['session_key'],
                         ];
-                        echo json_encode($data);
+                        $this->frame['data'] = $data;
+                        // echo json_encode($data);
                     } else {
-                        echo json_encode(['open_id'=>$cont['openid'],'session_key'=>$cont['session_key']]);
+                        $this->frame['data'] = ['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>''];
+                        // echo json_encode(['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'']);
                     }
                 }
-                // echo json_encode(['open_id'=>$cont['openid'],'session_key'=>$cont['session_key']]);
-                // echo $cont['session_key'];
                 Yii::app()->end();
-                // $this->frame['data'] = $cont['session_key'];
             }
                 
         }

@@ -13,6 +13,7 @@ class TagExt extends Tag
     static $xinfangCate = [
         //直接式标签
         'direct' => [
+            'indextag'=>'首页标签',
             'wzlm' => '项目列表顶部标签',
             'wylx' => '物业类型',
             'zxzt' => '装修状态',

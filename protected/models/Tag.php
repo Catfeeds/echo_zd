@@ -8,6 +8,8 @@
  * @property string $name
  * @property string $cate
  * @property integer $sort
+ * @property string $url
+ * @property string $icon
  * @property string $max
  * @property string $min
  * @property string $pinyin
@@ -36,10 +38,11 @@ class Tag extends CActiveRecord
 			array('name, cate, created', 'required'),
 			array('sort, status, created, updated', 'numerical', 'integerOnly'=>true),
 			array('name, cate', 'length', 'max'=>20),
+			array('url, icon', 'length', 'max'=>255),
 			array('max, min, pinyin', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, cate, sort, max, min, pinyin, status, created, updated', 'safe', 'on'=>'search'),
+			array('id, name, cate, sort, url, icon, max, min, pinyin, status, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,16 +63,18 @@ class Tag extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => '主键',
-			'name' => '标签名称',
-			'cate' => '分类标识',
-			'sort' => '排序',
+			'id' => 'ID',
+			'name' => 'Name',
+			'cate' => 'Cate',
+			'sort' => 'Sort',
+			'url' => 'Url',
+			'icon' => 'Icon',
 			'max' => 'Max',
 			'min' => 'Min',
 			'pinyin' => 'Pinyin',
-			'status' => '状态',
-			'created' => '添加时间',
-			'updated' => '修改时间',
+			'status' => 'Status',
+			'created' => 'Created',
+			'updated' => 'Updated',
 		);
 	}
 
@@ -95,6 +100,8 @@ class Tag extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('cate',$this->cate,true);
 		$criteria->compare('sort',$this->sort);
+		$criteria->compare('url',$this->url,true);
+		$criteria->compare('icon',$this->icon,true);
 		$criteria->compare('max',$this->max,true);
 		$criteria->compare('min',$this->min,true);
 		$criteria->compare('pinyin',$this->pinyin,true);

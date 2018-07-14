@@ -23,7 +23,7 @@ $this->breadcrumbs = array('区域管理' => '/admin/area/arealist', $this->page
         <div class="col-md-2"><?php echo $form->error($area, 'parent') ?></div>
     </div>
     <div class="form-group">
-        <label class="col-md-2 control-label">区域拼音</label>
+        <label class="col-md-2 control-label">区域首字母大写</label>
         <div class="col-md-4">
             <?php echo $form->textField($area, 'pinyin', array('class' => 'form-control')) ?>
         </div>

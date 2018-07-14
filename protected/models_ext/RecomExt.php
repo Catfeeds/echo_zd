@@ -88,7 +88,7 @@ class RecomExt extends Recom{
         $info = [];
         switch ($this->type) {
             case '1':
-                $model = 'ArticleExt';
+                $model = 'PlotExt';
                 break;
             case '2':
                 $model = 'CommentExt';

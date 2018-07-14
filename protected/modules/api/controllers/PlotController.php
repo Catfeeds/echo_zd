@@ -269,7 +269,7 @@ class PlotController extends ApiController{
 					else
 						$streetName = '';
 					// if(!$company) {
-					$companydes = ['id'=>$value->company_id,'name'=>$value->company_name];
+					// $companydes = ['id'=>$value->company_id,'name'=>$value->company_name];
 					// }
 					$wyw = '';
 					$wylx1 = $value->wylx;
@@ -327,9 +327,9 @@ class PlotController extends ApiController{
 						'image'=>ImageTools::fixImage($value->image?$value->image:$info_no_pic,200,150),
 						'wylx'=>$wyw,
 						'status'=>$value->status,
-						'zd_company'=>$companydes,
+						'zd_company'=>$value->address,
 						'pay'=>$showPay?$value->first_pay:'暂无权限查看',
-						'sort'=>$area?($value->qjsort||$value->sort):$value->qjsort,
+						'sort'=>$value->sort?'置顶房源':'',
 						'can_edit'=>$can_edit,
 						'expire'=>$this->staff&&$expire,
 						'distance'=>round($this->getDistance($value),2),
@@ -339,9 +339,9 @@ class PlotController extends ApiController{
 				$this->frame['data'] = ['list'=>$lists,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount,'refresh_num'=>$uid?$this->staff->refresh_num:''];
 			}
 		}
-		if($city+$area+$street+$aveprice+$sfprice+$wylx+$zxzt+$toptag+$company+$uid+$save==0&&!$kw) {
-			$this->frame['data']['num'] += 800;
-		}
+		// if($city+$area+$street+$aveprice+$sfprice+$wylx+$zxzt+$toptag+$company+$uid+$save==0&&!$kw) {
+		// 	$this->frame['data']['num'] += 800;
+		// }
 		if($area && $page==1) {
 			// 所有该城市置顶项目
 			$allareatops = PlotExt::model()->undeleted()->findAll('area='.$area.' and sort>0');
@@ -713,7 +713,8 @@ class PlotController extends ApiController{
 			'wx_share_title'=>$info->wx_share_title?$info->wx_share_title:$info->title,
 			'phonesnum'=>$phonesnum,
 			'qfuidsarr'=>$qfuidsarr,
-			'zd_company'=>['id'=>$info->company_id,'name'=>$info->company_name],
+			// 'zd_company'=>['id'=>$info->company_id,'name'=>$info->company_name],
+			'zd_company'=>SiteExt::getAttr('qjpz','cname'),
 			'tags'=>$tagName,
 			'is_contact_only'=>$is_contact_only,
 			'mzsm'=>SiteExt::getAttr('qjpz','mzsm'),
