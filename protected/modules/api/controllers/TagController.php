@@ -88,8 +88,8 @@ class TagController extends ApiController{
 
 					$more = [];
 					$more['name'] = '更多';
-					$more['list'] = [$sort,$wylx,$zxzt];
-					return [$aveprice,$sfprice,$more];
+					$more['list'] = [$wylx,$zxzt];
+					return [$aveprice,$sfprice,$more,$sort];
 				});
 				// var_dump($ots);exit;
 				array_unshift($ots,$area);
