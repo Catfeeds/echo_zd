@@ -266,6 +266,7 @@ class IndexController extends ApiController
             }
             // $user = UserExt::model()->find('phone="'.$kw.'"');
             if($user) {
+                $companyinfo = $user->companyinfo;
                 if($user) {
                     $data = [
                         'id'=>$user->id,
@@ -276,9 +277,9 @@ class IndexController extends ApiController
                         'status'=>$user->status,
                         'openid'=>$user->openid,
                         'avatarUrl'=>ImageTools::fixImage($user->ava,200,200),
-                        'wx_word'=>$user->companyinfo?$user->companyinfo->name:'独立经纪人',
+                        'wx_word'=>$companyinfo?($companyinfo->name):'独立经纪人',
                         // 'is_true'=>$user->is_true,
-                        'company_name'=>$user->companyinfo?$user->companyinfo->name:'独立经纪人',
+                        'company_name'=>$companyinfo?$companyinfo->name:'独立经纪人',
                     ];
                     $this->frame['data'] = $data;
                    $this->returnSuccess('bingo');
@@ -533,7 +534,7 @@ class IndexController extends ApiController
     public function actionDecode()
     {
         include_once "wxBizDataCrypt.php";
-        $appid = 'wxc4b995f8ee3ef609';
+        $appid = SiteExt::getAttr('qjpz','appid');
         $sessionKey = $_POST['accessKey'];
         $encryptedData = $_POST['encryptedData'];
         $iv = $_POST['iv'];
@@ -595,7 +596,7 @@ class IndexController extends ApiController
                         // echo json_encode(['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'']);
                     }
                 }
-                Yii::app()->end();
+                // Yii::app()->end();
             }
                 
         }

@@ -9,10 +9,9 @@ class SubExt extends Sub{
         '报备',
         '到访',
         '认筹',
-        '认购',
-        '签约',
+        '成交',
+        '请佣',
         '结佣',
-        '退定',
     ];
 	/**
      * 定义关系
@@ -21,7 +20,9 @@ class SubExt extends Sub{
     {
         return array(
             'user'=>array(self::BELONGS_TO, 'UserExt', 'uid'),
-            'sale_user'=>array(self::BELONGS_TO, 'UserExt', 'sale_uid'),
+            'sale_user'=>array(self::BELONGS_TO, 'StaffExt', 'sale_uid'),
+            'market_user'=>array(self::BELONGS_TO, 'StaffExt', 'market_uid'),
+            'an_user'=>array(self::BELONGS_TO, 'StaffExt', 'an_uid'),
             'plot'=>array(self::BELONGS_TO, 'PlotExt', 'hid'),
             'pros'=>array(self::HAS_MANY, 'SubProExt', 'sid','order'=>'pros.created desc'),
         );

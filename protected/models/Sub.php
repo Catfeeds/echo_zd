@@ -7,6 +7,8 @@
  * @property integer $id
  * @property string $hid
  * @property integer $uid
+ * @property integer $an_uid
+ * @property integer $market_uid
  * @property integer $time
  * @property string $market_staff
  * @property string $name
@@ -14,6 +16,7 @@
  * @property string $notice
  * @property string $code
  * @property string $company_name
+ * @property integer $visit_num
  * @property integer $visit_way
  * @property integer $sale_uid
  * @property integer $sex
@@ -45,7 +48,7 @@ class Sub extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('uid, status, created, updated', 'required'),
-			array('uid, time, visit_way, sale_uid, sex, is_check, is_only_sub, status, deleted, sort, created, updated', 'numerical', 'integerOnly'=>true),
+			array('uid, an_uid, market_uid, time, visit_num, visit_way, sale_uid, sex, is_check, is_only_sub, status, deleted, sort, created, updated', 'numerical', 'integerOnly'=>true),
 			array('hid, market_staff, name', 'length', 'max'=>100),
 			array('phone', 'length', 'max'=>20),
 			array('notice', 'length', 'max'=>12),
@@ -53,7 +56,7 @@ class Sub extends CActiveRecord
 			array('company_name, note', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hid, uid, time, market_staff, name, phone, notice, code, company_name, visit_way, sale_uid, sex, is_check, is_only_sub, note, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
+			array('id, hid, uid, an_uid, market_uid, time, market_staff, name, phone, notice, code, company_name, visit_num, visit_way, sale_uid, sex, is_check, is_only_sub, note, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -77,6 +80,8 @@ class Sub extends CActiveRecord
 			'id' => 'ID',
 			'hid' => 'Hid',
 			'uid' => 'Uid',
+			'an_uid' => 'An Uid',
+			'market_uid' => 'Market Uid',
 			'time' => 'Time',
 			'market_staff' => 'Market Staff',
 			'name' => 'Name',
@@ -84,6 +89,7 @@ class Sub extends CActiveRecord
 			'notice' => 'Notice',
 			'code' => 'Code',
 			'company_name' => 'Company Name',
+			'visit_num' => 'Visit Num',
 			'visit_way' => 'Visit Way',
 			'sale_uid' => 'Sale Uid',
 			'sex' => 'Sex',
@@ -119,6 +125,8 @@ class Sub extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('hid',$this->hid,true);
 		$criteria->compare('uid',$this->uid);
+		$criteria->compare('an_uid',$this->an_uid);
+		$criteria->compare('market_uid',$this->market_uid);
 		$criteria->compare('time',$this->time);
 		$criteria->compare('market_staff',$this->market_staff,true);
 		$criteria->compare('name',$this->name,true);
@@ -126,6 +134,7 @@ class Sub extends CActiveRecord
 		$criteria->compare('notice',$this->notice,true);
 		$criteria->compare('code',$this->code,true);
 		$criteria->compare('company_name',$this->company_name,true);
+		$criteria->compare('visit_num',$this->visit_num);
 		$criteria->compare('visit_way',$this->visit_way);
 		$criteria->compare('sale_uid',$this->sale_uid);
 		$criteria->compare('sex',$this->sex);

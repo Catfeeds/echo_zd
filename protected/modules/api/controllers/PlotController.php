@@ -956,74 +956,49 @@ class PlotController extends ApiController{
 	public function actionAddSub()
 	{
 		if(!Yii::app()->user->getIsGuest() && Yii::app()->request->getIsPostRequest()) {
-			if(($tmp['hid'] = $this->cleanXss($_POST['hid'])) && ($plot = PlotExt::model()->findByPk($_POST['hid'])) && ($tmp['phone'] = $this->cleanXss($_POST['phone']))) {
+			if(($hid = $_POST['hid']) && ($tmp['phone'] = $this->cleanXss($_POST['phone']))) {
+
 				$tmp['name'] = $this->cleanXss($_POST['name']);
 				$tmp['time'] = strtotime($this->cleanXss($_POST['time']));
 				$tmp['sex'] = $this->cleanXss($_POST['sex']);
 				$tmp['note'] = $this->cleanXss(Yii::app()->request->getPost('note',''));
 				$tmp['visit_way'] = $this->cleanXss($_POST['visit_way']);
 				$tmp['is_only_sub'] = $this->cleanXss($_POST['is_only_sub']);
-				$tmp['notice'] = $notice = $this->cleanXss($_POST['notice']);
-				$tmp['uid'] = $this->staff->id;
+				$tmp['uid'] = $this->cleanXss($_POST['uid']);
+				// $tmp['uid'] = $this->staff->id;
 
 				// if($this->staff->type<=1) {
 				// 	return $this->returnError('您的账户类型为总代公司，不支持快速报备');
 				// } 
-
-				if(Yii::app()->db->createCommand("select id from sub where uid=".$tmp['uid']." and hid=".$tmp['hid']." and deleted=0 and phone='".$tmp['phone']."' and created<=".TimeTools::getDayEndTime()." and created>=".TimeTools::getDayBeginTime())->queryScalar()) {
-					return $this->returnError("同一组客户每天最多报备一次，请勿重复操作");
-				}
-				$obj = new SubExt;
-				$obj->attributes = $tmp;
-				$obj->status = 0;
-				if($tmp['uid']) {
-					$companyname = Yii::app()->db->createCommand("select c.name from company c left join user u on u.cid=c.id where u.id=".$tmp['uid'])->queryScalar();
-					$obj->company_name = $companyname;
-				}
-				// 新增6位客户码 不重复
-				$code = 700000+rand(0,99999);
-				// var_dump($code);exit;
-				while (SubExt::model()->find('code='.$code)) {
-					$code = 700000+rand(0,99999);
-				}
-				$obj->code = $code;
-				if($obj->save()) {
-					$pro = new SubProExt;
-					$pro->sid = $obj->id;
-					$pro->uid = $this->staff->id;
-					$pro->note = '新增客户报备';
-					$pro->save();
-					SmsExt::sendMsg('客户通知',$this->staff->phone,['pro'=>$plot->title,'pho'=>substr($tmp['phone'], -4,4),'code'=>$code]);
-					
-					$this->staff->qf_uid && Yii::app()->controller->sendNotice('您好，你对'.$plot->title.'的报备已经成功，客户的尾号是'.substr($tmp['phone'], -4,4).'，客户码为'.$code.'，请牢记您的客户码。',$this->staff->qf_uid);
-
-					if($notice) {
-						// Yii::log(1);
-						$noticename = Yii::app()->db->createCommand("select name from user where phone='$notice'")->queryScalar();
-						$res = SmsExt::sendMsg('报备',$notice,['staff'=>($this->staff->cid?CompanyExt::model()->findByPk($this->staff->cid)->name:'独立经纪人').$this->staff->name.$this->staff->phone,'user'=>$tmp['name'].$tmp['phone'],'time'=>$_POST['time'],'project'=>$plot->title,'type'=>($obj->visit_way==1?'自驾':'班车')]);
-						// Yii::log(json_encode($res));
-
-						$noticeuid = Yii::app()->db->createCommand("select qf_uid from user where phone='$notice'")->queryScalar();
-						// $noticeuid && $this->staff->qf_uid && Yii::app()->controller->sendNotice('项目名称：'.$plot->title.'；客户：'.$tmp['name'].$tmp['phone'].'；来访时间：'.$_POST['time'].'；来访方式：'.($obj->visit_way==1?'自驾':'班车').'；业务员：'.($this->staff->cid?CompanyExt::model()->findByPk($this->staff->cid)->name:'独立经纪人').$this->staff->name.$this->staff->phone,$noticeuid);
-						$noticeuid && $this->staff->qf_uid && Yii::app()->controller->sendNotice(
-							'报备项目：'.$plot->title.'
-客户姓名：'.$tmp['name'].'
-客户电话： '.$tmp['phone'].'
-公司门店：'.($this->staff->cid?CompanyExt::model()->findByPk($this->staff->cid)->name:'独立经纪人').'
-业务员姓名：'.$this->staff->name.'
-业务员电话：'.$this->staff->phone.'
-市场对接人：'.$noticename.'
-对接人电话：'.$notice.'
-带看时间：'.$_POST['time'].'
-来访方式：'.($obj->visit_way==1?'自驾':'班车'),$noticeuid);
-
+				foreach ($hid as $key => $value) {
+					$tmp['hid'] = $value;
+					if(Yii::app()->db->createCommand("select id from sub where uid=".$tmp['uid']." and hid=".$tmp['hid']." and deleted=0 and phone='".$tmp['phone']."' and created<=".TimeTools::getDayEndTime()." and created>=".TimeTools::getDayBeginTime())->queryScalar()) {
+						return $this->returnError("同一组客户每天最多报备一次，请勿重复操作");
 					}
-						
-					
-				} else {
-					$this->returnError(current(current($obj->getErrors())));
+					$obj = new SubExt;
+					$obj->attributes = $tmp;
+					$obj->status = 0;
+					if($tmp['uid']) {
+						$companyname = Yii::app()->db->createCommand("select c.name from company c left join user u on u.cid=c.id where u.id=".$tmp['uid'])->queryScalar();
+						$obj->company_name = $companyname;
+					}
+					// 新增6位客户码 不重复
+					$code = 700000+rand(0,99999);
+					// var_dump($code);exit;
+					while (SubExt::model()->find('code='.$code)) {
+						$code = 700000+rand(0,99999);
+					}
+					$obj->code = $code;
+					if($obj->save()) {
+						$pro = new SubProExt;
+						$pro->sid = $obj->id;
+						$pro->uid = $this->staff->id;
+						$pro->note = '新增客户报备';
+						$pro->save();
+					} else {
+						$this->returnError(current(current($obj->getErrors())));
+					}
 				}
-				// }
 			}
 		} else {
 			$this->returnError('操作失败');

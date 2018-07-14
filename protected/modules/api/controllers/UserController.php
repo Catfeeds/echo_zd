@@ -141,4 +141,103 @@ class UserController extends ApiController{
 			$this->staff->save();
 		}
 	}
+
+	public function actionIndex($uid='')
+	{
+		$data = [];
+		$user = UserExt::model()->normal()->findByPk($uid);
+		if(!$user) {
+			return $this->returnError('用户不存在或禁用');
+		}
+		$tagarr = [];
+		if($tags = TagExt::model()->findAll("status=1 and cate='fxmy'")) {
+			foreach ($tags as $key => $value) {
+				$tagarr[] = ['name'=>$value->name,'image'=>ImageTools::fixImage($value->icon),'url'=>$value->url];
+			}
+		}
+		$companyinfo = $user->companyinfo;
+		$data = [
+			'name'=>$user->name,
+			'type'=>$user->type,
+			'typename'=>$user->type==2?'分销':($user->type==3?'独立经纪人':'总代'),
+			'wx_word'=>$companyinfo?$companyinfo->name:'独立经纪人',
+			'company'=>$companyinfo?(Tools::u8_title_substr($companyinfo->name,24).' '.$companyinfo->code):'独立经纪人',
+			'tags'=>$tagarr,
+			'tel'=>SiteExt::getAttr('qjpz','site_phone'),
+		];
+		$this->frame['data'] = $data;
+	}
+
+	public function actionSubList($uid='',$user_type=0,$type='',$kw='')
+	{
+		$data = $all =  [];
+		if(!$user_type) {
+			$user = UserExt::model()->normal()->findByPk($uid);
+		} else {
+			$user = StaffExt::model()->normal()->findByPk($uid);
+		}
+		if(!$user) {
+			return $this->returnError('用户不存在或禁用');
+		}
+
+		if($user_type==0) {
+			// 搜项目和客户电话
+			$criteria = new CDbCriteria;
+			$criteria->addCondition("uid=$uid");
+			$criteria->order = 'updated desc';
+			if(is_numeric($kw)) {
+				$criteria->addSearchCondition('phone',$kw);
+			} else {
+				$ids = [];
+				$cre = new CDbCriteria;
+				$cre->addSearchCondition('title',$kw);
+				$ress = PlotExt::model()->findAll($cre);
+				if($ress) {
+					foreach ($ress as $key => $value) {
+						$ids[] = $value->id;
+					}
+				}
+				$criteria->addInCondition('hid',$ids);
+			}
+			$subs = SubExt::model()->findAll($criteria);
+			if($subs) {
+				foreach ($subs as $key => $value) {
+					$market_user = $value->market_user;
+					$all[] = [
+						'id'=>$value->id,
+						'userName'=>$value->name,
+						'userPhone'=>$value->phone,
+						'isShowCode'=>1,
+						'type'=>$value->status,
+						'staffName'=>$market_user?$market_user->name:'暂无',
+						'StaffPhone'=>$market_user?$market_user->phone:'暂无',
+						'time'=>date("m-d H:i",$value->created),
+						'thirdLine'=>$value->plot?$value->plot->title:'暂无',
+					];
+				}
+				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
+				if($all) {
+					foreach (SubExt::$status as $key => $value) {
+						$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
+					}
+					foreach ($all as $key => $value) {
+						$data[$value['type']+1]['num']++;
+						$data[$value['type']+1]['list'][] = $value;
+					}
+				}
+			}
+		}
+		$this->frame['data'] = $data;
+
+	}
+
+	public function actionShowCode($id='')
+	{
+		$data = [];
+		$sub = SubExt::model()->findByPk($id);
+		if(!$sub) {
+			return $this->returnError('参数错误');
+		}
+
+	}
 }
