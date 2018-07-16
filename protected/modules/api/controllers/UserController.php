@@ -331,11 +331,33 @@ class UserController extends ApiController{
 
 	public function actionShowCode($id='')
 	{
-		$data = [];
+		$data = $imgs = [];
 		$sub = SubExt::model()->findByPk($id);
 		if(!$sub) {
 			return $this->returnError('参数错误');
 		}
+		if($subimgs = $sub->imgs) {
+			foreach ($subimgs as $key => $value) {
+				$imgs[] = ImageTools::fixImage($value->url);
+			}
+		}
+		$data = [
+			'id'=>$id,
+			'name'=>$sub->name,
+			'phone'=>$sub->phone,
+			'time'=>date('Y-m-d H:i',$sub->time),
+			'status'=>SubExt::$status[$sub->status],
+			'plot'=>$sub->plot_title,
+			'code'=>$sub->code,
+			'note'=>SiteExt::model()->getAttr('qjpz','subnote'),
+			'imgs'=>$imgs,
+		];
+		$this->frame['data'] = $imgs;
 
+	}
+
+	public function actionSubInfo($id='')
+	{
+		# code...
 	}
 }

@@ -25,6 +25,7 @@ class SubExt extends Sub{
             'an_user'=>array(self::BELONGS_TO, 'StaffExt', 'an_uid'),
             'plot'=>array(self::BELONGS_TO, 'PlotExt', 'hid'),
             'pros'=>array(self::HAS_MANY, 'SubProExt', 'sid','order'=>'pros.created desc'),
+            'imgs'=>array(self::HAS_MANY, 'SubImgExt', 'sid','order'=>'imgs.created desc'),
         );
     }
 
@@ -69,6 +70,15 @@ class SubExt extends Sub{
         }
         if($this->uid && !$this->fx_phone) {
             $this->fx_phone = $this->user->phone;
+        }
+        if(!$this->code) {
+            // 新增6位客户码 不重复
+            $code = 700000+rand(0,99999);
+            // var_dump($code);exit;
+            while (SubExt::model()->find('code='.$code)) {
+                $code = 700000+rand(0,99999);
+            }
+            $this->code = $code;
         }
 
         if($this->getIsNewRecord()) {

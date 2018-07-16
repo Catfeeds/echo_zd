@@ -1,79 +1,36 @@
 <?php
-$this->pageTitle = $this->controllerName.'列表';
+$this->pageTitle = '报备材料列表';
 $this->breadcrumbs = array($this->pageTitle);
-$statusArr = SubExt::$status;
+// $statusArr = SubExt::$status;
 ?>
 <div class="table-toolbar">
-    <div class="btn-group pull-left">
-        <form class="form-inline">
-            <div class="form-group">
-                <?php echo CHtml::dropDownList('type',$type,array('title'=>'标题'),array('class'=>'form-control','encode'=>false)); ?>
-            </div>
-            <div class="form-group">
-                <?php echo CHtml::textField('value',$value,array('class'=>'form-control chose_text')) ?>
-            </div>
-            <div class="form-group">
-                <?php echo CHtml::dropDownList('time_type',$time_type,array('created'=>'添加时间','updated'=>'修改时间'),array('class'=>'form-control','encode'=>false)); ?>
-            </div>
-            <?php Yii::app()->controller->widget("DaterangepickerWidget",['time'=>$time,'params'=>['class'=>'form-control chose_text']]);?>
-            
-            <div class="form-group">
-                <?php echo CHtml::dropDownList('cate',$cate,$statusArr,array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择状态--')); ?>
-            </div>
-            <button type="submit" class="btn blue">搜索</button>
-            <a class="btn yellow" onclick="removeOptions()"><i class="fa fa-trash"></i>&nbsp;清空</a>
-        </form>
-    </div>
+
     <div class="pull-right">
-        <a href="<?php echo $this->createAbsoluteUrl('edit') ?>" class="btn blue">
-            添加<?=$this->controllerName?> <i class="fa fa-plus"></i>
+        <a href="<?php echo $this->createAbsoluteUrl('imageedit',['sid'=>$sid]) ?>" class="btn blue">
+            添加材料 <i class="fa fa-plus"></i>
         </a>
     </div>
 </div>
    <table class="table table-bordered table-striped table-condensed flip-content table-hover">
     <thead class="flip-content">
     <tr>
-        <th class="text-center">排序</th>
         <th class="text-center">ID</th>
-        <th class="text-center">项目信息</th>
-        <th class="text-center">分销信息</th>
-        <th class="text-center">客户信息</th>
-        <th class="text-center">市场人员</th>
+        <th class="text-center">图片</th>
         <th class="text-center">添加时间</th>
         <th class="text-center">修改时间</th>
-        <th class="text-center">状态</th>
         <th class="text-center">操作</th>
     </tr>
     </thead>
     <tbody>
     <?php foreach($infos as $k=>$v): ?>
         <tr>
-            <td style="text-align:center;vertical-align: middle" class="warning sort_edit"
-                data-id="<?php echo $v['id'] ?>"><?php echo $v['sort'] ?></td>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
-            <td class="text-center"><a target="_blank" href="<?=$this->createUrl('/api/index/detail',['id'=>$v->hid])?>"><?=$v->plot->title?></a></td>
-            <td class="text-center"><?=$v->user?($v->user->name.'/'.$v->user->phone):''?></td> 
-            <td class="text-center"><?=$v->name.'/'.$v->phone?></td> 
-            <td class="text-center"><?=$v->market_user?$v->market_user->name:''?></td>     
+            <td style="text-align:center;vertical-align: middle" class="text-center"><?=strstr($v->url,'http')?$v->url:('<img width="100px" height="70px" src="'.ImageTools::fixImage($v->url).'">')?></td>            
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>
-            <td class="text-center" style="text-align:center;vertical-align: middle">
-                <div class="btn-group">
-                    <button id="btnGroupVerticalDrop1" type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                    <?=$statusArr[$v->status]?> <i class="fa fa-angle-down"></i>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                    <?php foreach($statusArr as $key=>$v1){?>
-                        <li>
-                            <?=CHtml::ajaxLink($v1,$this->createUrl('ajaxStatus',['kw'=>$key,'ids'=>$v->id]),['success'=>'function(){location.reload();}'])?>
-                        </li>
-                      <?php  }?>
-                    </ul>
-                </div>
-            </td>
+            
             <td style="text-align:center;vertical-align: middle">
-                <a href="<?php echo $this->createUrl('imagelist',array('sid'=>$v->id)); ?>" class="btn default btn-xs blue"> 材料列表 </a>
-                <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id)); ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 修改 </a>
+                <a href="<?php echo $this->createUrl('imageedit',array('id'=>$v->id,'sid'=>$sid)); ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 修改 </a>
                 <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?>
 
 
@@ -82,7 +39,6 @@ $statusArr = SubExt::$status;
     <?php endforeach;?>
     </tbody>
 </table>
-<?php $this->widget('VipLinkPager', array('pages'=>$pager)); ?>
 
 <script>
 <?php Tools::startJs(); ?>
