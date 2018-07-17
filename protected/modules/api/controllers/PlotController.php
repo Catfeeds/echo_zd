@@ -975,6 +975,7 @@ class PlotController extends ApiController{
 				$tmp['visit_way'] = $this->cleanXss($_POST['visit_way']);
 				$tmp['is_only_sub'] = $this->cleanXss($_POST['is_only_sub']);
 				$tmp['uid'] = $this->cleanXss($_POST['uid']);
+				$hid = explode(',', $hid);
 				// $tmp['uid'] = $this->staff->id;
 
 				// if($this->staff->type<=1) {
@@ -1851,15 +1852,15 @@ class PlotController extends ApiController{
     	}
     }
 
-    public function actionAddSave($hid='')
+    public function actionAddSave($hid='',$uid='')
     {
-    	if(!Yii::app()->user->getIsGuest()&&$hid) {
-    		if($save = SaveExt::model()->find('hid='.(int)$hid.' and uid='.$this->staff->id)) {
-    			SaveExt::model()->deleteAllByAttributes(['hid'=>$hid,'uid'=>$this->staff->id]);
+    	if($uid&&$hid) {
+    		if($save = SaveExt::model()->find('hid='.(int)$hid.' and uid='.$uid)) {
+    			SaveExt::model()->deleteAllByAttributes(['hid'=>$hid,'uid'=>$uid]);
     			$this->returnSuccess('取消关注成功');
     		} else {
     			$save = new SaveExt;
-    			$save->uid = $this->staff->id;
+    			$save->uid = $uid;
     			$save->hid = $hid;
     			$save->save();
     			$this->returnSuccess('关注成功');
