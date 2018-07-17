@@ -13,7 +13,10 @@ class IndexController extends ApiController
         } else {
             $data['indexImgs'] = [];
         }
-        $data['cityName'] = AreaExt::model()->find(['condition'=>'parent='.AreaExt::model()->find(['condition'=>'parent=0','order'=>'sort asc'])->id,'order'=>'sort asc'])->name;
+        $areaobj = AreaExt::model()->find(['condition'=>'parent='.AreaExt::model()->find(['condition'=>'parent=0','order'=>'sort asc'])->id,'order'=>'sort asc']);
+        $data['cityName'] = $areaobj->name;
+        $data['areaid'] = $areaobj->id;
+        $data['cityid'] = $areaobj->parent;
         $data['tags'] = [];
         if($ress = TagExt::model()->findAll("status=1 and cate='indextag'")) {
             foreach ($ress as $key => $value) {
