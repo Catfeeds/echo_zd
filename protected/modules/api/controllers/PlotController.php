@@ -63,42 +63,9 @@ class PlotController extends ApiController{
 		}
 		$ids = $companyids = [];
 		$criteria = new CDbCriteria;
-		if($uid>0) {
-			if(!$save) {
-				if(!$this->staff) {
-					$this->staff = UserExt::model()->findByPk($uid);
-				}
-				if($this->staff && $this->staff->type==1 && $this->staff->companyinfo) {
-					$init = 0;
-					$plothidsres = Yii::app()->db->createCommand("select hid from plot_makert_user where status=1 and uid=".$this->staff->id)->queryAll();
-					if($plothidsres) {
-						foreach ($plothidsres as $ress) {
-							$ids[] = $ress['hid'];
-						}
-					}
-					$criteria->addInCondition('id',$ids);
-					// $criteria->addCondition('uid=:uid');
-					// $criteria->params[':uid'] = $this->staff->id;
-					// if(is_numeric($status)) {
-					// 	$criteria->addCondition('status=:status');
-					// 	$criteria->params[':status'] = $status;
-					// }
-				} else {
-					// $criteria->addCondition('uid=');
-					return $this->returnError('未登录');
-				}
-			}
-		} else {
-			$criteria->addCondition('status=1');
-		}
-		if(($save>0&&$this->staff)||($save>0&&$myuid)) {
-			if($myuid) {
-				$thisuid = $myuid;
-			} else {
-				$thisuid = $this->staff->id;
-			}
+		if($save&&$uid) {
 			$savehidsarr = [];
-			$savehids = Yii::app()->db->createCommand("select hid from save where uid=".$thisuid)->queryAll();
+			$savehids = Yii::app()->db->createCommand("select hid from save where uid=".$uid)->queryAll();
 			if($savehids) {
 				foreach ($savehids as $savehid) {
 					$savehidsarr[] = $savehid['hid'];
@@ -106,6 +73,49 @@ class PlotController extends ApiController{
 			}
 			$criteria->addInCondition('id',$savehidsarr);
 		}
+		// if($uid>0) {
+		// 	if(!$save) {
+		// 		if(!$this->staff) {
+		// 			$this->staff = UserExt::model()->findByPk($uid);
+		// 		}
+		// 		if($this->staff && $this->staff->type==1 && $this->staff->companyinfo) {
+		// 			$init = 0;
+		// 			$plothidsres = Yii::app()->db->createCommand("select hid from plot_makert_user where status=1 and uid=".$this->staff->id)->queryAll();
+		// 			if($plothidsres) {
+		// 				foreach ($plothidsres as $ress) {
+		// 					$ids[] = $ress['hid'];
+		// 				}
+		// 			}
+		// 			$criteria->addInCondition('id',$ids);
+		// 			// $criteria->addCondition('uid=:uid');
+		// 			// $criteria->params[':uid'] = $this->staff->id;
+		// 			// if(is_numeric($status)) {
+		// 			// 	$criteria->addCondition('status=:status');
+		// 			// 	$criteria->params[':status'] = $status;
+		// 			// }
+		// 		} else {
+		// 			// $criteria->addCondition('uid=');
+		// 			return $this->returnError('未登录');
+		// 		}
+		// 	}
+		// } else {
+		// 	$criteria->addCondition('status=1');
+		// }
+		// if(($save>0&&$this->staff)||($save>0&&$myuid)) {
+		// 	if($myuid) {
+		// 		$thisuid = $myuid;
+		// 	} else {
+		// 		$thisuid = $this->staff->id;
+		// 	}
+		// 	$savehidsarr = [];
+		// 	$savehids = Yii::app()->db->createCommand("select hid from save where uid=".$thisuid)->queryAll();
+		// 	if($savehids) {
+		// 		foreach ($savehids as $savehid) {
+		// 			$savehidsarr[] = $savehid['hid'];
+		// 		}
+		// 	}
+		// 	$criteria->addInCondition('id',$savehidsarr);
+		// }
 		if($kw) {
 			// $criteria1 = new CDbCriteria;
 			// $criteria1->addSearchCondition('name',$kw);
