@@ -978,4 +978,13 @@ class ToolCommand extends CConsoleCommand
         curl_close($curlHandle);    
         return $data;
     }
+
+    public function actionDoArea()
+    {
+        $areas = AreaExt::model()->findAll('pinyin!=""');
+        foreach ($areas as $key => $value) {
+            $value->pinyin = strtoupper(substr($value->pinyin, 0,1));
+            $value->save();
+        }
+    }
 }
