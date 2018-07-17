@@ -1135,14 +1135,14 @@ class PlotController extends ApiController{
 
     public function actionAddReport()
     {
-    	if(!Yii::app()->user->getIsGuest() && Yii::app()->request->getIsPostRequest()) {
+    	if(Yii::app()->request->getIsPostRequest()) {
 			if($tmp['hid'] = $this->cleanXss($_POST['hid'])) {
 				$plot = PlotExt::model()->findByPk($tmp['hid']);
 				if(!$plot) {
 					return $this->returnError('操作失败');
 				}
 				$tmp['reason'] = $this->cleanXss($_POST['reason']);
-				$tmp['uid'] = $this->staff->id;
+				$tmp['uid'] = $_POST['uid'];
 // var_dump($plot);exit;
 				if(!Yii::app()->db->createCommand("select id from report where deleted=0 and uid=".$tmp['uid']." and hid=".$tmp['hid'])->queryScalar()) {
 					
