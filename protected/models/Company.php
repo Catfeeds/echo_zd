@@ -8,9 +8,12 @@
  * @property string $name
  * @property string $address
  * @property string $manager
- * @property integer $street
  * @property integer $area
+ * @property integer $street
  * @property string $phone
+ * @property string $map_zoom
+ * @property string $map_lng
+ * @property string $map_lat
  * @property string $code
  * @property integer $msg_num
  * @property string $image
@@ -41,14 +44,14 @@ class Company extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('created', 'required'),
-			array('street, area, msg_num, adduid, type, status, sort, deleted, created, updated', 'numerical', 'integerOnly'=>true),
+			array('area, street, msg_num, adduid, type, status, sort, deleted, created, updated', 'numerical', 'integerOnly'=>true),
 			array('name, address, image', 'length', 'max'=>255),
-			array('manager', 'length', 'max'=>100),
+			array('manager, map_zoom, map_lng, map_lat', 'length', 'max'=>100),
 			array('phone', 'length', 'max'=>30),
 			array('code', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, address, manager, street, area, phone, code, msg_num, image, adduid, type, status, sort, deleted, created, updated', 'safe', 'on'=>'search'),
+			array('id, name, address, manager, area, street, phone, map_zoom, map_lng, map_lat, code, msg_num, image, adduid, type, status, sort, deleted, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,9 +76,12 @@ class Company extends CActiveRecord
 			'name' => 'Name',
 			'address' => 'Address',
 			'manager' => 'Manager',
-			'street' => 'Street',
 			'area' => 'Area',
+			'street' => 'Street',
 			'phone' => 'Phone',
+			'map_zoom' => 'Map Zoom',
+			'map_lng' => 'Map Lng',
+			'map_lat' => 'Map Lat',
 			'code' => 'Code',
 			'msg_num' => 'Msg Num',
 			'image' => 'Image',
@@ -111,9 +117,12 @@ class Company extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('address',$this->address,true);
 		$criteria->compare('manager',$this->manager,true);
-		$criteria->compare('street',$this->street);
 		$criteria->compare('area',$this->area);
+		$criteria->compare('street',$this->street);
 		$criteria->compare('phone',$this->phone,true);
+		$criteria->compare('map_zoom',$this->map_zoom,true);
+		$criteria->compare('map_lng',$this->map_lng,true);
+		$criteria->compare('map_lat',$this->map_lat,true);
 		$criteria->compare('code',$this->code,true);
 		$criteria->compare('msg_num',$this->msg_num);
 		$criteria->compare('image',$this->image,true);
