@@ -6,14 +6,13 @@
  */
 class SubProExt extends SubPro{
     public static $status = [
-        '报备',
-        '到访',
-        '认筹',
-        '认购',
-        '成交',
-        '结佣',
-        '退定',
-        '跟进',
+    0=>'报备',
+        1=>'到访',
+        2=>'认筹',
+        3=>'成交',
+        4=>'请佣',
+        5=>'结佣',
+        9=>'跟进',
     ];
 	/**
      * 定义关系
@@ -23,6 +22,7 @@ class SubProExt extends SubPro{
         return array(
             'user'=>array(self::BELONGS_TO, 'UserExt', 'uid'),
             'sub'=>array(self::BELONGS_TO, 'SubExt', 'sid'),
+            'staffObj'=>array(self::BELONGS_TO, 'StaffExt', 'staff'),
         );
     }
 

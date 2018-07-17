@@ -72,6 +72,7 @@ $statusArr = SubExt::$status;
                 </div>
             </td>
             <td style="text-align:center;vertical-align: middle">
+                <a href="<?php echo $this->createUrl('prolist',array('sid'=>$v->id)); ?>" class="btn default btn-xs default"> 跟进列表 </a>
                 <a href="<?php echo $this->createUrl('imagelist',array('sid'=>$v->id)); ?>" class="btn default btn-xs blue"> 材料列表 </a>
                 <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id)); ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 修改 </a>
                 <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?>

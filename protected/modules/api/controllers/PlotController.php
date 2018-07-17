@@ -1018,29 +1018,17 @@ class PlotController extends ApiController{
 
 	public function actionAddCo()
 	{
-		if(!Yii::app()->user->getIsGuest() && Yii::app()->request->getIsPostRequest()) {
+		if(Yii::app()->request->getIsPostRequest()) {
 			if($tmp['hid'] = $this->cleanXss($_POST['hid'])) {
 				$plot = PlotExt::model()->findByPk($tmp['hid']);
-				$tmp['com_phone'] = $this->cleanXss($_POST['com_phone']);
-				$tmp['uid'] = $this->staff->id;
+				// $tmp['com_phone'] = $this->cleanXss($_POST['com_phone']);
+				$tmp['uid'] = $this->cleanXss($_POST['uid']);
 // var_dump($plot);exit;
-				if($this->staff->type>1 && $plot && !Yii::app()->db->createCommand("select id from cooperate where deleted=0 and uid=".$tmp['uid']." and hid=".$tmp['hid'])->queryScalar()) {
-					if($this->staff->cid) {
-						$company = Yii::app()->db->createCommand('select name from company where id='.$this->staff->cid)->queryScalar();
-					} else {
-						$company = '';
-					}
-					
+				if($plot && !Yii::app()->db->createCommand("select id from cooperate where deleted=0 and uid=".$tmp['uid']." and hid=".$tmp['hid'])->queryScalar()) {
 					$obj = new CooperateExt;
 					$obj->attributes = $tmp;
 					$obj->status = 0;
-					if($obj->save()) {
-						SmsExt::sendMsg('分销',$tmp['com_phone'],['staff'=>$company.$this->staff->name.$this->staff->phone,'plot'=>$plot->title]);
-						$noticeuid = Yii::app()->db->createCommand("select qf_uid from user where phone='".$tmp['com_phone']."'")->queryScalar();
-						$noticeuid && Yii::app()->controller->sendNotice('分销合同签约申请：'.$company.$this->staff->name.$this->staff->phone.'，正在经纪圈APP中申请合作（'.$plot->title.'）项目，请尽快联系哦！',$noticeuid);
-					}
-				} elseif($this->staff->type<=1) {
-					$this->returnError('您的账户类型为总代公司，不支持申请分销签约');
+					$obj->save();
 				} else {
 					$this->returnError('您已经提交申请，请勿重复提交');
 				}

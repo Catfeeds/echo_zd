@@ -5,6 +5,7 @@
  *
  * The followings are the available columns in table 'sub_pro':
  * @property integer $id
+ * @property integer $staff
  * @property integer $sid
  * @property integer $uid
  * @property string $note
@@ -32,11 +33,11 @@ class SubPro extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('created', 'required'),
-			array('sid, uid, status, deleted, created, updated', 'numerical', 'integerOnly'=>true),
+			array('staff, sid, uid, status, deleted, created, updated', 'numerical', 'integerOnly'=>true),
 			array('note', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, sid, uid, note, status, deleted, created, updated', 'safe', 'on'=>'search'),
+			array('id, staff, sid, uid, note, status, deleted, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,6 +59,7 @@ class SubPro extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'staff' => 'Staff',
 			'sid' => 'Sid',
 			'uid' => 'Uid',
 			'note' => 'Note',
@@ -87,6 +89,7 @@ class SubPro extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('staff',$this->staff);
 		$criteria->compare('sid',$this->sid);
 		$criteria->compare('uid',$this->uid);
 		$criteria->compare('note',$this->note,true);

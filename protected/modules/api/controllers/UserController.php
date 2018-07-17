@@ -356,8 +356,109 @@ class UserController extends ApiController{
 
 	}
 
-	public function actionSubInfo($id='')
+	public function actionSubInfo($id='',$user_type='')
 	{
-		# code...
+		$data = $pros = $imgs = $firstArr = $secondArr = [];
+		$sub = SubExt::model()->findByPk($id);
+		$subArr  = SubExt::$status;
+		if(!$sub) {
+			return $this->returnError('参数错误');
+		}
+		if($pross = $sub->pros) {
+			foreach ($pross as $key => $value) {
+				$pros[] = [
+					'id'=>$value->id,
+					'name'=>($value->user?$value->user->name:($value->staffObj?$value->staffObj->name:'')).'添加了'.$subArr[$value->status],
+					'time'=>date('m-d H:i',$value->created),
+					'note'=>$value->note,
+				];
+			}
+		}
+		if($subimgs = $sub->imgs) {
+			foreach ($subimgs as $key => $value) {
+				$imgs[] = ImageTools::fixImage($value->url);
+			}
+		}
+		$firstArr = [
+			'name'=>$sub->name,
+			'phone'=>$sub->phone,
+			'tag'=>'客户姓名',
+		];
+		// 项目展示系统用0 案场传1 市场传2
+		if(!$user_type) {
+			// 市场消息
+			if($u = $sub->market_user) {
+				$secondArr = [
+					'name'=>$u->name,
+					'phone'=>$u->phone,
+					'tag'=>'市场资料',
+				];
+			}
+				
+		} elseif($user_type==1) {
+			if($u = $sub->user) {
+				$secondArr = [
+					'name'=>$u->name,
+					'phone'=>$u->phone,
+					'tag'=>'分销资料',
+				];
+			}
+		} else {
+			if($u = $sub->an_user) {
+				$secondArr = [
+					'name'=>$u->name,
+					'phone'=>$u->phone,
+					'tag'=>'案场资料',
+				];
+			}
+		}
+
+		$subArr = array_slice($subArr, 0,-1);
+		// var_dump($subArr);exit;
+		$data = [
+			'id'=>$id,
+			'plot_title'=>$sub->plot_title,
+			'status'=>$sub->status,
+			'status_arr'=>$subArr,
+			// 'vip_name'=>$sub->name,
+			// 'vip_phone'=>$sub->phone,
+			// 'vip_tag'=>'客户姓名',
+			'pros'=>$pros,
+			'imgs'=>$imgs,
+			'secondArr'=>$secondArr,
+			'firstArr'=>$firstArr,
+			'user_phone'=>$sub->phone,
+		];
+		$this->frame['data'] = $data;
+	}
+
+	public function actionAddSubPro()
+	{
+		if(Yii::app()->request->getIsPostRequest()) {
+			$data['sid'] = $_post['sid'];
+			$data['note'] = $_post['note'];
+			$data['status'] = $_post['status'];
+			$data['uid'] = $_post['uid'];
+			$data['staff'] = $_post['staff'];
+			if(!$data['sid']) {
+				$obj = new SubProExt;
+				$obj->attributes = $obj;
+				if(!$obj->status) {
+					$obj->status = 9;
+				}
+				if($obj->save()) {
+					$sub = $obj->sub;
+					if($obj->status!=9) {
+						$sub->status = $obj->status;
+						$sub->save();
+					}
+				}
+			}
+		}
+	}
+
+	public function actionGetSubTag()
+	{
+		$this->frame['data'] = SubExt::$status;
 	}
 }

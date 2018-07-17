@@ -81,12 +81,12 @@ class SubController extends AdminController{
 		$this->setMessage('操作成功','success');	
 	}
 
-	public function actionImageList($sid='')
+	public function actionImagelist($sid='')
 	{
 		$sub = SubExt::model()->findByPk($sid);
 		$this->render('imagelist',['sub'=>$sub,'infos'=>$sub->imgs,'sid'=>$sid]);
 	}
-	public function actionImageEdit($sid='',$id='')
+	public function actionImageedit($sid='',$id='')
 	{
 		$modelName = 'SubImgExt';
 		$info = $id ? $modelName::model()->findByPk($id) : new $modelName;
@@ -101,5 +101,26 @@ class SubController extends AdminController{
 			}
 		} 
 		$this->render('imageedit',['cates'=>$this->cates,'article'=>$info,'sid'=>$sid,]);
+	}
+	public function actionProlist($sid='')
+	{
+		$sub = SubExt::model()->findByPk($sid);
+		$this->render('prolist',['sub'=>$sub,'infos'=>$sub->pros,'sid'=>$sid]);
+	}
+	public function actionProedit($sid='',$id='')
+	{
+		$modelName = 'SubProExt';
+		$info = $id ? $modelName::model()->findByPk($id) : new $modelName;
+		if(Yii::app()->request->getIsPostRequest()) {
+			$info->attributes = Yii::app()->request->getPost($modelName,[]);
+			$info->sid = $sid;
+			// $info->time =  is_numeric($info->time)?$info->time : strtotime($info->time);
+			if($info->save()) {
+				$this->setMessage('操作成功','success',['prolist?sid='.$sid]);
+			} else {
+				$this->setMessage(array_values($info->errors)[0][0],'error');
+			}
+		} 
+		$this->render('proedit',['cates'=>$this->cates,'article'=>$info,'sid'=>$sid,]);
 	}
 }
