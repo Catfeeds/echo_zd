@@ -56,7 +56,7 @@ class IndexController extends ApiController
         if($pares) {
             $tmp = [];
             foreach ($pares as $key => $value) {
-                $tmp = array_merge(Yii::app()->db->createCommand("select id,name,pinyin from area where parent=".$value->id." and status=1 order by sort asc,updated desc")->queryAll(),$tmp) ;
+                $tmp = array_merge(Yii::app()->db->createCommand("select id,name,pinyin,parent from area where parent=".$value->id." and status=1 order by sort asc,updated desc")->queryAll(),$tmp) ;
             }
             // var_dump($tmp);exit;
             foreach ($tmp as $key => $value) {
