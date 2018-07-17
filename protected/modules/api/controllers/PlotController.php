@@ -2702,7 +2702,7 @@ class PlotController extends ApiController{
     	$data = [];
     	$user = UserExt::model()->findByPk($uid);
 
-    	if($uid) {
+    	if(!$user) {
     		return $this->returnError('参数错误');
     	}
     	if($subs = $user->subs) {
