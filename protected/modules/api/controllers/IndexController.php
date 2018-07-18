@@ -280,6 +280,7 @@ class IndexController extends ApiController
                         'status'=>$user->status,
                         'openid'=>$user->openid,
                         'avatarUrl'=>ImageTools::fixImage($user->ava,200,200),
+                        'image'=>ImageTools::fixImage($user->image),
                         'wx_word'=>$companyinfo?($companyinfo->name):'独立经纪人',
                         // 'is_true'=>$user->is_true,
                         'company_name'=>$companyinfo?$companyinfo->name:'独立经纪人',
@@ -578,10 +579,24 @@ class IndexController extends ApiController
                 $cont = json_decode($cont,true);
                 $openid = $cont['openid'];
                 if($openid) {
+                    // 如果用户类型是fenxiao有没有cid则把用户信息带过去
                     $user = UserExt::model()->find("openid='$openid'");
+                    $is_true = 1;
+                    $user_data = [];
+                    if($user->type==2&&!$user->cid) {
+                        $is_true = 0;
+                        $user_data = [
+                            'name'=>$user->name,
+                            'phone'=>$user->phone,
+                            'type'=>$user->type,
+                            'image'=>ImageTools::fixImage($user->image),
+                        ];
+                    }
                     if($user) {
                         $data = [
                             'uid'=>$user->id,
+                            'is_true'=>$is_true,
+                            'user_data'=>$user_data,
                             // 'phone'=>$user->phone,
                             // 'name'=>$user->name,
                             // 'type'=>$user->type,
@@ -595,7 +610,7 @@ class IndexController extends ApiController
                         $this->frame['data'] = $data;
                         // echo json_encode($data);
                     } else {
-                        $this->frame['data'] = ['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>''];
+                        $this->frame['data'] = ['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'','is_true'=>$is_true,'user_data'=>$user_data];
                         // echo json_encode(['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'']);
                     }
                 } else {
@@ -877,6 +892,15 @@ class IndexController extends ApiController
         } else {
             $this->returnError('验证码错误');
         }
+    }
+
+    public function actionGetUserType()
+    {
+        $data[] = ['id'=>'2','name'=>'分销'];
+        if(SiteExt::getAttr('qjpz','openDl')) {
+            $data[] = ['id'=>'3','name'=>'独立经纪人'];
+        }
+        $this->frame['data'] = $data;
     }
 
 }

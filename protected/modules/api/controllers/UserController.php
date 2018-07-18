@@ -461,4 +461,29 @@ class UserController extends ApiController{
 	{
 		$this->frame['data'] = SubExt::$status;
 	}
+
+	public function actionAddSubImg()
+	{
+		if(Yii::app()->request->getIsPostRequest()) {
+			$data['sid'] = $_post['sid'];
+			$data['imgs'] = $_post['imgs'];
+			if(!$data['sid'] || !$data['imgs']) {
+				return $this->returnError('参数错误');
+			}
+			foreach (explode(',', $data['imgs']) as $key => $value) {
+				$obj = new SubImgExt;
+				$obj->sid = $data['sid'];
+				$obj->url = $value;
+				$obj->save();
+			}
+		}
+	}
+
+	public function actionLeave($uid='')
+	{
+		if($user = UserExt::model()->findByPk($uid)) {
+			$user->cid = 0;
+			$user->save();
+		}
+	}
 }
