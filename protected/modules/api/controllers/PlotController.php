@@ -308,20 +308,20 @@ class PlotController extends ApiController{
 					// }
 					$expire = '您尚未成为对接人';
 					// // var_dump($uid);exit;
-					if($uid) {
-						$expiret = Yii::app()->db->createCommand('select expire from plot_makert_user where uid='.$this->staff->id.' and hid='.$value->id)->queryScalar();
-						if(!$expiret) {
-							$expire = '等待付款';
-						}elseif($expiret>0 && $expiret<time()) {
-							$expire = '已到期';
-						} elseif($expiret>0) {
-							if($value->status) {
-								$expire = '已上线';
-							} else {
-								$expire = '等待审核';
-							}
-						}
-					}
+					// if($uid) {
+					// 	$expiret = Yii::app()->db->createCommand('select expire from plot_makert_user where uid='.$this->staff->id.' and hid='.$value->id)->queryScalar();
+					// 	if(!$expiret) {
+					// 		$expire = '等待付款';
+					// 	}elseif($expiret>0 && $expiret<time()) {
+					// 		$expire = '已到期';
+					// 	} elseif($expiret>0) {
+					// 		if($value->status) {
+					// 			$expire = '已上线';
+					// 		} else {
+					// 			$expire = '等待审核';
+					// 		}
+					// 	}
+					// }
 					// 自己发的才能编辑
 					if($this->staff&&$value->uid&&$value->uid==$this->staff->id) {
 						$can_edit = 1;
@@ -350,7 +350,7 @@ class PlotController extends ApiController{
 					];
 				}
 				$pager = $plots->pagination;
-				$this->frame['data'] = ['list'=>$lists,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount,'refresh_num'=>$uid?$this->staff->refresh_num:''];
+				$this->frame['data'] = ['list'=>$lists,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
 			}
 		}
 		// if($city+$area+$street+$aveprice+$sfprice+$wylx+$zxzt+$toptag+$company+$uid+$save==0&&!$kw) {
@@ -965,7 +965,7 @@ class PlotController extends ApiController{
 
 	public function actionAddSub()
 	{
-		if(!Yii::app()->user->getIsGuest() && Yii::app()->request->getIsPostRequest()) {
+		if(Yii::app()->request->getIsPostRequest()) {
 			if(($hid = $_POST['hid']) && ($tmp['phone'] = $this->cleanXss($_POST['phone']))) {
 
 				$tmp['name'] = $this->cleanXss($_POST['name']);
