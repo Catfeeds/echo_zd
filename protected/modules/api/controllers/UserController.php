@@ -41,11 +41,14 @@ class UserController extends ApiController{
 				return $this->returnError('请绑定手机号再进行提交');
 			}
 			if($obj) {
-				$user = new UserExt;
+				if($user = UserExt::model()->find("phone='".$obj['phone']."'")){
+					;
+				} else
+					$user = new UserExt;
 				$company = '';
-				if(Yii::app()->db->createCommand("select id from user where phone='".$obj['phone']."'")->queryScalar()) {
-					return $this->returnError('您已提交申请，请勿重复提交');
-				}
+				// if(Yii::app()->db->createCommand("select id from user where phone='".$obj['phone']."'")->queryScalar()) {
+				// 	return $this->returnError('您已提交申请，请勿重复提交');
+				// }
 				if($obj['type']<3) {
 					$code = $obj['companycode'];
 					unset($obj['companycode']);

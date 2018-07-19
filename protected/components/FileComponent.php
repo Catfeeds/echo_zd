@@ -55,6 +55,7 @@ class FileComponent extends CApplicationComponent
      * @var boolean 是否多文件上传
      */
     private $_multi=false;
+    public $password;
 
     /**
      * 获得随机文件名，用于要上传的文件

@@ -44,6 +44,8 @@ $this->breadcrumbs = array('站点配置', $this->pageTitle);
             <?php echo $form->textField($model, $key, array('class' => 'form-control fi','onfocus'=>'setFocus(this)')); ?>
         <?php elseif($value['type'] == 'textarea'):?>
             <?php echo $form->textarea($model, $key, array('class' => 'form-control fi','onfocus'=>'setFocus(this)')); ?>
+        <?php elseif($value['type'] == 'pwd'):?>
+            <?php echo $form->passwordField($model, $key, array('class' => 'form-control fi','onfocus'=>'setFocus(this)')); ?>
         <?php elseif($value['type'] == 'radio'):?>
             <?php echo $form->radioButtonList($model, $key,$value['list'] ,array('class' => 'form-control','separator' => '')); ?>
         <?php endif;?>
