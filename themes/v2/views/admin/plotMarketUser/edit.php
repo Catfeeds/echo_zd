@@ -15,9 +15,9 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
         'print','preview','searchreplace']]")); ?>
 <?php $form = $this->beginWidget('HouseForm', array('htmlOptions' => array('class' => 'form-horizontal'))) ?>
 <div class="form-group">
-    <label class="col-md-2 control-label">经纪人电话</label>
+    <label class="col-md-2 control-label">选择市场</label>
     <div class="col-md-4">
-        <input type="text" class="form-control" name="userphone" value="<?=$userphone?>">       
+        <?php echo $form->dropDownList($article, 'uid', CHtml::listData(StaffExt::model()->findAll(),'id','name'), array('value'=>$hid?$hid:'','class' => 'form-control select2','empty'=>'')); ?>     
     </div>
 </div>
 <div class="form-group">
@@ -28,13 +28,13 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
   <input type="hidden" name="<?=get_class($article).'[hid]'?>"  value="<?=$hid?>">
  <?php else:?>
   
-        <?php echo $form->dropDownList($article, 'hid', Yii::app()->redis->getClient()->hGetAll('plot_title'), array('value'=>$hid?$hid:'','class' => 'form-control select2','empty'=>'')); ?>
+        <?php echo $form->dropDownList($article, 'hid', CHtml::listData(PlotExt::model()->findAll(),'id','title'), array('value'=>$hid?$hid:'','class' => 'form-control select2','empty'=>'')); ?>
     
  <?php endif;?> 
  </div>
     <div class="col-md-2"><?php echo $form->error($article, 'hid') ?></div>
 </div>
-<div class="form-group">
+<!-- <div class="form-group">
     <label class="col-md-2 control-label">到期时间</label>
     <div class="col-md-4">
         <div class="input-group date form_datetime" >
@@ -45,21 +45,21 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
         </div>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'hid') ?></div>
-</div>
-<div class="form-group">
+</div> -->
+<!-- <div class="form-group">
     <label class="col-md-2 control-label">是否发布人</label>
     <div class="col-md-4">
         <?php echo $form->radioButtonList($article, 'is_manager', ['否','是'], array('separator' => '')); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'is_manager') ?></div>
-</div>
-<div class="form-group">
+</div> -->
+<!-- <div class="form-group">
     <label class="col-md-2 control-label">状态</label>
     <div class="col-md-4">
         <?php echo $form->radioButtonList($article, 'status', PlotMarketUserExt::$status, array('separator' => '')); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'status') ?></div>
-</div>
+</div> -->
 <div class="form-actions">
     <div class="row">
         <div class="col-md-offset-3 col-md-9">

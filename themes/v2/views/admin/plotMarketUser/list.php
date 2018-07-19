@@ -34,7 +34,7 @@ $this->breadcrumbs = array($this->pageTitle);
         <th class="text-center">ID</th>
         <th class="text-center">项目信息</th>
         <th class="text-center">用户信息</th>
-        <th class="text-center">到期时间</th>
+        <!-- <th class="text-center">到期时间</th> -->
         <th class="text-center">添加时间</th>
         <th class="text-center">修改时间</th>
         <th class="text-center">状态</th>
@@ -47,7 +47,6 @@ $this->breadcrumbs = array($this->pageTitle);
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td class="text-center"><?=$v->plot?$v->plot->title:''?></td>
             <td class="text-center"><?=($v->user?($v->user->name.'/'.$v->user->phone):'暂无').($v->is_manager&&$v->plot?('<a href="/admin/plot/edit?id='.$v->plot->id.'"> 查看发布项目</a>'):'')?></td> 
-            <td class="text-center"><?=$v->expire<time()?'已到期':date('Y-m-d',$v->expire)?></td>
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>
             <td class="text-center"><?php echo CHtml::ajaxLink(PlotMarketUserExt::$status[$v->status],$this->createUrl('changeStatus'), array('type'=>'get', 'data'=>array('id'=>$v->id,'class'=>get_class($v)),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$v->status])); ?></td>
