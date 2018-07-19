@@ -91,7 +91,7 @@ class UserController extends ApiController{
 					// 	}
 					// 	$this->frame['data'] = $company->name;
 					// }
-					$this->frame['data'] = $company->name;
+					// $this->frame['data'] = $company->name;
 
 				}
 			}

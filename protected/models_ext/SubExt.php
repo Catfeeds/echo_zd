@@ -72,6 +72,9 @@ class SubExt extends Sub{
         if($this->uid && !$this->fx_phone) {
             $this->fx_phone = $this->user->phone;
         }
+        if($this->uid && !$this->cid) {
+            $this->cid = $this->user->cid;
+        }
         if(!$this->code) {
             // 新增6位客户码 不重复
             $code = 700000+rand(0,99999);
