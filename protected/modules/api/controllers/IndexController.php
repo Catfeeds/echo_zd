@@ -586,14 +586,14 @@ class IndexController extends ApiController
                     $user_data = [];
                     if($user->type==2&&!$user->cid) {
                         $is_true = 0;
+                    }
+                    if($user) {
                         $user_data = [
                             'name'=>$user->name,
                             'phone'=>$user->phone,
                             'type'=>$user->type,
                             'image'=>ImageTools::fixImage($user->image),
                         ];
-                    }
-                    if($user) {
                         $data = [
                             'uid'=>$user->id,
                             'is_true'=>$is_true,
