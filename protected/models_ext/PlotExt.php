@@ -188,30 +188,6 @@ class PlotExt extends Plot{
 
     public function beforeValidate() {
         !$this->pinyin && $this->pinyin = 'pinyin';
-        if(!$this->company_id && $cms = $this->companys) {
-            $this->company_id = $cms[0]['id'];
-            $this->company_name = $cms[0]['name'];
-        }
-        if($this->company_id && $this->market_users) {
-            $mks = explode(' ', $this->market_users);
-            foreach ($mks as $key => $value) {
-                preg_match_all('/[0-9]+/', $value,$num);
-                if(isset($num[0][0])) {
-                    $num = $num[0][0];
-                    $numss = $num;
-                    $name = str_replace($num, '', $value);
-                    // var_dump(UserExt::model()->find("phone='$numss'"),$name);exit;
-                    if($name && !UserExt::model()->find("phone='$numss'")){
-                        $obj = new UserExt;
-                        $obj->phone = $numss;
-                        $obj->status = $obj->type = 1;
-                        $obj->cid = $this->company_id;
-                        $obj->name = $name;
-                        $obj->save();
-                    }
-                }
-            }
-        }
         if($this->getIsNewRecord()) {
             // 非会员过滤
             // if($ow = $this->owner) {
@@ -224,11 +200,11 @@ class PlotExt extends Plot{
         else {
             $this->updated = time();
         }
-        // if(!$this->first_pay) {
-        //     $this->first_pay = Yii::app()->db->createCommand("select price from plot_pay where hid=".$this->id." and deleted=0 and status=1 and price!=''")->queryScalar();
-        //     // var_dump($this->first_pay);
-        //     // $this->save();
-        // }
+        if(!$this->first_pay) {
+            $this->first_pay = Yii::app()->db->createCommand("select price from plot_pay where hid=".$this->id." and deleted=0 and status=1 and price!=''")->queryScalar();
+            // var_dump($this->first_pay);
+            // $this->save();
+        }
         // var_dump($this->data_conf);exit;
         if(!$this->refresh_time){
             $this->refresh_time = $this->created;
@@ -443,31 +419,31 @@ class PlotExt extends Plot{
 
     public function changeS()
     {
-        $area = $this->area;
-        $street = $this->street;
-        $wylx = $this->wylx?$this->wylx[0]:0;
-        $zxzt = $this->zxzt?$this->zxzt[0]:0;
-        $price = $this->price/1000;
+//         $area = $this->area;
+//         $street = $this->street;
+//         $wylx = $this->wylx?$this->wylx[0]:0;
+//         $zxzt = $this->zxzt?$this->zxzt[0]:0;
+//         $price = $this->price/1000;
 
-        $sql = "select distinct u.qf_uid from user u left join subscribe s on s.uid=u.id where u.qf_uid>0 and (s.area=$area or s.area=0) and (s.street=$street or s.street=0) and (s.wylx=$wylx or s.wylx=0) and (s.zxzt=$zxzt or s.zxzt=0)";
+//         $sql = "select distinct u.qf_uid from user u left join subscribe s on s.uid=u.id where u.qf_uid>0 and (s.area=$area or s.area=0) and (s.street=$street or s.street=0) and (s.wylx=$wylx or s.wylx=0) and (s.zxzt=$zxzt or s.zxzt=0)";
         
-        $uids = Yii::app()->db->createCommand($sql)->queryAll();
-        // var_dump($uids);exit;
-        if($uids) {
-            foreach ($uids as $key => $value) {
-                Yii::app()->controller->sendNotice('有新的项目符合您的订阅条件：'.$this->title.' 已上线，欢迎前往经纪圈新房通查看。点这里查看项目详情：'.Yii::app()->request->getHostInfo().'/api/index/detail?id='.$this->id,$value['qf_uid']);
-            }
-        }
-        if($owner = $this->owner) {
-            $owner->qf_uid && Yii::app()->controller->sendNotice('恭喜您，'.$this->title.'已通过审核并已上线。点这里预览项目详情：'.Yii::app()->request->getHostInfo().'/api/index/detail?id='.$this->id,$owner->qf_uid);
-            SmsExt::sendMsg('项目通过审核',$owner->phone,['lpmc'=>$this->title]);
-//             if($owner->jjq_openid)
-//                 Yii::app()->controller->sendWxNo($owner->jjq_openid,'审核提醒',Yii::app()->request->getHostInfo().'/api/index/detail?id='.$this->id,['first'=>'恭喜您，您的项目'.$this->title.'已经审核通过！',
-// 'keyword1'=>'通过',
-// 'keyword2'=>date('Y-m-d H:i'),
-// 'remark'=>'请点击详情进行预览，更多精彩请关注经纪圈APP']);
-            // 恭喜您，${lpmc}已通过后台编辑的完善和审核，请登录经纪圈APP消息列表查看付费链接。
-        }
+//         $uids = Yii::app()->db->createCommand($sql)->queryAll();
+//         // var_dump($uids);exit;
+//         if($uids) {
+//             foreach ($uids as $key => $value) {
+//                 Yii::app()->controller->sendNotice('有新的项目符合您的订阅条件：'.$this->title.' 已上线，欢迎前往经纪圈新房通查看。点这里查看项目详情：'.Yii::app()->request->getHostInfo().'/api/index/detail?id='.$this->id,$value['qf_uid']);
+//             }
+//         }
+//         if($owner = $this->owner) {
+//             $owner->qf_uid && Yii::app()->controller->sendNotice('恭喜您，'.$this->title.'已通过审核并已上线。点这里预览项目详情：'.Yii::app()->request->getHostInfo().'/api/index/detail?id='.$this->id,$owner->qf_uid);
+//             SmsExt::sendMsg('项目通过审核',$owner->phone,['lpmc'=>$this->title]);
+// //             if($owner->jjq_openid)
+// //                 Yii::app()->controller->sendWxNo($owner->jjq_openid,'审核提醒',Yii::app()->request->getHostInfo().'/api/index/detail?id='.$this->id,['first'=>'恭喜您，您的项目'.$this->title.'已经审核通过！',
+// // 'keyword1'=>'通过',
+// // 'keyword2'=>date('Y-m-d H:i'),
+// // 'remark'=>'请点击详情进行预览，更多精彩请关注经纪圈APP']);
+//             // 恭喜您，${lpmc}已通过后台编辑的完善和审核，请登录经纪圈APP消息列表查看付费链接。
+//         }
     }
 
     public function getTags()

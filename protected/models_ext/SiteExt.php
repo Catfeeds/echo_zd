@@ -47,6 +47,7 @@ class SiteExt extends Site{
         'topword'=>'',
         'cname'=>'',
         'openDl'=>'',
+        'sitePwd'=>'',
     ];
     public static $cateName = [
         'qjpz' => '全局配置',
@@ -62,6 +63,7 @@ class SiteExt extends Site{
             'indexmarquee'=>['type'=>'text','name'=>'头条内容'],
             'topword'=>['type'=>'text','name'=>'楼盘置顶文案'],
             'cname'=>['type'=>'text','name'=>'公司名'],
+            'sitePwd'=>['type'=>'pwd','name'=>'登录密码'],
             'openDl'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启独立经纪人'],
             // 'add_market_words'=>['type'=>'text','name'=>'对接人申请备注'],
             // 'bussiness_tel'=>['type'=>'text','name'=>'业务部联系方式'],

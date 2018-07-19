@@ -274,6 +274,7 @@ class IndexController extends ApiController
                     $data = [
                         'id'=>$user->id,
                         'phone'=>$user->phone,
+                        'is_true'=>$user->type==2&&!$user->cid?0:1,
                         'name'=>$user->name,
                         'type'=>$user->type,
                         'typename'=>$user->type==2?'分销':($user->type==3?'独立经纪人':'总代'),
