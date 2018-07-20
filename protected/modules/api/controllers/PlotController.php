@@ -2716,4 +2716,24 @@ class PlotController extends ApiController{
     	$this->frame['data'] = $data;
     }
 
+    public function actionGetPlotsById($hid='')
+    {
+    	if($hid) {
+    		$data = [];
+    		$hids = explode(',', $hid);
+    		$criteria = new CDbCriteria;
+    		$criteria->addInCondition('id',$hids);
+    		if($plots = PlotExt::model()->normal()->findAll($criteria)) {
+    			foreach ($plots as $key => $value) {
+    				$data[] = [
+    					'id'=>$value->id,
+    					'title'=>$value->title,
+    					'pay'=>$value->first_pay,
+    				];
+    			}
+    		}
+    		$this->frame['data'] = $data;
+    	}
+    }
+
 }
