@@ -438,11 +438,11 @@ class UserController extends ApiController{
 	public function actionAddSubPro()
 	{
 		if(Yii::app()->request->getIsPostRequest()) {
-			$data['sid'] = $_post['sid'];
-			$data['note'] = $_post['note'];
-			$data['status'] = $_post['status'];
-			$data['uid'] = $_post['uid'];
-			$data['staff'] = $_post['staff'];
+			$data['sid'] = $_POST['sid'];
+			$data['note'] = $_POST['note'];
+			$data['status'] = $_POST['status'];
+			$data['uid'] = $_POST['uid'];
+			$data['staff'] = $_POST['staff'];
 			if(!$data['sid']) {
 				$obj = new SubProExt;
 				$obj->attributes = $obj;
@@ -468,8 +468,8 @@ class UserController extends ApiController{
 	public function actionAddSubImg()
 	{
 		if(Yii::app()->request->getIsPostRequest()) {
-			$data['sid'] = $_post['sid'];
-			$data['imgs'] = $_post['imgs'];
+			$data['sid'] = $_POST['sid'];
+			$data['imgs'] = $_POST['imgs'];
 			if(!$data['sid'] || !$data['imgs']) {
 				return $this->returnError('参数错误');
 			}
