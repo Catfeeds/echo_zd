@@ -355,7 +355,7 @@ class UserController extends ApiController{
 			'note'=>SiteExt::model()->getAttr('qjpz','subnote'),
 			'imgs'=>$imgs,
 		];
-		$this->frame['data'] = $imgs;
+		$this->frame['data'] = $data;
 
 	}
 
