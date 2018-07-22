@@ -477,6 +477,7 @@ class UserController extends ApiController{
 			if(!$data['sid'] || !$data['imgs']) {
 				return $this->returnError('参数错误');
 			}
+			SubImgExt::model()->deleteAllByAttributes(['sid'=>$data['sid']]);
 			foreach (explode(',', $data['imgs']) as $key => $value) {
 				$obj = new SubImgExt;
 				$obj->sid = $data['sid'];
