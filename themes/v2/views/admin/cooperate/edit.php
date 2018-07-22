@@ -15,11 +15,18 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
         'print','preview','searchreplace']]")); ?>
 <?php $form = $this->beginWidget('HouseForm', array('htmlOptions' => array('class' => 'form-horizontal'))) ?>
 <div class="form-group">
-    <label class="col-md-2 control-label">经纪人</label>
+    <label class="col-md-2 control-label">分销公司</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'uid', CHtml::listData(UserExt::model()->normal()->findAll('type=3'),'id','name'), array('class' => 'form-control', 'encode' => false)); ?>
+        <?php echo $form->dropDownList($article, 'cid', CHtml::listData(CompanyExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control', 'encode' => false)); ?>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'uid') ?></div>
+    <div class="col-md-2"><?php echo $form->error($article, 'cid') ?></div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">市场人员</label>
+    <div class="col-md-4">
+        <?php echo $form->dropDownList($article, 'staff', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control', 'encode' => false)); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'staff') ?></div>
 </div>
 <div class="form-group">
     <label class="col-md-2 control-label">楼盘</label>
@@ -27,13 +34,6 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
         <?php echo $form->dropDownList($article, 'hid', CHtml::listData(PlotExt::model()->normal()->findAll(),'id','title'), array('class' => 'form-control', 'encode' => false)); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'hid') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">对接人联系</label>
-    <div class="col-md-4">
-        <?php echo $form->textField($article, 'com_phone', array('class' => 'form-control')); ?>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'com_phone') ?></div>
 </div>
 <div class="form-group">
     <label class="col-md-2 control-label">状态</label>

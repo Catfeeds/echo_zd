@@ -41,11 +41,14 @@ class UserController extends ApiController{
 				return $this->returnError('请绑定手机号再进行提交');
 			}
 			if($obj) {
-				$user = new UserExt;
+				if($user = UserExt::model()->find("phone='".$obj['phone']."'")){
+					;
+				} else
+					$user = new UserExt;
 				$company = '';
-				if(Yii::app()->db->createCommand("select id from user where phone='".$obj['phone']."'")->queryScalar()) {
-					return $this->returnError('您已提交申请，请勿重复提交');
-				}
+				// if(Yii::app()->db->createCommand("select id from user where phone='".$obj['phone']."'")->queryScalar()) {
+				// 	return $this->returnError('您已提交申请，请勿重复提交');
+				// }
 				if($obj['type']<3) {
 					$code = $obj['companycode'];
 					unset($obj['companycode']);
@@ -88,7 +91,7 @@ class UserController extends ApiController{
 					// 	}
 					// 	$this->frame['data'] = $company->name;
 					// }
-					$this->frame['data'] = $company->name;
+					// $this->frame['data'] = $company->name;
 
 				}
 			}
@@ -338,7 +341,7 @@ class UserController extends ApiController{
 		}
 		if($subimgs = $sub->imgs) {
 			foreach ($subimgs as $key => $value) {
-				$imgs[] = ImageTools::fixImage($value->url);
+				$imgs[] = ['key'=>$value->url,'imageURL'=>ImageTools::fixImage($value->url)];
 			}
 		}
 		$data = [
@@ -352,7 +355,7 @@ class UserController extends ApiController{
 			'note'=>SiteExt::model()->getAttr('qjpz','subnote'),
 			'imgs'=>$imgs,
 		];
-		$this->frame['data'] = $imgs;
+		$this->frame['data'] = $data;
 
 	}
 
@@ -370,7 +373,7 @@ class UserController extends ApiController{
 					'id'=>$value->id,
 					'name'=>($value->user?$value->user->name:($value->staffObj?$value->staffObj->name:'')).'添加了'.$subArr[$value->status],
 					'time'=>date('m-d H:i',$value->created),
-					'note'=>$value->note,
+					'note'=>$value->status?$value->note:('预计到访时间：'.date('Y-m-d H:i',$sub->time).'<br>到访人数：'.$sub->visit_num.'<br>备注：'.$sub->note),
 				];
 			}
 		}
@@ -383,6 +386,7 @@ class UserController extends ApiController{
 			'name'=>$sub->name,
 			'phone'=>$sub->phone,
 			'tag'=>'客户姓名',
+			'company'=>'',
 		];
 		// 项目展示系统用0 案场传1 市场传2
 		if(!$user_type) {
@@ -392,6 +396,7 @@ class UserController extends ApiController{
 					'name'=>$u->name,
 					'phone'=>$u->phone,
 					'tag'=>'市场资料',
+					'company'=>'',
 				];
 			}
 				
@@ -401,6 +406,7 @@ class UserController extends ApiController{
 					'name'=>$u->name,
 					'phone'=>$u->phone,
 					'tag'=>'分销资料',
+					'company'=>$sub->company?$sub->company->name:'',
 				];
 			}
 		} else {
@@ -409,6 +415,7 @@ class UserController extends ApiController{
 					'name'=>$u->name,
 					'phone'=>$u->phone,
 					'tag'=>'案场资料',
+					'company'=>'',
 				];
 			}
 		}
@@ -435,12 +442,12 @@ class UserController extends ApiController{
 	public function actionAddSubPro()
 	{
 		if(Yii::app()->request->getIsPostRequest()) {
-			$data['sid'] = $_post['sid'];
-			$data['note'] = $_post['note'];
-			$data['status'] = $_post['status'];
-			$data['uid'] = $_post['uid'];
-			$data['staff'] = $_post['staff'];
-			if(!$data['sid']) {
+			$data['sid'] = $_POST['sid'];
+			$data['note'] = $_POST['note'];
+			$data['status'] = Yii::app()->request->getPost('status',9);
+			$data['uid'] = Yii::app()->request->getPost('uid',0);
+			$data['staff'] = Yii::app()->request->getPost('staff',0);
+			if($data['sid']) {
 				$obj = new SubProExt;
 				$obj->attributes = $obj;
 				if(!$obj->status) {
@@ -460,5 +467,30 @@ class UserController extends ApiController{
 	public function actionGetSubTag()
 	{
 		$this->frame['data'] = SubExt::$status;
+	}
+
+	public function actionAddSubImg()
+	{
+		if(Yii::app()->request->getIsPostRequest()) {
+			$data['sid'] = $_POST['sid'];
+			$data['imgs'] = $_POST['imgs'];
+			if(!$data['sid'] || !$data['imgs']) {
+				return $this->returnError('参数错误');
+			}
+			foreach (explode(',', $data['imgs']) as $key => $value) {
+				$obj = new SubImgExt;
+				$obj->sid = $data['sid'];
+				$obj->url = $value;
+				$obj->save();
+			}
+		}
+	}
+
+	public function actionLeave($uid='')
+	{
+		if($user = UserExt::model()->findByPk($uid)) {
+			$user->cid = 0;
+			$user->save();
+		}
 	}
 }

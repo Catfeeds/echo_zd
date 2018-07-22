@@ -12,7 +12,9 @@ class CooperateExt extends Cooperate{
     {
          return array(
             'user'=>array(self::BELONGS_TO, 'UserExt', 'uid'),
+            'staffObj'=>array(self::BELONGS_TO, 'StaffExt', 'staff'),
             'plot'=>array(self::BELONGS_TO, 'PlotExt', 'hid'),
+            'company'=>array(self::BELONGS_TO, 'CompanyExt', 'cid'),
         );
     }
 

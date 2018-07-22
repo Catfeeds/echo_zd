@@ -46,6 +46,8 @@ class SiteExt extends Site{
         'ttpic'=>'',
         'topword'=>'',
         'cname'=>'',
+        'openDl'=>'',
+        'sitePwd'=>'',
     ];
     public static $cateName = [
         'qjpz' => '全局配置',
@@ -60,7 +62,9 @@ class SiteExt extends Site{
             'ttpic'=>['type'=>'image','max'=>1,'name'=>'头条图片'],
             'indexmarquee'=>['type'=>'text','name'=>'头条内容'],
             'topword'=>['type'=>'text','name'=>'楼盘置顶文案'],
-            'cname'=>['type'=>'text','name'=>'公司名'],
+            // 'cname'=>['type'=>'text','name'=>'公司名'],
+            'sitePwd'=>['type'=>'pwd','name'=>'登录密码'],
+            'openDl'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启独立经纪人'],
             // 'add_market_words'=>['type'=>'text','name'=>'对接人申请备注'],
             // 'bussiness_tel'=>['type'=>'text','name'=>'业务部联系方式'],
             // 'add_subscribe_words'=>['type'=>'text','name'=>'订阅申请备注'],
@@ -84,7 +88,7 @@ class SiteExt extends Site{
             // 'wx_share_image'=>['type'=>'image','max'=>1,'name'=>'微信分享头图'],
             'info_no_pic'=>['type'=>'image','max'=>1,'name'=>'房源默认图'],
             // 'mzsm'=>['type'=>'text','name'=>'免责声明'],
-            // 'vipNotice'=>['type'=>'text','name'=>'后台须知'],
+            'vipNotice'=>['type'=>'text','name'=>'后台须知'],
             'usernopic'=>['type'=>'image','max'=>1,'name'=>'用户默认头像'],
             'waterlogo'=>['type'=>'image','max'=>1,'name'=>'水印图片'],
             // 'wxgzh'=>['type'=>'text','name'=>'微信公众号'],

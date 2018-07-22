@@ -9,7 +9,9 @@
  * @property string $user_company
  * @property string $user_phone
  * @property string $user_name
+ * @property integer $staff
  * @property integer $uid
+ * @property integer $cid
  * @property string $com_phone
  * @property integer $sort
  * @property integer $status
@@ -36,12 +38,12 @@ class Cooperate extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('created', 'required'),
-			array('hid, uid, sort, status, deleted, created, updated', 'numerical', 'integerOnly'=>true),
+			array('hid, staff, uid, cid, sort, status, deleted, created, updated', 'numerical', 'integerOnly'=>true),
 			array('user_company, user_name', 'length', 'max'=>100),
 			array('user_phone, com_phone', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hid, user_company, user_phone, user_name, uid, com_phone, sort, status, deleted, created, updated', 'safe', 'on'=>'search'),
+			array('id, hid, user_company, user_phone, user_name, staff, uid, cid, com_phone, sort, status, deleted, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,7 +69,9 @@ class Cooperate extends CActiveRecord
 			'user_company' => 'User Company',
 			'user_phone' => 'User Phone',
 			'user_name' => 'User Name',
+			'staff' => 'Staff',
 			'uid' => 'Uid',
+			'cid' => 'Cid',
 			'com_phone' => 'Com Phone',
 			'sort' => 'Sort',
 			'status' => 'Status',
@@ -100,7 +104,9 @@ class Cooperate extends CActiveRecord
 		$criteria->compare('user_company',$this->user_company,true);
 		$criteria->compare('user_phone',$this->user_phone,true);
 		$criteria->compare('user_name',$this->user_name,true);
+		$criteria->compare('staff',$this->staff);
 		$criteria->compare('uid',$this->uid);
+		$criteria->compare('cid',$this->cid);
 		$criteria->compare('com_phone',$this->com_phone,true);
 		$criteria->compare('sort',$this->sort);
 		$criteria->compare('status',$this->status);

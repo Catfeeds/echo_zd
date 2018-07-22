@@ -34,14 +34,14 @@ class IndexController extends ApiController
             foreach ($ress as $key => $value) {
                 if($value->cid==1 && count($data['recomLong'])<1) {
                     $thisObj = $value->getObj();
-                    $data['recomLong'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金','image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image),'sort'=>$thisObj->sort?SiteExt::getAttr('qjpz','topword'):''];
+                    $data['recomLong'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->price:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金','image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image),'sort'=>$thisObj->sort?SiteExt::getAttr('qjpz','topword'):''];
                 } elseif ($value->cid==2 && count($data['recomLong'])<2) {
                     $thisObj = $value->getObj();
-                    $data['recomShort'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金','image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image),'sort'=>$thisObj->sort?SiteExt::getAttr('qjpz','topword'):''];
+                    $data['recomShort'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->price:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金','image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image),'sort'=>$thisObj->sort?SiteExt::getAttr('qjpz','topword'):''];
                 } elseif ($value->cid==3 && count($data['recomLong'])<5) {
                     $thisObj = $value->getObj();
                     // var_dump($thisObj->pa);exit;
-                    $data['recomYou'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->name:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金','image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image),'sort'=>$thisObj->sort?SiteExt::getAttr('qjpz','topword'):''];
+                    $data['recomYou'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->pays?$thisObj->pays[0]->price:'暂无佣金','addr'=>$thisObj->address,'words'=>'佣金','image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image),'sort'=>$thisObj->sort?SiteExt::getAttr('qjpz','topword'):''];
                 }
             }
         }
@@ -274,12 +274,14 @@ class IndexController extends ApiController
                     $data = [
                         'id'=>$user->id,
                         'phone'=>$user->phone,
+                        'is_true'=>$user->type==2&&!$user->cid?0:1,
                         'name'=>$user->name,
                         'type'=>$user->type,
                         'typename'=>$user->type==2?'分销':($user->type==3?'独立经纪人':'总代'),
                         'status'=>$user->status,
                         'openid'=>$user->openid,
                         'avatarUrl'=>ImageTools::fixImage($user->ava,200,200),
+                        'image'=>ImageTools::fixImage($user->image),
                         'wx_word'=>$companyinfo?($companyinfo->name):'独立经纪人',
                         // 'is_true'=>$user->is_true,
                         'company_name'=>$companyinfo?$companyinfo->name:'独立经纪人',
@@ -578,10 +580,24 @@ class IndexController extends ApiController
                 $cont = json_decode($cont,true);
                 $openid = $cont['openid'];
                 if($openid) {
+                    // 如果用户类型是fenxiao有没有cid则把用户信息带过去
                     $user = UserExt::model()->find("openid='$openid'");
+                    $is_true = 1;
+                    $user_data = [];
+                    if($user->type==2&&!$user->cid) {
+                        $is_true = 0;
+                    }
                     if($user) {
+                        $user_data = [
+                            'name'=>$user->name,
+                            'phone'=>$user->phone,
+                            'type'=>$user->type,
+                            'image'=>ImageTools::fixImage($user->image),
+                        ];
                         $data = [
                             'uid'=>$user->id,
+                            'is_true'=>$is_true,
+                            'user_data'=>$user_data,
                             // 'phone'=>$user->phone,
                             // 'name'=>$user->name,
                             // 'type'=>$user->type,
@@ -595,7 +611,7 @@ class IndexController extends ApiController
                         $this->frame['data'] = $data;
                         // echo json_encode($data);
                     } else {
-                        $this->frame['data'] = ['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>''];
+                        $this->frame['data'] = ['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'','is_true'=>$is_true,'user_data'=>$user_data];
                         // echo json_encode(['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'']);
                     }
                 } else {
@@ -877,6 +893,15 @@ class IndexController extends ApiController
         } else {
             $this->returnError('验证码错误');
         }
+    }
+
+    public function actionGetUserType()
+    {
+        $data[] = ['id'=>'2','name'=>'分销'];
+        if(SiteExt::getAttr('qjpz','openDl')) {
+            $data[] = ['id'=>'3','name'=>'独立经纪人'];
+        }
+        $this->frame['data'] = $data;
     }
 
 }

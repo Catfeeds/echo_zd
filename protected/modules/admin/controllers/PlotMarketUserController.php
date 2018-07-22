@@ -76,15 +76,15 @@ class PlotMarketUserController extends AdminController{
 		$modelName = $this->modelName;
 		$info = $id ? $modelName::model()->findByPk($id) : new $modelName;
 		if(Yii::app()->request->getIsPostRequest()) {
-			$userphone = Yii::app()->request->getPost('userphone');
-			$uid = '';
-			if($userphone) {
-				$user = UserExt::model()->find("phone='$userphone'");
-				$uid = $user->id;
-			}
+			// $userphone = Yii::app()->request->getPost('userphone');
+			// $uid = '';
+			// if($userphone) {
+			// 	$user = UserExt::model()->find("phone='$userphone'");
+			// 	$uid = $user->id;
+			// }
 			
 			$info->attributes = Yii::app()->request->getPost($modelName,[]);
-			$info->uid = $uid;
+			// $info->uid = $uid;
 			// $info->time =  is_numeric($info->time)?$info->time : strtotime($info->time);
 			if($info->save()) {
 				$this->setMessage('操作成功','success',['list']);

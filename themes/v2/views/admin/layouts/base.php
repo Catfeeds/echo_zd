@@ -8,7 +8,7 @@
 <head>
 <meta charset="utf-8"/>
 <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
-<title><?php echo $this->pageTitle ?>-经纪圈新房通管理后台</title>
+<title><?php echo $this->pageTitle ?>-<?=Yii::app()->file->sitename?>管理后台</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -62,7 +62,7 @@
 		<!-- BEGIN LOGO -->
 		<div class="page-logo" style="width:500px">
 			<a href="<?php echo $this->createUrl('/admin/common/index') ?>"  class="logo-name">
-			经纪圈新房通管理后台
+			<?=Yii::app()->file->sitename?>管理后台
 			<!-- <img src="/static/admin/layout/img/logo.png" alt="logo" class="logo-default"/> -->
 			</a>
 			<div class="menu-toggler sidebar-toggler hide">
@@ -177,7 +177,7 @@
 <!-- BEGIN FOOTER -->
 <div class="page-footer">
 	<div class="page-footer-inner">
-		 2017 &copy; <?php echo '回音网络科技版权所有'; ?>
+		 2018 &copy; <?php echo '上海贺诺网络科技版权所有'; ?>
 	</div>
 	<div class="scroll-to-top">
 		<i class="icon-arrow-up"></i>

@@ -57,7 +57,7 @@ class AdminController extends Controller
             ['label'=>'管理中心','icon'=>'icon-settings','url'=>'/admin/common/index','active'=>$this->route=='admin/common/index'],
             ['label' => '项目管理', 'icon' => 'icon-speedometer', 'items' => [
                 ['label' => '项目列表', 'url' => ['/admin/plot/list']],
-                // ['label' => '项目动态列表', 'url' => ['/admin/plot/newslistnew']],
+                ['label' => '项目对接人列表', 'url' => ['/admin/plotMarketUser/list']],
                 ['label' => '项目呼叫列表', 'url' => ['/admin/plot/calllist']],
                 ['label' => '新建项目', 'url' => ['/admin/plot/edit'],'active'=>$this->route=='admin/plot/edit'],
             ]],

@@ -33,12 +33,14 @@ $statusArr = SubExt::$status;
    <table class="table table-bordered table-striped table-condensed flip-content table-hover">
     <thead class="flip-content">
     <tr>
-        <th class="text-center">排序</th>
         <th class="text-center">ID</th>
         <th class="text-center">项目信息</th>
         <th class="text-center">分销信息</th>
         <th class="text-center">客户信息</th>
         <th class="text-center">市场人员</th>
+        <th class="text-center">案场助理</th>
+        <th class="text-center">案场销售</th>
+        <th class="text-center">销售额</th>
         <th class="text-center">添加时间</th>
         <th class="text-center">修改时间</th>
         <th class="text-center">状态</th>
@@ -46,15 +48,22 @@ $statusArr = SubExt::$status;
     </tr>
     </thead>
     <tbody>
-    <?php foreach($infos as $k=>$v): ?>
+    <?php foreach($infos as $k=>$v):
+        $user = $v->user;
+        $market_user = $v->market_user;
+        $an_user = $v->an_user;
+        $sale_user = $v->sale_user;
+        $company = $v->company;
+     ?>
         <tr>
-            <td style="text-align:center;vertical-align: middle" class="warning sort_edit"
-                data-id="<?php echo $v['id'] ?>"><?php echo $v['sort'] ?></td>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td class="text-center"><a target="_blank" href="<?=$this->createUrl('/api/index/detail',['id'=>$v->hid])?>"><?=$v->plot->title?></a></td>
-            <td class="text-center"><?=$v->user?($v->user->name.'/'.$v->user->phone):''?></td> 
+            <td class="text-center"><?=$user?($user->name.'/'.$user->phone.($company?('<br>'.$company->name):'')):''?></td> 
             <td class="text-center"><?=$v->name.'/'.$v->phone?></td> 
-            <td class="text-center"><?=$v->market_user?$v->market_user->name:''?></td>     
+            <td class="text-center"><?=$market_user?$market_user->name:''?></td> 
+            <td class="text-center"><?=$an_user?$an_user->name:''?></td> 
+            <td class="text-center"><?=$sale_user?$sale_user->name:''?></td>
+            <td class="text-center"><?=$v->sale_price?$v->sale_price:'-'?></td> 
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>
             <td class="text-center" style="text-align:center;vertical-align: middle">

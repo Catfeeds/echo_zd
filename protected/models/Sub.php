@@ -7,6 +7,7 @@
  * @property integer $id
  * @property string $hid
  * @property integer $uid
+ * @property integer $cid
  * @property string $fx_phone
  * @property string $plot_title
  * @property integer $an_uid
@@ -15,6 +16,7 @@
  * @property string $market_phone
  * @property integer $time
  * @property string $market_staff
+ * @property string $sale_price
  * @property string $name
  * @property string $phone
  * @property string $notice
@@ -53,15 +55,15 @@ class Sub extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('uid, status, created, updated', 'required'),
-			array('uid, an_uid, market_uid, time, visit_num, visit_way, sale_uid, sex, is_check, is_only_sub, status, deleted, sort, created, updated', 'numerical', 'integerOnly'=>true),
-			array('hid, plot_title, market_staff, name', 'length', 'max'=>100),
+			array('uid, cid, an_uid, market_uid, time, visit_num, visit_way, sale_uid, sex, is_check, is_only_sub, status, deleted, sort, created, updated', 'numerical', 'integerOnly'=>true),
+			array('hid, plot_title, market_staff, sale_price, name', 'length', 'max'=>100),
 			array('fx_phone, an_phone, market_phone, phone, sale_phone', 'length', 'max'=>20),
 			array('notice', 'length', 'max'=>12),
 			array('code', 'length', 'max'=>10),
 			array('company_name, note', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hid, uid, fx_phone, plot_title, an_uid, an_phone, market_uid, market_phone, time, market_staff, name, phone, notice, code, company_name, visit_num, visit_way, sale_phone, sale_uid, sex, is_check, is_only_sub, note, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
+			array('id, hid, uid, cid, fx_phone, plot_title, an_uid, an_phone, market_uid, market_phone, time, market_staff, sale_price, name, phone, notice, code, company_name, visit_num, visit_way, sale_phone, sale_uid, sex, is_check, is_only_sub, note, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -85,6 +87,7 @@ class Sub extends CActiveRecord
 			'id' => 'ID',
 			'hid' => 'Hid',
 			'uid' => 'Uid',
+			'cid' => 'Cid',
 			'fx_phone' => 'Fx Phone',
 			'plot_title' => 'Plot Title',
 			'an_uid' => 'An Uid',
@@ -93,6 +96,7 @@ class Sub extends CActiveRecord
 			'market_phone' => 'Market Phone',
 			'time' => 'Time',
 			'market_staff' => 'Market Staff',
+			'sale_price' => 'Sale Price',
 			'name' => 'Name',
 			'phone' => 'Phone',
 			'notice' => 'Notice',
@@ -135,6 +139,7 @@ class Sub extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('hid',$this->hid,true);
 		$criteria->compare('uid',$this->uid);
+		$criteria->compare('cid',$this->cid);
 		$criteria->compare('fx_phone',$this->fx_phone,true);
 		$criteria->compare('plot_title',$this->plot_title,true);
 		$criteria->compare('an_uid',$this->an_uid);
@@ -143,6 +148,7 @@ class Sub extends CActiveRecord
 		$criteria->compare('market_phone',$this->market_phone,true);
 		$criteria->compare('time',$this->time);
 		$criteria->compare('market_staff',$this->market_staff,true);
+		$criteria->compare('sale_price',$this->sale_price,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('notice',$this->notice,true);

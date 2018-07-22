@@ -15,7 +15,7 @@ $this->breadcrumbs = array($this->pageTitle);
     <thead class="flip-content">
     <tr>
         <th class="text-center">ID</th>
-        <th class="text-center">类型</th>
+        <th class="text-center">状态</th>
         <th class="text-center">备注</th>
         <th class="text-center">添加时间</th>
         <th class="text-center">修改时间</th>
@@ -26,7 +26,8 @@ $this->breadcrumbs = array($this->pageTitle);
     <?php foreach($infos as $k=>$v): ?>
         <tr>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
-            <td style="text-align:center;vertical-align: middle" class="text-center"><?=SubProExt::$status[$v->status]?></td><td style="text-align:center;vertical-align: middle"><?php echo $v->note; ?></td>
+            <td class="text-center"><?=SubProExt::$status[$v->status]?></td>
+            <td class="text-center"><?=$v->note?></td>
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>
             
