@@ -728,7 +728,7 @@ class PlotController extends ApiController{
 			'phonesnum'=>$phonesnum,
 			'qfuidsarr'=>$qfuidsarr,
 			// 'zd_company'=>['id'=>$info->company_id,'name'=>$info->company_name],
-			'zd_company'=>SiteExt::getAttr('qjpz','cname'),
+			'zd_company'=>Yii::app()->file->sitename,
 			'tags'=>$tagName,
 			'is_contact_only'=>$is_contact_only,
 			'mzsm'=>SiteExt::getAttr('qjpz','mzsm'),
@@ -973,7 +973,7 @@ class PlotController extends ApiController{
 				$tmp['sex'] = $this->cleanXss($_POST['sex']);
 				$tmp['note'] = $this->cleanXss(Yii::app()->request->getPost('note',''));
 				$tmp['visit_way'] = $this->cleanXss($_POST['visit_way']);
-				$tmp['is_only_sub'] = $this->cleanXss($_POST['is_only_sub']);
+				$tmp['visit_num'] = $this->cleanXss($_POST['visit_num']);
 				$tmp['uid'] = $this->cleanXss($_POST['uid']);
 				$hid = explode(',', $hid);
 				// $tmp['uid'] = $this->staff->id;
