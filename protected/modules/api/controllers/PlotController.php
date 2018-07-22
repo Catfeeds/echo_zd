@@ -989,7 +989,6 @@ class PlotController extends ApiController{
 					$obj = new SubExt;
 					// 如果市场绑定了分销公司则自动分配
 					// 找到分销用户的cid
-					// $cid = Yii::app()->db->createCommand()
 					$sql = "select c.staff from cooperate c left join user u on u.cid=c.cid where c.hid=".$tmp['hid']." and u.id=".$tmp['uid'];
 					if($stid = Yii::app()->db->createCommand($sql)->queryScalar())
 						$tmp['market_uid'] = $stid;
@@ -2710,12 +2709,13 @@ class PlotController extends ApiController{
     	if(!$user) {
     		return $this->returnError('参数错误');
     	}
-    	if($subs = $user->subs) {
+    	$sql = "select phone,name,sex from sub where uid=$uid group by phone order by updated desc";
+    	if($subs = Yii::app()->db->createCommand($sql)->queryAll()) {
     		foreach ($subs as $key => $value) {
     			$data[] = [
-    				'phone'=>$value->phone,
-    				'name'=>$value->name,
-    				'sex'=>$value->sex,
+    				'phone'=>$value['phone'],
+    				'name'=>$value['name'],
+    				'sex'=>$value['sex'],
     			];
     		}
     	}
