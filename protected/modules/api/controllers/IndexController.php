@@ -572,6 +572,7 @@ class IndexController extends ApiController
     public function actionGetOpenId($code='')
     {
         $appid=SiteExt::getAttr('qjpz','appid');$apps=SiteExt::getAttr('qjpz','appsecret');
+        $is_true = 0;
         // $res = HttpHelper::get("https://api.weixin.qq.com/sns/jscode2session?appid=$appid&secret=$apps&js_code=$code&grant_type=authorization_code");
         $res = HttpHelper::getHttps("https://api.weixin.qq.com/sns/jscode2session?appid=$appid&secret=$apps&js_code=$code&grant_type=authorization_code");
         if($res){
@@ -582,12 +583,14 @@ class IndexController extends ApiController
                 if($openid) {
                     // 如果用户类型是fenxiao有没有cid则把用户信息带过去
                     $user = UserExt::model()->find("openid='$openid'");
-                    $is_true = 1;
+                    
                     $user_data = [];
-                    if($user->type==2&&!$user->cid) {
-                        $is_true = 0;
-                    }
+                        
                     if($user) {
+                        $is_true = 1;
+                        if($user->type==2&&!$user->cid) {
+                            $is_true = 0;
+                        }
                         $user_data = [
                             'name'=>$user->name,
                             'phone'=>$user->phone,
