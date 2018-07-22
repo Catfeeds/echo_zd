@@ -444,7 +444,7 @@ class UserController extends ApiController{
 		if(Yii::app()->request->getIsPostRequest()) {
 			$data['sid'] = $_POST['sid'];
 			$data['note'] = $_POST['note'];
-			$data['status'] = $_POST['status'];
+			$data['status'] = Yii::app()->request->getPost('status',9);
 			$data['uid'] = $_POST['uid'];
 			$data['staff'] = $_POST['staff'];
 			if(!$data['sid']) {
