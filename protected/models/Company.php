@@ -8,6 +8,7 @@
  * @property string $name
  * @property string $address
  * @property string $manager
+ * @property integer $city
  * @property integer $area
  * @property integer $street
  * @property string $phone
@@ -44,14 +45,14 @@ class Company extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('created', 'required'),
-			array('area, street, msg_num, adduid, type, status, sort, deleted, created, updated', 'numerical', 'integerOnly'=>true),
+			array('city, area, street, msg_num, adduid, type, status, sort, deleted, created, updated', 'numerical', 'integerOnly'=>true),
 			array('name, address, image', 'length', 'max'=>255),
 			array('manager, map_zoom, map_lng, map_lat', 'length', 'max'=>100),
 			array('phone', 'length', 'max'=>30),
 			array('code', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, address, manager, area, street, phone, map_zoom, map_lng, map_lat, code, msg_num, image, adduid, type, status, sort, deleted, created, updated', 'safe', 'on'=>'search'),
+			array('id, name, address, manager, city, area, street, phone, map_zoom, map_lng, map_lat, code, msg_num, image, adduid, type, status, sort, deleted, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,6 +77,7 @@ class Company extends CActiveRecord
 			'name' => 'Name',
 			'address' => 'Address',
 			'manager' => 'Manager',
+			'city' => 'City',
 			'area' => 'Area',
 			'street' => 'Street',
 			'phone' => 'Phone',
@@ -117,6 +119,7 @@ class Company extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('address',$this->address,true);
 		$criteria->compare('manager',$this->manager,true);
+		$criteria->compare('city',$this->city);
 		$criteria->compare('area',$this->area);
 		$criteria->compare('street',$this->street);
 		$criteria->compare('phone',$this->phone,true);
