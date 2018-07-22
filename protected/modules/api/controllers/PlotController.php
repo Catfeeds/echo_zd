@@ -987,6 +987,12 @@ class PlotController extends ApiController{
 						return $this->returnError("同一组客户每天最多报备一次，请勿重复操作");
 					}
 					$obj = new SubExt;
+					// 如果市场绑定了分销公司则自动分配
+					// 找到分销用户的cid
+					// $cid = Yii::app()->db->createCommand()
+					$sql = "select c.staff from cooperate c left join user u on u.cid=c.cid where c.hid=".$tmp['hid']." and u.id=".$tmp['uid'];
+					if($stid = Yii::app()->db->createCommand($sql)->queryScalar())
+						$tmp['market_uid'] = $stid;
 					$obj->attributes = $tmp;
 					$obj->status = 0;
 					if($tmp['uid']) {
@@ -1003,7 +1009,7 @@ class PlotController extends ApiController{
 					if($obj->save()) {
 						$pro = new SubProExt;
 						$pro->sid = $obj->id;
-						$pro->uid = $this->staff->id;
+						$pro->uid = $tmp['uid'];
 						$pro->note = '新增客户报备';
 						$pro->save();
 					} else {
