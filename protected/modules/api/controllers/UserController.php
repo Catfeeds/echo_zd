@@ -341,7 +341,7 @@ class UserController extends ApiController{
 		}
 		if($subimgs = $sub->imgs) {
 			foreach ($subimgs as $key => $value) {
-				$imgs[] = ImageTools::fixImage($value->url);
+				$imgs[] = ['key'=>$value->url,'imageURL'=>ImageTools::fixImage($value->url)];
 			}
 		}
 		$data = [
