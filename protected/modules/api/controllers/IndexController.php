@@ -30,6 +30,7 @@ class IndexController extends ApiController
         $data['topNewsImage'] = ImageTools::fixImage(SiteExt::getAttr('qjpz','ttpic'));
         $data['topNewsList'] = explode(' ', SiteExt::getAttr('qjpz','indexmarquee'));
         $data['recomLong'] = $data['recomShort'] = $data['recomYou'] = [];
+        $data['title'] = Yii::app()->file->sitename;
         if($ress = RecomExt::model()->normal()->findAll('type=1')) {
             foreach ($ress as $key => $value) {
                 if($value->cid==1 && count($data['recomLong'])<1) {
