@@ -449,7 +449,7 @@ class UserController extends ApiController{
 			$data['staff'] = Yii::app()->request->getPost('staff',0);
 			if($data['sid']) {
 				$obj = new SubProExt;
-				$obj->attributes = $obj;
+				$obj->attributes = $data;
 				if(!$obj->status) {
 					$obj->status = 9;
 				}
