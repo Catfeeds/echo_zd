@@ -373,7 +373,7 @@ class UserController extends ApiController{
 					'id'=>$value->id,
 					'name'=>($value->user?$value->user->name:($value->staffObj?$value->staffObj->name:'')).'添加了'.$subArr[$value->status],
 					'time'=>date('m-d H:i',$value->created),
-					'note'=>$value->note,
+					'note'=>$value->status?$value->note:('预计到访时间：'.date('Y-m-d H:i',$sub->time).'<br>到访人数：'.$sub->visit_num.'<br>备注：'.$sub->note),
 				];
 			}
 		}
@@ -386,6 +386,7 @@ class UserController extends ApiController{
 			'name'=>$sub->name,
 			'phone'=>$sub->phone,
 			'tag'=>'客户姓名',
+			'company'=>'',
 		];
 		// 项目展示系统用0 案场传1 市场传2
 		if(!$user_type) {
@@ -395,6 +396,7 @@ class UserController extends ApiController{
 					'name'=>$u->name,
 					'phone'=>$u->phone,
 					'tag'=>'市场资料',
+					'company'=>'',
 				];
 			}
 				
@@ -404,6 +406,7 @@ class UserController extends ApiController{
 					'name'=>$u->name,
 					'phone'=>$u->phone,
 					'tag'=>'分销资料',
+					'company'=>$sub->company?$sub->company->name:'',
 				];
 			}
 		} else {
@@ -412,6 +415,7 @@ class UserController extends ApiController{
 					'name'=>$u->name,
 					'phone'=>$u->phone,
 					'tag'=>'案场资料',
+					'company'=>'',
 				];
 			}
 		}
