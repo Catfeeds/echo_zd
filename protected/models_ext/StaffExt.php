@@ -16,6 +16,14 @@ class StaffExt extends Staff{
             // 'images'=>array(self::HAS_MANY, 'AlbumExt', 'pid'),
         );
     }
+    public static $is_jls = [
+        0=>'暂无',
+        1=>'市场部经理',
+        2=>'案场部经理',
+        3=>'市场专员',
+        4=>'案场助理',
+        5=>'案场销售',
+    ];
 
     /**
      * @return array 验证规则

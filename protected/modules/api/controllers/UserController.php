@@ -145,30 +145,75 @@ class UserController extends ApiController{
 		}
 	}
 
-	public function actionIndex($uid='')
+	public function actionIndex($uid='',$user_type=0)
 	{
 		$data = [];
-		$user = UserExt::model()->normal()->findByPk($uid);
-		if(!$user) {
-			return $this->returnError('用户不存在或禁用');
-		}
-		$tagarr = [];
-		if($tags = TagExt::model()->findAll("status=1 and cate='fxmy'")) {
-			foreach ($tags as $key => $value) {
-				$tagarr[] = ['name'=>$value->name,'image'=>ImageTools::fixImage($value->icon),'url'=>$value->url];
+		if(!$user_type) {
+			$user = UserExt::model()->normal()->findByPk($uid);
+			if(!$user) {
+				return $this->returnError('用户不存在或禁用');
 			}
+			$tagarr = [];
+			if($tags = TagExt::model()->findAll("status=1 and cate='fxmy'")) {
+				foreach ($tags as $key => $value) {
+					$tagarr[] = ['name'=>$value->name,'image'=>ImageTools::fixImage($value->icon),'url'=>$value->url];
+				}
+			}
+			$companyinfo = $user->companyinfo;
+			$data = [
+				'name'=>$user->name,
+				'type'=>$user->type,
+				'typename'=>$user->type==2?'分销':($user->type==3?'独立经纪人':'总代'),
+				'wx_word'=>$companyinfo?$companyinfo->name:'独立经纪人',
+				'company'=>$companyinfo?(Tools::u8_title_substr($companyinfo->name,24).' '.$companyinfo->code):'独立经纪人',
+				'tags'=>$tagarr,
+				'tel'=>SiteExt::getAttr('qjpz','site_phone'),
+			];
+		} elseif ($user_type==1) {
+			$user = StaffExt::model()->normal()->findByPk($uid);
+			if(!$user) {
+				return $this->returnError('用户不存在或禁用');
+			}
+			$tagarr = [];
+			if($tags = TagExt::model()->findAll("status=1 and cate='anmy'")) {
+				foreach ($tags as $key => $value) {
+					$tagarr[] = ['name'=>$value->name,'image'=>ImageTools::fixImage($value->icon),'url'=>$value->url];
+				}
+			}
+			// $companyinfo = $user->companyinfo;
+			$data = [
+				'name'=>$user->name,
+				'type'=>$user_type,
+				'typename'=>'案场',
+				'wx_word'=>Yii::app()->file->sitename,
+				// 'company'=>$companyinfo?(Tools::u8_title_substr($companyinfo->name,24).' '.$companyinfo->code):'独立经纪人',
+				'tags'=>$tagarr,
+				'tel'=>SiteExt::getAttr('qjpz','site_phone'),
+			];
+		} else {
+			$user = StaffExt::model()->normal()->findByPk($uid);
+			if(!$user) {
+				return $this->returnError('用户不存在或禁用');
+			}
+			$tagarr = [];
+			if($tags = TagExt::model()->findAll("status=1 and cate='scmy'")) {
+				foreach ($tags as $key => $value) {
+					$tagarr[] = ['name'=>$value->name,'image'=>ImageTools::fixImage($value->icon),'url'=>$value->url];
+				}
+			}
+			// $companyinfo = $user->companyinfo;
+			$data = [
+				'name'=>$user->name,
+				'type'=>$user_type,
+				'typename'=>'市场',
+				'wx_word'=>Yii::app()->file->sitename,
+				// 'company'=>$companyinfo?(Tools::u8_title_substr($companyinfo->name,24).' '.$companyinfo->code):'独立经纪人',
+				'tags'=>$tagarr,
+				'tel'=>SiteExt::getAttr('qjpz','site_phone'),
+			];
 		}
-		$companyinfo = $user->companyinfo;
-		$data = [
-			'name'=>$user->name,
-			'type'=>$user->type,
-			'typename'=>$user->type==2?'分销':($user->type==3?'独立经纪人':'总代'),
-			'wx_word'=>$companyinfo?$companyinfo->name:'独立经纪人',
-			'company'=>$companyinfo?(Tools::u8_title_substr($companyinfo->name,24).' '.$companyinfo->code):'独立经纪人',
-			'tags'=>$tagarr,
-			'tel'=>SiteExt::getAttr('qjpz','site_phone'),
-		];
 		$this->frame['data'] = $data;
+		
 	}
 
 	public function actionSubList($uid='',$user_type=0,$type='',$kw='',$hid='')
@@ -493,5 +538,36 @@ class UserController extends ApiController{
 			$user->cid = 0;
 			$user->save();
 		}
+	}
+
+	public function actionCheckPwd($kw='',$pwd='')
+	{
+		if(!$kw||!$pwd)
+			return $this->returnError('参数错误');
+		if(is_numeric($kw)) {
+			$user = StaffExt::model()->normal()->find("phone='$kw'");
+		} else {
+			$user = StaffExt::model()->normal()->find("name='$kw'");
+		}
+		if($user) {
+			if($user->password==$pwd) {
+				$this->frame['data'] = $user->id;
+			} else {
+				$this->returnError('用户名或密码错误');
+			}
+		} else{
+			return $this->returnError('用户不存在或禁用');
+		}
+	}
+
+	public function actionBindOpenid($openid='',$phone='')
+	{
+		$staff = StaffExt::model()->normal()->find("phone='$phone'");
+		if(!$staff) {
+			return $this->returnError('用户不存在或禁用');
+		}
+		$staff->openid = $openid;
+		$staff->save();
+		$this->frame['data'] = $staff->id;
 	}
 }

@@ -281,7 +281,7 @@ class IndexController extends ApiController
                         'typename'=>$user->type==2?'分销':($user->type==3?'独立经纪人':'总代'),
                         'status'=>$user->status,
                         'openid'=>$user->openid,
-                        'avatarUrl'=>ImageTools::fixImage($user->ava,200,200),
+                        'avatarUrl'=>ImageTools::fixImage($user->ava?$user->ava:SiteExt::getAttr('qjpz','usernopic'),200,200),
                         'image'=>ImageTools::fixImage($user->image),
                         'wx_word'=>$companyinfo?($companyinfo->name):'独立经纪人',
                         // 'is_true'=>$user->is_true,
@@ -559,6 +559,28 @@ class IndexController extends ApiController
         }
     }
 
+    public function actionDecodeAn()
+    {
+        include_once "wxBizDataCrypt.php";
+        $appid = SiteExt::getAttr('qjpz','appid1');
+        $sessionKey = $_POST['accessKey'];
+        $encryptedData = $_POST['encryptedData'];
+        $iv = $_POST['iv'];
+        $pc = new WXBizDataCrypt($appid, $sessionKey);
+        $errCode = $pc->decryptData($encryptedData, $iv, $data );
+
+        if ($errCode == 0) {
+            $data = json_decode($data,true);
+            $this->frame['data'] = $data['phoneNumber'];
+            echo $data['phoneNumber'];
+            Yii::app()->end();
+            // print($data . "\n");
+        } else {
+            echo '';
+            Yii::app()->end();
+        }
+    }
+
     public function getSessionKey($code='' )
     {
         $appid='wxc4b995f8ee3ef609';$apps='48d79f6b24890a88ef5b53a5e5119f5a';
@@ -598,6 +620,64 @@ class IndexController extends ApiController
                             'type'=>$user->type,
                             'image'=>ImageTools::fixImage($user->image),
                         ];
+                        $data = [
+                            'uid'=>$user->id,
+                            'is_true'=>$is_true,
+                            'user_data'=>$user_data,
+                            // 'phone'=>$user->phone,
+                            // 'name'=>$user->name,
+                            // 'type'=>$user->type,
+                            // 'status'=>$user->status,
+                            // 'is_true'=>$user->is_true,
+                            // 'avatarUrl'=>ImageTools::fixImage($user->ava,200,200),
+                            // 'company_name'=>$user->companyinfo?$user->companyinfo->name:'独立经纪人',
+                            'openid'=>$openid,
+                            'session_key'=>$cont['session_key'],
+                        ];
+                        $this->frame['data'] = $data;
+                        // echo json_encode($data);
+                    } else {
+                        $this->frame['data'] = ['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'','is_true'=>$is_true,'user_data'=>$user_data];
+                        // echo json_encode(['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'']);
+                    }
+                } else {
+                    Yii::log(json_encode($cont));
+                    // $this->returnError($cont['errorMsg']);
+                }
+                // Yii::app()->end();
+            }
+                
+        }
+    }
+
+    public function actionGetOpenIdAn($code='')
+    {
+        $appid=SiteExt::getAttr('qjpz','appid1');$apps=SiteExt::getAttr('qjpz','appsecret1');
+        $is_true = 0;
+        // $res = HttpHelper::get("https://api.weixin.qq.com/sns/jscode2session?appid=$appid&secret=$apps&js_code=$code&grant_type=authorization_code");
+        $res = HttpHelper::getHttps("https://api.weixin.qq.com/sns/jscode2session?appid=$appid&secret=$apps&js_code=$code&grant_type=authorization_code");
+        if($res){
+            $cont = $res['content'];
+            if($cont) {
+                $cont = json_decode($cont,true);
+                $openid = $cont['openid'];
+                if($openid) {
+                    // 如果用户类型是fenxiao有没有cid则把用户信息带过去
+                    $user = StaffExt::model()->normal()->find("openid='$openid'");
+                    
+                    $user_data = [];
+                        
+                    if($user) {
+                        $is_true = 1;
+                        // if($user->type==2&&!$user->cid) {
+                        //     $is_true = 0;
+                        // }
+                        // $user_data = [
+                        //     'name'=>$user->name,
+                        //     'phone'=>$user->phone,
+                        //     'type'=>$user->type,
+                        //     'image'=>ImageTools::fixImage($user->image),
+                        // ];
                         $data = [
                             'uid'=>$user->id,
                             'is_true'=>$is_true,

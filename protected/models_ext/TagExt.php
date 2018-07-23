@@ -16,6 +16,8 @@ class TagExt extends Tag
             'indextag'=>'首页标签',
             // 'wzlm' => '项目列表顶部标签',
             'fxmy'=>'分销个人中心',
+            'scmy'=>'市场个人中心',
+            'anmy'=>'案场个人中心',
             'wylx' => '物业类型',
             'zxzt' => '装修状态',
             'xszt' => '销售状态',
