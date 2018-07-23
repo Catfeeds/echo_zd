@@ -977,11 +977,16 @@ class PlotController extends ApiController{
 				$plot = PlotExt::model()->findByPk($tmp['hid']);
 				// $tmp['com_phone'] = $this->cleanXss($_POST['com_phone']);
 				$tmp['uid'] = $this->cleanXss($_GET['uid']);
+				$user = UserExt::model()->findByPk($tmp['uid']);
 // var_dump($plot);exit;
 				if($plot && !Yii::app()->db->createCommand("select id from cooperate where deleted=0 and uid=".$tmp['uid']." and hid=".$tmp['hid'])->queryScalar()) {
+					if($user->type!=2||!$user->cid) {
+						return $this->returnError('项目只支持分销公司申请分销');
+					}
 					$obj = new CooperateExt;
 					$obj->attributes = $tmp;
-					$obj->status = 0;
+					$obj->cid = $user->cid;
+					$obj->status = 1;
 					$obj->save();
 				} else {
 					$this->returnError('您已经提交申请，请勿重复提交');
