@@ -84,21 +84,21 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
 <div class="form-group">
     <label class="col-md-2 control-label">市场对接人</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'market_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control', 'encode' => false)); ?>
+        <?php echo $form->dropDownList($article, 'market_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'market_uid') ?></div>
 </div>
 <div class="form-group">
     <label class="col-md-2 control-label">案场助理</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'an_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control', 'encode' => false)); ?>
+        <?php echo $form->dropDownList($article, 'an_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'an_uid') ?></div>
 </div>
 <div class="form-group">
     <label class="col-md-2 control-label">案场销售</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'sale_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control', 'encode' => false)); ?>
+        <?php echo $form->dropDownList($article, 'sale_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'sale_uid') ?></div>
 </div>
