@@ -513,9 +513,9 @@ class PlotController extends AdminController{
 			// 	$zd_company = [$zd_company];
 			// }
 			// var_dump($zd_company);exit;
-			if($house->company_id) {
-				$house->company_name = CompanyExt::model()->findByPk($house->company_id)->name;
-			}
+			// if($house->company_id) {
+			// 	$house->company_name = CompanyExt::model()->findByPk($house->company_id)->name;
+			// }
 				
 			$tagArray = [];
 			foreach (PlotExt::$tagArr as $tagKey) {

@@ -742,15 +742,15 @@ class PlotController extends ApiController{
 			'is_save'=>$thisuid&&Yii::app()->db->createCommand('select id from save where uid='.$thisuid.' and hid='.$info->id)->queryScalar()?1:0,
 			// 'share_phone'=>$share_phone,
 		];
-		if($this->staff) {
-			if((Yii::app()->db->createCommand("select id from plot_makert_user where status=1 and deleted=0 and expire>".time()." and uid=".$this->staff->id." and hid=".$info->id)->queryScalar())||strstr($info->market_user,$this->staff->phone)) {
-				$data['can_edit'] = 1;
-			} else {
-				$data['can_edit'] = 0;
-			}
-		}else {
-				$data['can_edit'] = 0;
-			}
+		// if($this->staff) {
+		// 	if((Yii::app()->db->createCommand("select id from plot_makert_user where status=1 and deleted=0 and expire>".time()." and uid=".$this->staff->id." and hid=".$info->id)->queryScalar())||strstr($info->market_user,$this->staff->phone)) {
+		// 		$data['can_edit'] = 1;
+		// 	} else {
+		// 		$data['can_edit'] = 0;
+		// 	}
+		// }else {
+		// 		$data['can_edit'] = 0;
+		// 	}
 		// $data['can_edit'] = $this->staff && strstr($info->market_user,$this->staff->phone)?1:0;
 		$this->frame['data'] = $data;
 	}
