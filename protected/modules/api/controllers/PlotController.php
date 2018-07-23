@@ -546,43 +546,12 @@ class PlotController extends ApiController{
 		}
 		if($sfs = $info->sfMarkets) {
 			foreach ($sfs as $key => $value) {
-				$thisstaff = UserExt::model()->findByPk($value->uid);
-				// 小程序不一样
-				// if($this->is_HTTPS()) {
-				// 	$thisstaff && $phones[] = $thisstaff->name.$thisstaff->phone;
-				// } else 
-				// if($thisstaff) {
-				// 	if($thisstaff->virtual_no) {
-				// 		$phones[] = $thisstaff->name.$thisstaff->virtual_no.','.$thisstaff->virtual_no_ext;
-				// 	} else {
-				// 		$phones[] = $thisstaff->name.$thisstaff->phone;
-				// 	}
-				// }
-				$thisstaff && $phones[] = $thisstaff->name.$thisstaff->phone;
+				$thisstaff = StaffExt::model()->findByPk($value->uid);
+
+				$thisstaff && $phones[] = ['name'=>$thisstaff->name,'phone'=>$thisstaff->phone];
 			}
-			// $phones = [];
-		} else {
-			// // var_dump(1);
-			// 小程序不一样
-				// if($this->is_HTTPS()) {
-				// 	$phones = array_filter(explode(' ', $info->market_users));
-				// } else {
-				// 	preg_match('/[0-9|,]+/', $info->market_users,$thisp);
-				// 	if(isset($thisp[0])&&$thisp[0]) {
-				// 		$user = UserExt::model()->find("phone='".$thisp[0]."'");
-				// 		if($user)
-				// 			$phones = [$user->name.$user->virtual_no.','.$user->virtual_no_ext];
-				// 	}
-				// }
-					
-			$phones = array_filter(explode(' ', $info->market_users));
+			// array_unique($phones);
 		}
-		// var_dump($phones);exit;
-		$info->market_user && array_unshift($phones, $info->market_user);
-
-		$phones && $phones = array_keys(array_flip($phones));
-
-		$phonesnum = [];
 		
 		$major_phone = '';
 		if($info->market_user) {
@@ -594,16 +563,16 @@ class PlotController extends ApiController{
 
 		$is_contact_only = 0;
 		// 分享出去 总代或者分销加电话咨询，否则提示下载
-		if($phone && $phones) {
-			foreach ($phones as $key => $value) {
-				if(strstr($value,$phone)) {
-					$is_contact_only = 1;
-					$phone = $value;
-					break;
-				}
-			}
-			!$is_contact_only && $is_contact_only = 2;
-		}
+		// if($phone && $phones) {
+		// 	foreach ($phones as $key => $value) {
+		// 		if(strstr($value,$phone)) {
+		// 			$is_contact_only = 1;
+		// 			$phone = $value;
+		// 			break;
+		// 		}
+		// 	}
+		// 	!$is_contact_only && $is_contact_only = 2;
+		// }
 		if(!is_array($info->wylx)) 
 			$info->wylx = [$info->wylx];
 		if(!is_array($info->zxzt)) 
@@ -617,24 +586,24 @@ class PlotController extends ApiController{
 			}
 		}
 		$info->dllx && array_unshift($tagName, Yii::app()->params['dllx'][$info->dllx]);
-		$ffphones=[];
-		if($ffs = $info->sfMarkets) {
-			foreach ($ffs as $key => $value) {
-				// 小程序不一样
-				// if($this->is_HTTPS()) {
-				// 	$value->user&&$ffphones[] = $value->user->phone;
-				// } else {
-				// 	$ffu = $value->user;
-				// 	if($ffu && $ffu->virtual_no) {
-				// 		$ffphones[] = $ffu->virtual_no.','.$ffu->virtual_no_ext;
-				// 	} else {
-				// 		$ffphones[] = $ffu->phone;
-				// 	}
-				// }
+		// $ffphones=[];
+		// if($ffs = $info->sfMarkets) {
+		// 	foreach ($ffs as $key => $value) {
+		// 		// 小程序不一样
+		// 		// if($this->is_HTTPS()) {
+		// 		// 	$value->user&&$ffphones[] = $value->user->phone;
+		// 		// } else {
+		// 		// 	$ffu = $value->user;
+		// 		// 	if($ffu && $ffu->virtual_no) {
+		// 		// 		$ffphones[] = $ffu->virtual_no.','.$ffu->virtual_no_ext;
+		// 		// 	} else {
+		// 		// 		$ffphones[] = $ffu->phone;
+		// 		// 	}
+		// 		// }
 					
-				$value->user&&$ffphones[] = $value->user->phone;
-			}
-		}
+		// 		$value->user&&$ffphones[] = $value->user->phone;
+		// 	}
+		// }
 		$is_alert = 0;
 		if($info->uid && $info->status==0) {
 			$is_alert = 1;
@@ -671,31 +640,7 @@ class PlotController extends ApiController{
 			}
 		}
 		$qfuidsarr = [];
-		shuffle($phones);
-		if($phones) {
-			foreach ($phones as $key => $value) {
-				preg_match('/[0-9|,]+/', $value,$tmp);
-				// var_dump($tmp);exit;
-				$tmpp = $tmp[0];
-				strstr($tmpp, ',') && list($nothis,$extthis) = explode(',', $tmpp);
-				$phonesnum = array_merge($phonesnum,$tmp);
-				if(strstr($tmpp, ',')) {
-					if($rmq = Yii::app()->db->createCommand("select qf_uid from user where virtual_no='$nothis' and virtual_no_ext='$extthis'")->queryScalar()) {
-						$qfuidsarr[] = $rmq;
-					} else {
-						$qfuidsarr[] = '';
-					}
-				} else {
-					if($rmq = Yii::app()->db->createCommand("select qf_uid from user where phone='$tmpp'")->queryScalar()) {
-						$qfuidsarr[] = $rmq;
-					} else {
-						$qfuidsarr[] = '';
-					}
-				}
-				
-				// $qfuidsarr[] = UserExt::model()->find()
-			}
-		}
+		
 		$data = [
 			'id'=>$id,
 			'title'=>$info->title,
@@ -725,7 +670,7 @@ class PlotController extends ApiController{
 			'dk_rule'=>$info->dk_rule,
 			'is_login'=>$this->staff?'1':'0',
 			'wx_share_title'=>$info->wx_share_title?$info->wx_share_title:$info->title,
-			'phonesnum'=>$phonesnum,
+			// 'phonesnum'=>$phonesnum,
 			'qfuidsarr'=>$qfuidsarr,
 			// 'zd_company'=>['id'=>$info->company_id,'name'=>$info->company_name],
 			'zd_company'=>Yii::app()->file->sitename,
@@ -735,7 +680,7 @@ class PlotController extends ApiController{
 			'areaid'=>$info->area,
 			'streetid'=>$info->street,
 			'owner_phone'=>'',
-			'ff_phones'=>$ffphones,
+			// 'ff_phones'=>$ffphones,
 			'is_alert'=>$is_alert,
 			'is_unshow'=>$info->is_unshow,
 			'sale_status'=>$info->sale_status?TagExt::model()->findByPk($info->sale_status)->name:'',
