@@ -972,11 +972,11 @@ class PlotController extends ApiController{
 
 	public function actionAddCo()
 	{
-		if(Yii::app()->request->getIsPostRequest()) {
-			if($tmp['hid'] = $this->cleanXss($_POST['hid'])) {
+		// if(Yii::app()->request->getIsPostRequest()) {
+			if($tmp['hid'] = $this->cleanXss($_GET['hid'])) {
 				$plot = PlotExt::model()->findByPk($tmp['hid']);
 				// $tmp['com_phone'] = $this->cleanXss($_POST['com_phone']);
-				$tmp['uid'] = $this->cleanXss($_POST['uid']);
+				$tmp['uid'] = $this->cleanXss($_GET['uid']);
 // var_dump($plot);exit;
 				if($plot && !Yii::app()->db->createCommand("select id from cooperate where deleted=0 and uid=".$tmp['uid']." and hid=".$tmp['hid'])->queryScalar()) {
 					$obj = new CooperateExt;
@@ -987,7 +987,7 @@ class PlotController extends ApiController{
 					$this->returnError('您已经提交申请，请勿重复提交');
 				}
 			}
-		}
+		// }
 	}
 	public function actionDo()
     {
