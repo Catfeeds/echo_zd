@@ -263,7 +263,7 @@ class UserController extends ApiController{
 						'isShowCode'=>1,
 						'type'=>$value->status,
 						'staffName'=>$market_user?$market_user->name:'暂无',
-						'StaffPhone'=>$market_user?$market_user->phone:'暂无',
+						'staffPhone'=>$market_user?$market_user->phone:'暂无',
 						'time'=>date("m-d H:i",$value->created),
 						'thirdLine'=>$value->plot?$value->plot->title:'暂无',
 					];
