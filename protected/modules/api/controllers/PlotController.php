@@ -258,7 +258,7 @@ class PlotController extends ApiController{
 				foreach ($dats['list'] as $key => $value) {
 					// var_dump($value);exit;
 					$dats['list'][$key]['pay'] = $showPay?$dats['list'][$key]['pay']:'暂无权限查看';
-					$dats['list'][$key]['distance'] = round($this->getDistance($value['distance']),2);
+					// $dats['list'][$key]['distance'] = round($this->getDistance($value['distance']),2);
 				}
 			}
 			$this->frame['data'] = $dats;
@@ -467,7 +467,7 @@ class PlotController extends ApiController{
         return $s;
 	}
 
-	public function actionInfo($id='',$phone='',$uid='',$ask_limit='1')
+	public function actionInfo($id='',$phone='',$uid='',$ask_limit='1',$map_lat='',$map_lng='')
 	{
 		if($id && strstr($id,'_')) {
 			list($id,$phone) = explode('_', $id);
@@ -548,7 +548,7 @@ class PlotController extends ApiController{
 			foreach ($sfs as $key => $value) {
 				$thisstaff = StaffExt::model()->findByPk($value->uid);
 
-				$thisstaff && $phones[] = ['name'=>$thisstaff->name,'phone'=>$thisstaff->phone];
+				$thisstaff && $phones[] = ['name'=>$thisstaff->name,'phone'=>$thisstaff->phone,'company'=>Yii::app()->file->sitename];
 			}
 			// array_unique($phones);
 		}
@@ -673,6 +673,7 @@ class PlotController extends ApiController{
 			// 'phonesnum'=>$phonesnum,
 			'qfuidsarr'=>$qfuidsarr,
 			// 'zd_company'=>['id'=>$info->company_id,'name'=>$info->company_name],
+			'distance'=>$map_lng&&$map_lat?(round($this->countDistance($map_lat,$map_lng,$info->map_lat,$info->map_lng),2).'km'):'',
 			'zd_company'=>Yii::app()->file->sitename,
 			'tags'=>$tagName,
 			'is_contact_only'=>$is_contact_only,
