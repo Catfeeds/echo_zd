@@ -389,6 +389,20 @@ class UserController extends ApiController{
 				$imgs[] = ['key'=>$value->url,'imageURL'=>ImageTools::fixImage($value->url)];
 			}
 		}
+		$errorCorrectionLevel = 'L';//容错级别 
+
+		$matrixPointSize = 6;//生成图片大小 
+
+		//生成二维码图片 
+		$filename = 'qrcode/'.microtime().'.png';
+		if($sub->qr) {
+			$image = $sub->qr;
+		} else {
+			QRcode::png($id, $filename, $errorCorrectionLevel, $matrixPointSize, 2); 
+			$image = $sub->qr = $filename;
+			$sub->save();
+		}
+		
 		$data = [
 			'id'=>$id,
 			'name'=>$sub->name,
@@ -399,6 +413,7 @@ class UserController extends ApiController{
 			'code'=>$sub->code,
 			'note'=>SiteExt::model()->getAttr('qjpz','subnote'),
 			'imgs'=>$imgs,
+			'image'=>Yii::app()->request->getHostInfo().'/'.$image,
 		];
 		$this->frame['data'] = $data;
 
