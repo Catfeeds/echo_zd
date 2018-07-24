@@ -618,7 +618,7 @@ class IndexController extends ApiController
                             'name'=>$user->name,
                             'phone'=>$user->phone,
                             'type'=>$user->type,
-                            'image'=>ImageTools::fixImage($user->image),
+                            'image'=>['key'=>$user->image,'imageURL'=>ImageTools::fixImage($user->image)],
                         ];
                         $data = [
                             'uid'=>$user->id,
