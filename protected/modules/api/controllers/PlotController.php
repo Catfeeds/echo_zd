@@ -1806,12 +1806,14 @@ class PlotController extends ApiController{
     	if($uid&&$hid) {
     		if($save = SaveExt::model()->find('hid='.(int)$hid.' and uid='.$uid)) {
     			SaveExt::model()->deleteAllByAttributes(['hid'=>$hid,'uid'=>$uid]);
+    			$this->frame['data'] = 0;
     			$this->returnSuccess('取消关注成功');
     		} else {
     			$save = new SaveExt;
     			$save->uid = $uid;
     			$save->hid = $hid;
     			$save->save();
+    			$this->frame['data'] = 1;
     			$this->returnSuccess('关注成功');
     		}
     	}else {
