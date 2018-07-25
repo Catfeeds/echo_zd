@@ -46,18 +46,12 @@ class PlotController extends ApiController{
 		$isxcx = (int)Yii::app()->request->getQuery('isxcx',0);
 		$kw = $this->cleanXss(Yii::app()->request->getQuery('kw',''));
 		$this->frame['data'] = ['list'=>[],'page'=>$page,'num'=>0,'page_count'=>0,];
-		$init = $areainit = 0 ;
-		if($city+$area+$street+$aveprice+$sfprice+$sort+$wylx+$zxzt+$toptag+$company+$save+$maxprice+$minprice==0&&$page==1&&!$kw) {
-			$init = 1;
-		}
-		if($city&&$area+$street+$aveprice+$sfprice+$sort+$wylx+$zxzt+$toptag+$company+$save+$maxprice+$minprice==0&&$page==1&&!$kw) {
-			$areainit = 1;
-		}
-		if(!$isxcx&&$this->is_HTTPS()&&$limit!=6){
-			$city = $area;
-			$area = $street;
-			$street = 0;
-		}
+		
+		// if(!$isxcx&&$this->is_HTTPS()&&$limit!=6){
+		// 	$city = $area;
+		// 	$area = $street;
+		// 	$street = 0;
+		// }
 		if($street && !$area) {
 			$area = AreaExt::model()->findByPk($street)->parent;
 		}
@@ -252,17 +246,17 @@ class PlotController extends ApiController{
 		// 	$this->frame['data'] = $dats[$area];
 		// }
 		// 走缓存拿初始数据
-		if($init) {
-			$dats = PlotExt::setPlotCache();
-			if(isset($dats['list']) && $dats['list']) {
-				foreach ($dats['list'] as $key => $value) {
-					// var_dump($value);exit;
-					$dats['list'][$key]['pay'] = $showPay?$dats['list'][$key]['pay']:'暂无权限查看';
-					// $dats['list'][$key]['distance'] = round($this->getDistance($value['distance']),2);
-				}
-			}
-			$this->frame['data'] = $dats;
-		} else {
+		// if($init) {
+		// 	$dats = PlotExt::setPlotCache();
+		// 	if(isset($dats['list']) && $dats['list']) {
+		// 		foreach ($dats['list'] as $key => $value) {
+		// 			// var_dump($value);exit;
+		// 			$dats['list'][$key]['pay'] = $showPay?$dats['list'][$key]['pay']:'暂无权限查看';
+		// 			// $dats['list'][$key]['distance'] = round($this->getDistance($value['distance']),2);
+		// 		}
+		// 	}
+		// 	$this->frame['data'] = $dats;
+		// } else {
 			$plots = PlotExt::model()->undeleted()->getList($criteria,$limit);
 			$lists = [];
 			$topids = [];
@@ -352,94 +346,7 @@ class PlotController extends ApiController{
 				$pager = $plots->pagination;
 				$this->frame['data'] = ['list'=>$lists,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
 			}
-		}
-		// if($city+$area+$street+$aveprice+$sfprice+$wylx+$zxzt+$toptag+$company+$uid+$save==0&&!$kw) {
-		// 	$this->frame['data']['num'] += 800;
 		// }
-		// if($area && $page==1) {
-		// 	// 所有该城市置顶项目
-		// 	$allareatops = PlotExt::model()->undeleted()->findAll('area='.$area.' and sort>0');
-		// 	foreach ($allareatops as $key => $value) {
-		// 		if(!in_array($value->id, $topids)) {
-		// 			if(isset($areaslist[$value->area]))
-		// 				$areaName = $areaslist[$value->area];
-		// 			else
-		// 				$areaName = '';
-		// 			if(isset($areaslist[$value->street]))
-		// 				$streetName = $areaslist[$value->street];
-		// 			else
-		// 				$streetName = '';
-		// 			// if(!$company) {
-		// 			$companydes = ['id'=>$value->company_id,'name'=>$value->company_name];
-		// 			// }
-		// 			$wyw = '';
-		// 			$wylx1 = $value->wylx;
-		// 			if($wylx1) {
-		// 				if(!is_array($wylx1)) 
-		// 					$wylx1 = [$wylx1];
-		// 				foreach ($wylx1 as $w) {
-		// 					$t = TagExt::model()->findByPk($w)->name;
-		// 					$t && $wyw .= $t.' ';
-		// 				}
-		// 				$wyw = trim($wyw);
-		// 			}
-					
-					
-		// 			// var_dump(Yii::app()->user->getIsGuest());exit;
-		// 			// if(Yii::app()->user->getIsGuest()) {
-		// 			// 	$pay = '';
-		// 			// } elseif($pays = $value->pays) {
-		// 			// 	$pay = $pays[0]['price'].(count($pays)>1?'('.count($pays).'个方案)':'');
-		// 			// } else {
-		// 			// 	$pay = '';
-		// 			// }
-		// 			$expire = '您尚未成为对接人';
-		// 			// // var_dump($uid);exit;
-		// 			if($uid) {
-		// 				$expiret = Yii::app()->db->createCommand('select expire from plot_makert_user where uid='.$this->staff->id.' and hid='.$value->id)->queryScalar();
-		// 				if(!$expiret) {
-		// 					$expire = '等待付款';
-		// 				}elseif($expiret>0 && $expiret<time()) {
-		// 					$expire = '已到期';
-		// 				} elseif($expiret>0) {
-		// 					if($value->status) {
-		// 						$expire = '已上线';
-		// 					} else {
-		// 						$expire = '等待审核';
-		// 					}
-		// 				}
-		// 			}
-		// 			// 自己发的才能编辑
-		// 			if($this->staff&&$value->uid&&$value->uid==$this->staff->id) {
-		// 				$can_edit = 1;
-		// 			} else {
-		// 				$can_edit = 0;
-		// 			}
-		// 			if($area && ($value->qjsort||$value->sort)) {
-		// 				$topids[] = $value->id;
-		// 			}
-		// 			array_unshift($this->frame['data']['list'], [
-		// 				'id'=>$value->id,
-		// 				'title'=>Tools::u8_title_substr($value->title,18),
-		// 				'price'=>$value->is_unshow?('已'.TagExt::model()->findByPk($value->sale_status)->name):(!$value->price?'待定':$value->price),
-		// 				'unit'=>$value->is_unshow||(!$value->price)?'':PlotExt::$unit[$value->unit],
-		// 				'area'=>$areaName,
-		// 				'street'=>$streetName,
-		// 				'image'=>ImageTools::fixImage($value->image?$value->image:$info_no_pic,200,150),
-		// 				'wylx'=>$wyw,
-		// 				'status'=>$value->status,
-		// 				'zd_company'=>$companydes,
-		// 				'pay'=>$showPay?$value->first_pay:'暂无权限查看',
-		// 				'sort'=>$value->sort?SiteExt::getAttr('qjpz','topword'):'',
-		// 				'can_edit'=>$can_edit,
-		// 				'expire'=>$this->staff&&$expire,
-		// 				'distance'=>round($this->getDistance($value),2),
-		// 			]);
-		// 			$this->frame['data']['num']++;
-		// 		}
-		// 	}
-		// }
-			
 	}
 
 	public function getDistance($obj)
