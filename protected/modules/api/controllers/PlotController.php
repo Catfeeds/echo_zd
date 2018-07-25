@@ -39,6 +39,8 @@ class PlotController extends ApiController{
 		$uid = (int)Yii::app()->request->getQuery('uid',0);
 		$myuid = (int)Yii::app()->request->getQuery('myuid',0);
 		$status = Yii::app()->request->getQuery('status','');
+		$map_lat = Yii::app()->request->getQuery('map_lat','');
+		$map_lng = Yii::app()->request->getQuery('map_lng','');
 		$minprice = (int)Yii::app()->request->getQuery('minprice',0);
 		$maxprice = (int)Yii::app()->request->getQuery('maxprice',0);
 		$page = (int)Yii::app()->request->getQuery('page',1);
@@ -223,11 +225,9 @@ class PlotController extends ApiController{
 					# code...
 					break;
 			}
-			if($sort == 3 && isset($_COOKIE['house_lng']) && isset($_COOKIE['house_lat'])) {
+			if($sort == 3 && $map_lat && $map_lng) {
 				// var_dump(1);exit;
-				$city_lat = $_COOKIE['house_lat'];
-				$city_lng = $_COOKIE['house_lng'];
-				$criteria->order = 'ACOS(SIN(('.$city_lat.' * 3.1415) / 180 ) *SIN((map_lat * 3.1415) / 180 ) +COS(('.$city_lat.' * 3.1415) / 180 ) * COS((map_lat * 3.1415) / 180 ) *COS(('.$city_lng.' * 3.1415) / 180 - (map_lng * 3.1415) / 180 ) ) * 6380  asc';
+				$criteria->order = 'ACOS(SIN(('.$map_lat.' * 3.1415) / 180 ) *SIN((map_lat * 3.1415) / 180 ) +COS(('.$map_lat.' * 3.1415) / 180 ) * COS((map_lat * 3.1415) / 180 ) *COS(('.$map_lng.' * 3.1415) / 180 - (map_lng * 3.1415) / 180 ) ) * 6380  asc';
 			}
 		} else {	
 			if($area) {
