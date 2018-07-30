@@ -111,6 +111,7 @@ if($parent) {
             <td  class="text-center">
                 <?php echo CHtml::ajaxLink('刷新',$this->createUrl('refresh'), array('type'=>'get', 'data'=>array('id'=>$v->id),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-xs blue')); ?>
                 <a target="_blank" href="<?=$this->createUrl('/admin/plotMarketUser/edit',['hid'=>$v->id])?>" class="btn btn-xs green">新增对接人</a>
+                <a target="_blank" href="<?=$this->createUrl('/admin/plotAn/edit',['hid'=>$v->id])?>" class="btn btn-xs yellow">新增案场</a>
                 <a target="_blank" href="<?=$this->createUrl('imagelist',['hid'=>$v->id])?>" class="btn btn-xs red">相册</a>
                 <a target="_blank" href="<?=$this->createUrl('hxlist',['hid'=>$v->id])?>" class="btn btn-xs yellow">户型</a>
                 <a target="_blank" href="<?=$this->createUrl('newslist',['hid'=>$v->id])?>" class="btn btn-xs blue">动态</a>

@@ -38,6 +38,8 @@ class PlotController extends ApiController{
 		$showPay = Yii::app()->request->getQuery('showPay',1);
 		$uid = (int)Yii::app()->request->getQuery('uid',0);
 		$myuid = (int)Yii::app()->request->getQuery('myuid',0);
+		$mkstaff = (int)Yii::app()->request->getQuery('mkstaff',0);
+		$anstaff = (int)Yii::app()->request->getQuery('anstaff',0);
 		$status = Yii::app()->request->getQuery('status','');
 		$map_lat = Yii::app()->request->getQuery('map_lat','');
 		$map_lng = Yii::app()->request->getQuery('map_lng','');
@@ -156,6 +158,26 @@ class PlotController extends ApiController{
 		if($maxprice) {
 			$criteria->addCondition('price<=:maxprice');
 			$criteria->params[':maxprice'] = $maxprice;
+		}
+		if($mkstaff) {
+			$mkids = [];
+			$idrr = Yii::app()->db->createCommand("select hid from plot_makert_user where uid=".$mkstaff)->queryAll();
+			if($idrr) {
+				foreach ($idrr as $mkid) {
+					$mkids[] = $mkid['hid'];
+				}
+			}
+			$criteria->addInCondition('id',$mkids);
+		}
+		if($anstaff) {
+			$mkids = [];
+			$idrr = Yii::app()->db->createCommand("select hid from plot_an where uid=".$anstaff)->queryAll();
+			if($idrr) {
+				foreach ($idrr as $mkid) {
+					$mkids[] = $mkid['hid'];
+				}
+			}
+			$criteria->addInCondition('id',$mkids);
 		}
 
 		// var_dump($toptag,$sfprice,$wylx);exit;
@@ -2605,6 +2627,24 @@ class PlotController extends ApiController{
     		}
     		$this->frame['data'] = $data;
     	}
+    }
+
+    public function actionGetSaleList($sid='')
+    {
+    	$data = [];
+    	$sub = SubExt::model()->findByPk($sid);
+
+    	if(!$sub) {
+    		return $this->returnError('参数错误');
+    	}
+    	$plot = $sub->plot;
+    	$sales = Yii::app()->db->createCommand("select distinct s.id,s.name,s.phone from staff s left join plot_an a on a.uid=s.id where s.status=1 and a.type=2 and a.hid=".$plot->id)->queryAll();
+    	if($sales) {
+    		foreach ($sales as $key => $value) {
+    			$data[] = ['id'=>$value['id'],'name'=>$value['name'].$value['phone']];
+    		}
+    	}
+    	$this->frame['data'] = $data;
     }
 
 }

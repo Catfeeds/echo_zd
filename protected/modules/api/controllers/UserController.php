@@ -228,12 +228,13 @@ class UserController extends ApiController{
 			return $this->returnError('用户不存在或禁用');
 		}
 		$criteria = new CDbCriteria;
-		$criteria->addCondition("uid=$uid");
+		
 		if($hid) {
 			$criteria->addCondition("hid=$hid");
 		}
 		$criteria->order = 'updated desc';
 		if($user_type==0) {
+			$criteria->addCondition("uid=$uid");
 			// 搜项目和客户电话
 			// $criteria = new CDbCriteria;
 			// $criteria->addCondition("uid=$uid");
@@ -280,6 +281,7 @@ class UserController extends ApiController{
 				}
 			}
 		} elseif ($user_type==1) {
+			$criteria->addCondition("an_uid=$uid or sale_uid=$uid");
 			// 搜项目和客户电话
 			// $criteria = new CDbCriteria;
 			// $criteria->addCondition("uid=$uid");
@@ -311,7 +313,7 @@ class UserController extends ApiController{
 						'staffName'=>$market_user?$market_user->name:'暂无',
 						'StaffPhone'=>$market_user?$market_user->phone:'暂无',
 						'time'=>date("m-d H:i",$value->created),
-						'thirdLine'=>$market_user->companyinfo?$value->companyinfo->name:'暂无',
+						'thirdLine'=>$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 					];
 				}
 				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
@@ -326,6 +328,7 @@ class UserController extends ApiController{
 				}
 			} 
 		} else {
+			$criteria->addCondition("market_uid=$uid");
 			// 搜项目、分销公司
 			// $criteria = new CDbCriteria;
 			$criteria->addCondition("company_name like '%$kw%' or plot_title like '%$kw%'");
@@ -358,7 +361,7 @@ class UserController extends ApiController{
 						'staffName'=>$market_user?$market_user->name:'暂无',
 						'StaffPhone'=>$market_user?$market_user->phone:'暂无',
 						'time'=>date("m-d H:i",$value->created),
-						'thirdLine'=>$market_user->companyinfo?$value->companyinfo->name:'暂无',
+						'thirdLine'=>$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 					];
 				}
 				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
@@ -507,6 +510,7 @@ class UserController extends ApiController{
 			$data['status'] = Yii::app()->request->getPost('status',9);
 			$data['uid'] = Yii::app()->request->getPost('uid',0);
 			$data['staff'] = Yii::app()->request->getPost('staff',0);
+			$sale_price = Yii::app()->request->getPost('price',0);
 			if($data['sid']) {
 				$obj = new SubProExt;
 				$obj->attributes = $data;
@@ -517,6 +521,7 @@ class UserController extends ApiController{
 					$sub = $obj->sub;
 					if($obj->status!=9) {
 						$sub->status = $obj->status;
+						$sub->price = $sale_price;
 						$sub->save();
 					}
 				}
@@ -527,6 +532,17 @@ class UserController extends ApiController{
 	public function actionGetSubTag()
 	{
 		$this->frame['data'] = SubExt::$status;
+	}
+
+	public function actionGetSubPrice($sid='')
+	{
+		$data = [];
+    	$sub = SubExt::model()->findByPk($sid);
+
+    	if(!$sub) {
+    		return $this->returnError('参数错误');
+    	}
+    	$this->frame['data'] = $sub->sale_price;
 	}
 
 	public function actionAddSubImg()
@@ -566,7 +582,7 @@ class UserController extends ApiController{
 		}
 		if($user) {
 			if($user->password==$pwd) {
-				$this->frame['data'] = $user->id;
+				$this->frame['data'] = ['uid'=>$user->id,'type'=>$user->is_jl==1||$user->jl==3?2:1];
 			} else {
 				$this->returnError('用户名或密码错误');
 			}
@@ -584,5 +600,86 @@ class UserController extends ApiController{
 		$staff->openid = $openid;
 		$staff->save();
 		$this->frame['data'] = $staff->id;
+	}
+
+	public function actionGetCompanyList($uid='',$kw='')
+	{
+		if(!($user = StaffExt::model()->findByPk($uid))) {
+			return $this->returnError('用户不存在或禁用');
+		}
+		$data = [];
+		$kwsql = '';
+		$kw && $kwsql = " and c.name like '%$kw%'";
+		if($companys = Yii::app()->db->createCommand("select c.id,c.name,c.address,c.image,c.area,c.street from company c left join cooperate o on c.id=o.cid where o.staff=$uid".$kwsql)->queryAll()) {
+			foreach ($companys as $key => $value) {
+				$areaInfo = AreaExt::model()->findByPk($value['area']);
+				$streetInfo =  AreaExt::model()->findByPk($value['street']);
+				$data[] = [
+					'id'=>$value['id'],
+					'name'=>$value['name'],
+					'area'=>$areaInfo?$areaInfo->name:'',
+					'street'=>$streetInfo?$streetInfo->name:'',
+					'address'=>$value['address'],
+					'image'=>ImageTools::fixImage($value['image']?$value['image']:SiteExt::getAttr('qjpz','companynopic')),
+				];
+			}
+		}
+		$this->frame['data'] = $data;
+	}
+
+	public function actionGetCompanyInfo($id='')
+	{
+		if(!($company = CompanyExt::model()->findByPk($id))) {
+			return $this->returnError('公司不存在或禁用');
+		}
+		$data = [];
+		$data = [
+			'id'=>$company->id,
+			'address'=>$company->address,
+			'map_lat'=>$company->map_lat,
+			'map_lng'=>$company->map_lng,
+			'area'=>$company->areainfo?$company->areainfo->name:'',
+			'street'=>$company->streetinfo?$company->streetinfo->name:'',
+			'name'=>$company->manager,
+			'phone'=>$company->phone,
+			'image'=>ImageTools::fixImage($company->image),
+		];
+		$this->frame['data'] = $data;
+	}
+
+	public function actionBindMarket($uid='',$hid='',$company='')
+	{
+		$cid = Yii::app()->createCommand("select id from company where name='$company'")->queryScalar();
+		$coo = CooperateExt::model()->find("hid=$hid and cid=$cid");
+		if($coo) {
+			if($coo->uid) {
+				return $this->returnError('该公司已绑定该项目');
+			} else {
+				$coo->uid = $uid;
+				$coo->save();
+			}
+		} else {
+			$coo = new CooperateExt;
+			$coo->uid = $uid;
+			$coo->hid = $hid;
+			$coo->cid = $cid;
+			$coo->save();
+		}
+	}
+
+	public function actionSetCome($sid='')
+	{
+		$data = [];
+    	$sub = SubExt::model()->findByPk($sid);
+
+    	if(!$sub) {
+    		return $this->returnError('参数错误');
+    	}
+    	if($sub->status) {
+    		return $this->returnError('客户已到访，请勿重复确认');
+    	}
+    	$sub->status = 1;
+    	$sub->save();
+
 	}
 }

@@ -20,6 +20,8 @@ class CompanyExt extends Company{
             'plotnum'=>array(self::STAT, 'PlotExt', 'company_id','condition'=>'deleted=0'),
             'managers'=>array(self::HAS_MANY, 'UserExt', 'cid','condition'=>'managers.deleted=0 and managers.status=1 and managers.is_manage=1'),
             'old_users'=>array(self::HAS_MANY, 'UserLogExt', 'from'),
+            'areainfo'=>array(self::BELONGS_TO, 'AreaExt', 'area'),
+            'streetinfo'=>array(self::BELONGS_TO, 'AreaExt', 'street'),
         );
     }
 
@@ -65,24 +67,24 @@ class CompanyExt extends Company{
             // $this->adduid && Yii::app()->controller->sendNotice('您好，贵公司门店码为'.$this->code.'，公司其他员工也可以通过此门店码加入经纪圈新房通，点这里立即前往绑定门店码：'.Yii::app()->request->getHostInfo().'/subwap/register.html?phone='.Yii::app()->db->createCommand("select phone from user where qf_uid=".$this->adduid)->queryScalar(),$this->adduid);
             // $this->phone && SmsExt::sendMsg('公司注册通过',$this->phone,['code'=>$code]);
         }
-        if(($this->getIsNewRecord() && $this->status==1) || ($this->status==1 && Yii::app()->db->createCommand("select status from company where id=".$this->id)->queryScalar()==0)) {
+        // if(($this->getIsNewRecord() && $this->status==1) || ($this->status==1 && Yii::app()->db->createCommand("select status from company where id=".$this->id)->queryScalar()==0)) {
 
-            if($this->adduid) {
-                $user = UserExt::model()->find("qf_uid=".$this->adduid);
-                // var_dump($this->adduid);exit;
-                if($user) {
-                    Yii::app()->controller->sendNotice('您好，贵公司门店码为'.$this->code.'，公司其他员工也可以通过此门店码加入经纪圈新房通，点这里立即前往绑定门店码：'.Yii::app()->request->getHostInfo().'/subwap/register.html?phone='.$user->phone,$this->adduid);
-                    SmsExt::sendMsg('公司注册通过',$user->phone,['code'=>$this->code]);
-                }
-            }
-        }
-        if(!$this->adduid&&$this->phone) {
-            $p = $this->phone;
-            $user = UserExt::model()->find("phone='$p'");
-            if($user && $user->qf_uid) {
-                $this->adduid = $user->qf_uid;
-            }
-        }
+        //     if($this->adduid) {
+        //         $user = UserExt::model()->find("qf_uid=".$this->adduid);
+        //         // var_dump($this->adduid);exit;
+        //         if($user) {
+        //             Yii::app()->controller->sendNotice('您好，贵公司门店码为'.$this->code.'，公司其他员工也可以通过此门店码加入经纪圈新房通，点这里立即前往绑定门店码：'.Yii::app()->request->getHostInfo().'/subwap/register.html?phone='.$user->phone,$this->adduid);
+        //             SmsExt::sendMsg('公司注册通过',$user->phone,['code'=>$this->code]);
+        //         }
+        //     }
+        // }
+        // if(!$this->adduid&&$this->phone) {
+        //     $p = $this->phone;
+        //     $user = UserExt::model()->find("phone='$p'");
+        //     if($user && $user->qf_uid) {
+        //         $this->adduid = $user->qf_uid;
+        //     }
+        // }
         if($this->getIsNewRecord()) {
             
             if($this->status==0) {

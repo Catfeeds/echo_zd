@@ -4,26 +4,21 @@
  * @author steven.allen <[<email address>]>
  * @date(2017.2.12)
  */
-class StaffExt extends Staff{
+class PlotAnExt extends PlotAn{
+    public static $type = [
+        1=>'案场助理',2=>'案场销售'
+    ];
 	/**
      * 定义关系
      */
     public function relations()
     {
         return array(
-            // 'url'=>array(self::BELONGS_TO, 'UserExt', 'uid'),
-            // 'plot'=>array(self::BELONGS_TO, 'PlotExt', 'hid'),
-            'companys'=>array(self::MANY_MANY, 'CompanyExt', 'cooperate(staff,cid)'),
+            'plot'=>array(self::BELONGS_TO, 'PlotExt', 'hid'),
+            'staff'=>array(self::BELONGS_TO, 'StaffExt', 'uid'),
+            // 'images'=>array(self::HAS_MANY, 'AlbumExt', 'pid'),
         );
     }
-    public static $is_jls = [
-        0=>'暂无',
-        1=>'市场部经理',
-        2=>'案场部经理',
-        3=>'市场专员',
-        4=>'案场助理',
-        5=>'案场销售',
-    ];
 
     /**
      * @return array 验证规则
@@ -52,11 +47,19 @@ class StaffExt extends Staff{
     }
 
     public function beforeValidate() {
-        if($this->getIsNewRecord())
+        if($this->getIsNewRecord()) {
+            // $this->status = 1;
             $this->created = $this->updated = time();
+        }
         else
             $this->updated = time();
         return parent::beforeValidate();
+    }
+
+    public function afterSave()
+    {
+        parent::afterSave();
+        
     }
 
     /**
@@ -71,7 +74,8 @@ class StaffExt extends Staff{
                 'order' => "{$alias}.sort desc,{$alias}.updated desc",
             ),
             'normal' => array(
-                'condition' => "{$alias}.status=1 ",
+                'condition' => "{$alias}.status=1",
+                'order'=>"{$alias}.sort desc,{$alias}.updated desc",
             ),
             'undeleted' => array(
                 'condition' => "{$alias}.deleted=0",
