@@ -162,6 +162,7 @@ class UserController extends ApiController{
 			$companyinfo = $user->companyinfo;
 			$data = [
 				'name'=>$user->name,
+				'id'=>$user->id,
 				'type'=>$user->type,
 				'typename'=>$user->type==2?'分销':($user->type==3?'独立经纪人':'总代'),
 				'wx_word'=>$companyinfo?$companyinfo->name:'独立经纪人',
@@ -183,6 +184,7 @@ class UserController extends ApiController{
 			// $companyinfo = $user->companyinfo;
 			$data = [
 				'name'=>$user->name,
+				'id'=>$user->id,
 				'type'=>$user_type,
 				'typename'=>'案场',
 				'wx_word'=>Yii::app()->file->sitename,
@@ -204,6 +206,7 @@ class UserController extends ApiController{
 			// $companyinfo = $user->companyinfo;
 			$data = [
 				'name'=>$user->name,
+				'id'=>$user->id,
 				'type'=>$user_type,
 				'typename'=>'市场',
 				'wx_word'=>Yii::app()->file->sitename,
@@ -649,7 +652,7 @@ class UserController extends ApiController{
 
 	public function actionBindMarket($uid='',$hid='',$company='')
 	{
-		$cid = Yii::app()->createCommand("select id from company where name='$company'")->queryScalar();
+		$cid = Yii::app()->db->createCommand("select id from company where name='$company'")->queryScalar();
 		$coo = CooperateExt::model()->find("hid=$hid and cid=$cid");
 		if($coo) {
 			if($coo->uid) {
