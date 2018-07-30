@@ -524,7 +524,7 @@ class UserController extends ApiController{
 					$sub = $obj->sub;
 					if($obj->status!=9) {
 						$sub->status = $obj->status;
-						$sub->price = $sale_price;
+						$sub->sale_price = $sale_price;
 						$sub->save();
 					}
 				}
@@ -681,6 +681,7 @@ class UserController extends ApiController{
     	if(!$sub) {
     		return $this->returnError('参数错误');
     	}
+    	
     	if($sub->status) {
     		return $this->returnError('客户已到访，请勿重复确认');
     	}
