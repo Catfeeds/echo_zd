@@ -654,6 +654,8 @@ class UserController extends ApiController{
 	public function actionBindMarket($uid='',$hid='',$company='')
 	{
 		$cid = Yii::app()->db->createCommand("select id from company where name='$company'")->queryScalar();
+		if(!$cid)
+			return $this->returnError('该公司不存在');
 		$coo = CooperateExt::model()->find("hid=$hid and cid=$cid");
 		if($coo) {
 			if($coo->uid) {
