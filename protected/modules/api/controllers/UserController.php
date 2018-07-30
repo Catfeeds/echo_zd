@@ -673,7 +673,7 @@ class UserController extends ApiController{
 		}
 	}
 
-	public function actionSetCome($sid='')
+	public function actionSetCome($sid='',$uid='')
 	{
 		$data = [];
     	$sub = SubExt::model()->findByPk($sid);
@@ -685,7 +685,20 @@ class UserController extends ApiController{
     		return $this->returnError('客户已到访，请勿重复确认');
     	}
     	$sub->status = 1;
+    	$sub->an_uid = $uid;
     	$sub->save();
 
+	}
+
+	public function actionSetAnSale($uid='',$sid='')
+	{
+		$data = [];
+    	$sub = SubExt::model()->findByPk($sid);
+
+    	if(!$sub) {
+    		return $this->returnError('参数错误');
+    	}
+    	$sub->sale_uid = $uid;
+    	$sub->save();
 	}
 }
