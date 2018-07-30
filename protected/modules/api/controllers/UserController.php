@@ -638,6 +638,7 @@ class UserController extends ApiController{
 		$data = [];
 		$data = [
 			'id'=>$company->id,
+			'name'=>$company->name,
 			'address'=>$company->address,
 			'map_lat'=>$company->map_lat,
 			'map_lng'=>$company->map_lng,
