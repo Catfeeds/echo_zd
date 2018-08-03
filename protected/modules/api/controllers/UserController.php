@@ -644,7 +644,7 @@ class UserController extends ApiController{
 			'map_lng'=>$company->map_lng,
 			'area'=>$company->areainfo?$company->areainfo->name:'',
 			'street'=>$company->streetinfo?$company->streetinfo->name:'',
-			'name'=>$company->manager,
+			'manager'=>$company->manager,
 			'phone'=>$company->phone,
 			'image'=>ImageTools::fixImage($company->image),
 		];
