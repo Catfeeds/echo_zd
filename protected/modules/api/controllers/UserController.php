@@ -675,19 +675,26 @@ class UserController extends ApiController{
 
 	public function actionSetCome($sid='',$uid='')
 	{
-		$data = [];
+		$data = 0;
     	$sub = SubExt::model()->findByPk($sid);
 
     	if(!$sub) {
     		return $this->returnError('参数错误');
     	}
-    	
+    	// 项目不对应，操作失败
+    	if(!Yii::app()->db->createCommand("select id from plot_an where uid=$uid and hid=".$sub->hid)->queryScalar()) {
+    		$this->frame['data'] = $data;
+    		return $this->returnError('您不是该项目的案场，请确认');
+    	}
     	if($sub->status) {
+    		$data = 1;
+    		$this->frame['data'] = $data;
     		return $this->returnError('客户已到访，请勿重复确认');
     	}
     	$sub->status = 1;
     	$sub->an_uid = $uid;
     	$sub->save();
+    	
 
 	}
 
