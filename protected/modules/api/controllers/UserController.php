@@ -658,16 +658,17 @@ class UserController extends ApiController{
 			return $this->returnError('该公司不存在');
 		$coo = CooperateExt::model()->find("hid=$hid and cid=$cid");
 		if($coo) {
-			if($coo->uid) {
+			if($coo->uid||$coo->staff) {
 				return $this->returnError('该公司已绑定该项目');
 			} else {
-				$coo->uid = $uid;
+				$coo->staff = $uid;
 				$coo->save();
 			}
 		} else {
 			$coo = new CooperateExt;
-			$coo->uid = $uid;
+			$coo->staff = $uid;
 			$coo->hid = $hid;
+			$coo->status = 1;
 			$coo->cid = $cid;
 			$coo->save();
 		}
