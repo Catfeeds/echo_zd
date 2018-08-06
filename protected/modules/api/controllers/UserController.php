@@ -291,7 +291,7 @@ class UserController extends ApiController{
 			// $criteria->order = 'updated desc';
 			if(is_numeric($kw)) {
 				$criteria->addSearchCondition('phone',$kw);
-			} else {
+			} elseif($kw) {
 				$ids = [];
 				$cre = new CDbCriteria;
 				$cre->addSearchCondition('title',$kw);
@@ -303,7 +303,9 @@ class UserController extends ApiController{
 				}
 				$criteria->addInCondition('hid',$ids);
 			}
+			var_dump($criteria);exit;
 			$subs = SubExt::model()->findAll($criteria);
+			var_dump(count($subs));exit;
 			if($subs) {
 				foreach ($subs as $key => $value) {
 					$market_user = $value->user;
@@ -445,7 +447,7 @@ class UserController extends ApiController{
 		}
 		if($subimgs = $sub->imgs) {
 			foreach ($subimgs as $key => $value) {
-				$imgs[] = ImageTools::fixImage($value->url);
+				$imgs[] = ['key'=>$value->url,'imageURL'=>ImageTools::fixImage($value->url)];
 			}
 		}
 		$firstArr = [
