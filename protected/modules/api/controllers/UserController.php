@@ -231,7 +231,14 @@ class UserController extends ApiController{
 			return $this->returnError('用户不存在或禁用');
 		}
 		$criteria = new CDbCriteria;
-		
+		// 都是搜索手机+客户姓名+楼盘名
+		// 案场助理看关联的所有项目的报备
+		// 案场销售看分配给自己的报备
+		if(is_numeric($kw)) {
+			$criteria->addSearchCondition('phone',$kw);
+		} else {
+			$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%'");
+		}
 		if($hid) {
 			$criteria->addCondition("hid=$hid");
 		}
@@ -242,34 +249,30 @@ class UserController extends ApiController{
 			// $criteria = new CDbCriteria;
 			// $criteria->addCondition("uid=$uid");
 			// $criteria->order = 'updated desc';
-			if(is_numeric($kw)) {
-				$criteria->addSearchCondition('phone',$kw);
-			} else {
-				$ids = [];
-				$cre = new CDbCriteria;
-				$cre->addSearchCondition('title',$kw);
-				$ress = PlotExt::model()->findAll($cre);
-				if($ress) {
-					foreach ($ress as $key => $value) {
-						$ids[] = $value->id;
-					}
-				}
-				$criteria->addInCondition('hid',$ids);
-			}
+			
 			$subs = SubExt::model()->findAll($criteria);
 			if($subs) {
 				foreach ($subs as $key => $value) {
 					$market_user = $value->market_user;
+					$an_user = $value->an_user;
 					$all[] = [
 						'id'=>$value->id,
-						'userName'=>$value->name,
-						'userPhone'=>$value->phone,
+						'plot_title'=>$value->plot_title,
+						'firstL'=>'客户',
+						'firstR'=>$value->name.' '.$value->phone,
+						'secondL'=>'市场',
+						'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
+						'thirdL'=>'案场',
+						'thirdR'=>$an_user?($an_user->name.' '.$an_user->phone):'暂无',
+						// 'userPhone'=>$value->phone,
 						'isShowCode'=>1,
+						// 'rightWord'=>'客户码',
 						'type'=>$value->status,
-						'staffName'=>$market_user?$market_user->name:'暂无',
-						'staffPhone'=>$market_user?$market_user->phone:'暂无',
-						'time'=>date("m-d H:i",$value->created),
-						'thirdLine'=>$value->plot?$value->plot->title:'暂无',
+						'typeWords'=>SubExt::$status[$value->status],
+						// 'staffName'=>$market_user?$market_user->name:'暂无',
+						// 'staffPhone'=>$market_user?$market_user->phone:'暂无',
+						'time'=>date("Y-m-d H:i",$value->created),
+						// 'thirdLine'=>$value->plot?$value->plot->title:'暂无',
 					];
 				}
 				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];

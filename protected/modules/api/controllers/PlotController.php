@@ -2647,4 +2647,15 @@ class PlotController extends ApiController{
     	$this->frame['data'] = $data;
     }
 
+    public function actionGetNoteList()
+    {
+    	$data = [];
+    	if($ress = TagExt::model()->normal()->findAll("cate='ts'")) {
+    		foreach ($ress as $key => $value) {
+    			$data[] = $value->name;
+    		}
+    	}
+    	$this->frame['data'] = $data;
+    }
+
 }

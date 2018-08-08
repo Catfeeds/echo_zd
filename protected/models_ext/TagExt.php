@@ -21,7 +21,7 @@ class TagExt extends Tag
             'wylx' => '物业类型',
             'zxzt' => '装修状态',
             'xszt' => '销售状态',
-            
+            'ts'=>'投诉建议',
             'sfprice' => '首付金额',
             'pricetype' => '付款选项',
             // 'hjxl' => '红酒系列',

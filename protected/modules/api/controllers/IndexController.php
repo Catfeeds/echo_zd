@@ -996,4 +996,9 @@ class IndexController extends ApiController
         $this->frame['data'] = $data;
     }
 
+    public function actionGetIsOpenSfz()
+    {
+        $this->frame['data'] = SiteExt::getAttr('qjpz','openSfz');
+    }
+
 }
