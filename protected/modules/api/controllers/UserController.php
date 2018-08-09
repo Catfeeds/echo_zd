@@ -590,7 +590,7 @@ class UserController extends ApiController{
 		}
 		if($user) {
 			if($user->password==$pwd) {
-				$this->frame['data'] = ['uid'=>$user->id,'type'=>$user->is_jl==1||$user->is_jl==3?2:1];
+				$this->frame['data'] = ['uid'=>$user->id,'type'=>$user->is_jl?$user->is_jl:1];
 			} else {
 				$this->returnError('用户名或密码错误');
 			}

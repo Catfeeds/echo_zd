@@ -1,31 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "staff".
+ * This is the model class for table "department".
  *
- * The followings are the available columns in table 'staff':
+ * The followings are the available columns in table 'department':
  * @property integer $id
  * @property string $name
- * @property string $openid
  * @property integer $parent
- * @property integer $is_manage
- * @property integer $is_jl
- * @property string $phone
- * @property string $dids
- * @property string $password
- * @property string $arr
+ * @property integer $sort
  * @property integer $status
  * @property integer $created
  * @property integer $updated
  */
-class Staff extends CActiveRecord
+class Department extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'staff';
+		return 'department';
 	}
 
 	/**
@@ -37,13 +31,11 @@ class Staff extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('created', 'required'),
-			array('parent, is_manage, is_jl, status, created, updated', 'numerical', 'integerOnly'=>true),
-			array('name, password', 'length', 'max'=>100),
-			array('openid, dids, arr', 'length', 'max'=>255),
-			array('phone', 'length', 'max'=>20),
+			array('parent, sort, status, created, updated', 'numerical', 'integerOnly'=>true),
+			array('name', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, openid, parent, is_manage, is_jl, phone, dids, password, arr, status, created, updated', 'safe', 'on'=>'search'),
+			array('id, name, parent, sort, status, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,14 +58,8 @@ class Staff extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'name' => 'Name',
-			'openid' => 'Openid',
 			'parent' => 'Parent',
-			'is_manage' => 'Is Manage',
-			'is_jl' => 'Is Jl',
-			'phone' => 'Phone',
-			'dids' => 'Dids',
-			'password' => 'Password',
-			'arr' => 'Arr',
+			'sort' => 'Sort',
 			'status' => 'Status',
 			'created' => 'Created',
 			'updated' => 'Updated',
@@ -100,14 +86,8 @@ class Staff extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('openid',$this->openid,true);
 		$criteria->compare('parent',$this->parent);
-		$criteria->compare('is_manage',$this->is_manage);
-		$criteria->compare('is_jl',$this->is_jl);
-		$criteria->compare('phone',$this->phone,true);
-		$criteria->compare('dids',$this->dids,true);
-		$criteria->compare('password',$this->password,true);
-		$criteria->compare('arr',$this->arr,true);
+		$criteria->compare('sort',$this->sort);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('created',$this->created);
 		$criteria->compare('updated',$this->updated);
@@ -121,7 +101,7 @@ class Staff extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Staff the static model class
+	 * @return Department the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

@@ -689,7 +689,8 @@ class IndexController extends ApiController
                         $data = [
                             'uid'=>$user->id,
                             'is_true'=>$is_true,
-                            'type'=>$user->is_jl==1||$user->is_jl==3?2:1,
+                            'type'=>$user->is_jl?$user->is_jl:1,
+                            'typeName'=>StaffExt::$is_jls[$user->is_jl],
                             // 'phone'=>$user->phone,
                             // 'name'=>$user->name,
                             // 'type'=>$user->type,
@@ -703,7 +704,7 @@ class IndexController extends ApiController
                         $this->frame['data'] = $data;
                         // echo json_encode($data);
                     } else {
-                        $this->frame['data'] = ['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'','is_true'=>$is_true,'type'=>$user->is_jl==1||$user->is_jl==3?2:1];
+                        $this->frame['data'] = ['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'','is_true'=>$is_true,'type'=>$user->is_jl?$user->is_jl:1,'typeName'=>StaffExt::$is_jls[$user->is_jl]];
                         // echo json_encode(['openid'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'']);
                     }
                 } else {

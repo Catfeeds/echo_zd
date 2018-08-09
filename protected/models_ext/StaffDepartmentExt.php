@@ -4,30 +4,19 @@
  * @author steven.allen <[<email address>]>
  * @date(2017.2.12)
  */
-class StaffExt extends Staff{
+class StaffDepartmentExt extends StaffDepartment{
 	/**
      * 定义关系
      */
     public function relations()
     {
         return array(
-            // 'url'=>array(self::BELONGS_TO, 'UserExt', 'uid'),
-            'sds'=>array(self::HAS_MANY, 'StaffDepartmentExt', 'uid'),
-            'companys'=>array(self::MANY_MANY, 'CompanyExt', 'cooperate(staff,cid)'),
-            'departments'=>array(self::MANY_MANY, 'DepartmentExt', 'staff_department(uid,did)'),
+            // 'user'=>array(self::BELONGS_TO, 'UserExt', 'uid'),
+            'staff'=>array(self::BELONGS_TO, 'StaffExt', 'uid'),
+            'department'=>array(self::BELONGS_TO, 'TagExt', 'did'),
+            // 'images'=>array(self::HAS_MANY, 'AlbumExt', 'pid'),
         );
     }
-    public static $is_jls = [
-        0=>'暂无',
-        1=>'案场助理',
-        2=>'市场',
-        3=>'案场销售',
-        // 4=>'案场助理',
-        // 5=>'案场销售',
-    ];
-    public static $types = [
-    '员工','主管'
-    ];
 
     /**
      * @return array 验证规则

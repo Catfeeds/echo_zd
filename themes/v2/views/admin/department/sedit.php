@@ -1,6 +1,6 @@
 <?php
-$this->pageTitle = $this->controllerName.'新建/编辑';
-$this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
+$this->pageTitle = '成员绑定';
+$this->breadcrumbs = array('成员管理', $this->pageTitle);
 ?>
 <?php $this->widget('ext.ueditor.UeditorWidget',array('id'=>'UserExt_content','options'=>"toolbars:[['fullscreen','source','undo','redo','|','customstyle','paragraph','fontfamily','fontsize'],
         ['bold','italic','underline','fontborder','strikethrough','superscript','subscript','removeformat',
@@ -15,60 +15,24 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
         'print','preview','searchreplace']]")); ?>
 <?php $form = $this->beginWidget('HouseForm', array('htmlOptions' => array('class' => 'form-horizontal'))) ?>
 <div class="form-group">
-    <label class="col-md-2 control-label">姓名</label>
+    <label class="col-md-2 control-label">选择成员</label>
     <div class="col-md-4">
-        <?php echo $form->textField($article, 'name', array('class' => 'form-control')); ?>
+        <?php echo $form->dropDownList($article, 'uid',  CHtml::listData(StaffExt::model()->findAll(),'id','name'), array('class'=>'form-control select2')); ?>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'name') ?></div>
+    <div class="col-md-2"><?php echo $form->error($article, 'uid') ?></div>
 </div>
-<div class="form-group">
-    <label class="col-md-2 control-label">密码</label>
-    <div class="col-md-4">
-        <?php echo $form->textField($article, 'password', array('class' => 'form-control','type'=>'password')); ?>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'password') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">手机号</label>
-    <div class="col-md-4">
-        <?php echo $form->textField($article, 'phone', array('class' => 'form-control')); ?>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'phone') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">openid</label>
-    <div class="col-md-4">
-        <?php echo $form->textField($article, 'openid', array('class' => 'form-control')); ?>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'openid') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">权限</label>
-    <div class="col-md-4">
-        <?php echo $form->checkBoxList($article, 'arr', $this->getFormatMenu(), array('separator' => '',)); ?>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'arr') ?></div>
-</div>
-
 <div class="form-group">
     <label class="col-md-2 control-label">身份</label>
     <div class="col-md-4">
-        <?php echo $form->radioButtonList($article, 'is_jl', StaffExt::$is_jls, array('separator' => '')); ?>
+        <?php echo $form->radioButtonList($article, 'is_major', StaffExt::$types, array('separator' => '')); ?>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'is_jl') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">状态</label>
-    <div class="col-md-4">
-        <?php echo $form->radioButtonList($article, 'status', UserExt::$status, array('separator' => '')); ?>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'status') ?></div>
+    <div class="col-md-2"><?php echo $form->error($article, 'is_major') ?></div>
 </div>
 <div class="form-actions">
     <div class="row">
         <div class="col-md-offset-3 col-md-9">
             <button type="submit" class="btn green">保存</button>
-            <?php echo CHtml::link('返回',$this->createUrl('list'), array('class' => 'btn default')) ?>
+            <?php echo CHtml::link('返回',$this->createUrl('slist',['did'=>$did]), array('class' => 'btn default')) ?>
         </div>
     </div>
 </div>

@@ -19,13 +19,23 @@ class StaffController extends AdminController{
 		// $this->cates = CHtml::listData(LeagueExt::model()->normal()->findAll(),'id','name');
 		// $this->cates1 = CHtml::listData(TeamExt::model()->normal()->findAll(),'id','name');
 	}
-	public function actionList($type='title',$value='',$time_type='created',$time='',$cate='')
+	public function actionList($type='title',$value='',$time_type='created',$time='',$cate='',$did='')
 	{
 		$modelName = $this->modelName;
 		$criteria = new CDbCriteria;
+        if($did) {
+            $ids = [];
+            $ress = StaffDepartmentExt::model()->findAll("did=$did");
+            if($ress) {
+                foreach ($ress as $res) {
+                    $ids[] = $res->uid;
+                }
+            }
+            $criteria->addInCondition('t.id',$ids);
+        }
 		if($value = trim($value))
             if ($type=='title') {
-                $criteria->addSearchCondition('name', $value);
+                $criteria->addSearchCondition('t.name', $value);
             } 
         //添加时间、刷新时间筛选
         if($time_type!='' && $time!='')
@@ -33,18 +43,18 @@ class StaffController extends AdminController{
             list($beginTime, $endTime) = explode('-', $time);
             $beginTime = (int)strtotime(trim($beginTime));
             $endTime = (int)strtotime(trim($endTime));
-            $criteria->addCondition("{$time_type}>=:beginTime");
-            $criteria->addCondition("{$time_type}<:endTime");
+            $criteria->addCondition("t.{$time_type}>=:beginTime");
+            $criteria->addCondition("t.{$time_type}<:endTime");
             $criteria->params[':beginTime'] = TimeTools::getDayBeginTime($beginTime);
             $criteria->params[':endTime'] = TimeTools::getDayEndTime($endTime);
 
         }
 		if($cate) {
-			$criteria->addCondition('status=:cid');
+			$criteria->addCondition('t.status=:cid');
 			$criteria->params[':cid'] = $cate;
 		}
         $criteria->order = 'updated desc';
-		$infos = $modelName::model()->getList($criteria,20);
+		$infos = $modelName::model()->with('departments')->getList($criteria,20);
         $scjls = [];
         $acjls = [];
         if($infos->data) {
@@ -191,5 +201,37 @@ class StaffController extends AdminController{
                 }
             }
         }
+    }
+
+    public function actionDlist($id='')
+    {
+        $info = StaffExt::model()->findByPk($id);
+        $this->render('dlist',['staff'=>$info,'infos'=>$info->departments]);
+    }
+
+    public function actionDedit($id='',$uid='')
+    {
+        $modelName = 'StaffDepartmentExt';
+        $info = $id ? $modelName::model()->findByPk($id) : new $modelName;
+        if(Yii::app()->request->getIsPostRequest()) {
+            $res = Yii::app()->request->getPost($modelName,[]);
+            $info->attributes = $res;
+            $info->uid = $uid;
+            // $info->time =  is_numeric($info->time)?$info->time : strtotime($info->time);
+            if($info->save()) {
+                $this->setMessage('操作成功','success',['dlist?id='.$uid]);
+            } else {
+                $this->setMessage(array_values($info->errors)[0][0],'error');
+            }
+        } 
+        $this->render('dedit',['article'=>$info,'uid'=>$uid]);
+    }
+
+    public function actionChangeType($id='')
+    {
+        $dep = StaffDepartmentExt::model()->findByPk($id);
+        $dep->is_major = $dep->is_major?0:1;
+        $dep->save();
+        $this->setMessage('操作成功','success');
     }
 }
