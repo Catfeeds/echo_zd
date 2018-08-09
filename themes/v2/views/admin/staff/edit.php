@@ -43,6 +43,13 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
     <div class="col-md-2"><?php echo $form->error($article, 'openid') ?></div>
 </div>
 <div class="form-group">
+    <label class="col-md-2 control-label">职位</label>
+    <div class="col-md-4">
+        <?php echo $form->textField($article, 'zw', array('class' => 'form-control')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'zw') ?></div>
+</div>
+<div class="form-group">
     <label class="col-md-2 control-label">权限</label>
     <div class="col-md-4">
         <?php echo $form->checkBoxList($article, 'arr', $this->getFormatMenu(), array('separator' => '',)); ?>

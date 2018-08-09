@@ -35,6 +35,7 @@ $this->breadcrumbs = array($this->pageTitle);
         <th class="text-center">用户名</th>
         <th class="text-center">身份</th>
         <th class="text-center">部门</th>
+        <th class="text-center">职位</th>
         <th class="text-center">电话</th>
         <th class="text-center">添加时间</th>
         <th class="text-center">修改时间</th>
@@ -71,6 +72,7 @@ $this->breadcrumbs = array($this->pageTitle);
                     echo $k->name.' ';
                 }
                 } ?></td>
+                <td class="text-center"><?=$v->zw?></td>
             <td class="text-center"><?=$v->phone?></td>
             <td class="text-center"><?=date('Y-m-d',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>

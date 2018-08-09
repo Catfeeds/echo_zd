@@ -10,6 +10,7 @@
  * @property integer $parent
  * @property integer $is_manage
  * @property integer $is_jl
+ * @property string $zw
  * @property string $phone
  * @property string $dids
  * @property string $password
@@ -38,12 +39,12 @@ class Staff extends CActiveRecord
 		return array(
 			array('created', 'required'),
 			array('parent, is_manage, is_jl, status, created, updated', 'numerical', 'integerOnly'=>true),
-			array('name, password', 'length', 'max'=>100),
+			array('name, zw, password', 'length', 'max'=>100),
 			array('openid, dids, arr', 'length', 'max'=>255),
 			array('phone', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, openid, parent, is_manage, is_jl, phone, dids, password, arr, status, created, updated', 'safe', 'on'=>'search'),
+			array('id, name, openid, parent, is_manage, is_jl, zw, phone, dids, password, arr, status, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,6 +71,7 @@ class Staff extends CActiveRecord
 			'parent' => 'Parent',
 			'is_manage' => 'Is Manage',
 			'is_jl' => 'Is Jl',
+			'zw' => 'Zw',
 			'phone' => 'Phone',
 			'dids' => 'Dids',
 			'password' => 'Password',
@@ -104,6 +106,7 @@ class Staff extends CActiveRecord
 		$criteria->compare('parent',$this->parent);
 		$criteria->compare('is_manage',$this->is_manage);
 		$criteria->compare('is_jl',$this->is_jl);
+		$criteria->compare('zw',$this->zw,true);
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('dids',$this->dids,true);
 		$criteria->compare('password',$this->password,true);
