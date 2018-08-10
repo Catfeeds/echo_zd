@@ -432,7 +432,7 @@ class UserController extends ApiController{
 
 	public function actionSubInfo($id='',$user_type='')
 	{
-		$data = $pros = $imgs = $firstArr = $secondArr = [];
+		$data = $pros = $imgs = $firstArr = $secondArr = $thirdArr = [];
 		$sub = SubExt::model()->findByPk($id);
 		$subArr  = SubExt::$status;
 		if(!$sub) {
@@ -467,6 +467,14 @@ class UserController extends ApiController{
 					'name'=>$u->name,
 					'phone'=>$u->phone,
 					'tag'=>'市场资料',
+					'company'=>'',
+				];
+			}
+			if($u = $sub->an_user) {
+				$thirdArr = [
+					'name'=>$u->name,
+					'phone'=>$u->phone,
+					'tag'=>'案场助理',
 					'company'=>'',
 				];
 			}
@@ -505,6 +513,7 @@ class UserController extends ApiController{
 			'imgs'=>$imgs,
 			'secondArr'=>$secondArr,
 			'firstArr'=>$firstArr,
+			'thirdArr'=>$thirdArr,
 			'user_phone'=>$sub->phone,
 		];
 		$this->frame['data'] = $data;
