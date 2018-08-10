@@ -22,6 +22,7 @@ class CompanyExt extends Company{
             'old_users'=>array(self::HAS_MANY, 'UserLogExt', 'from'),
             'areainfo'=>array(self::BELONGS_TO, 'AreaExt', 'area'),
             'streetinfo'=>array(self::BELONGS_TO, 'AreaExt', 'street'),
+            'parentCompany'=>array(self::BELONGS_TO, 'CompanyExt', 'parent'),
         );
     }
 

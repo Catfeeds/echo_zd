@@ -34,6 +34,7 @@ $this->breadcrumbs = array($this->pageTitle);
         <th class="text-center">排序</th>
         <th class="text-center">ID</th>
         <th class="text-center">公司名</th>
+        <th class="text-center">父级公司</th>
         <th class="text-center">地址</th>
         <th class="text-center">公司联系</th>
         <th class="text-center">门店码</th>
@@ -50,6 +51,7 @@ $this->breadcrumbs = array($this->pageTitle);
                 data-id="<?php echo $v['id'] ?>"><?php echo $v['sort'] ?></td>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td class="text-center"><?=$v->name?></td>
+            <td class="text-center"><?=$v->parentCompany?$v->parentCompany->name:''?></td>
             <td class="text-center"><?=$v->address?></td> 
             <td class="text-center"><?=$v->manager.'/'.$v->phone?></td> 
             <td class="text-center"><?=$v->code?></td> 
