@@ -2,8 +2,10 @@
 $this->pageTitle = $this->controllerName.'新建/编辑';
 $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
 $parentArea = AreaExt::model()->parent()->normal()->findAll();
-$parent = $article->area?$article->area:(isset($parentArea[0])?$parentArea[0]->id:0);
+$parent = $article->city?$article->city:(isset($parentArea[0])?$parentArea[0]->id:0);
 $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll() : array(0=>'--无子分类--');
+$parent1 = $article->area?$article->area:(isset($childArea[0])?$childArea[0]->id:0);
+$childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->findAll() : array(0=>'--无子分类--');
 ?>
 <?php $this->widget('ext.ueditor.UeditorWidget',array('id'=>'UserExt_content','options'=>"toolbars:[['fullscreen','source','undo','redo','|','customstyle','paragraph','fontfamily','fontsize'],
         ['bold','italic','underline','fontborder','strikethrough','superscript','subscript','removeformat',
@@ -25,25 +27,32 @@ $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll
     <div class="col-md-2"><?php echo $form->error($article, 'name') ?></div>
 </div>
 <div class="form-group">
-    <label class="col-md-2 control-label text-nowrap">所在区域<span class="required" aria-required="true">*</span></label>
-    <div class="col-md-10">
-        <?php
-        echo $form->dropDownList($article , 'area' ,CHtml::listData($parentArea,'id','name') , array(
-                'class'=>'form-control input-inline',
-                'ajax' =>array(
-                    'url' => Yii::app()->createUrl('admin/area/ajaxGetArea'),
-                    'update' => '#CompanyExt_street',
-                    'data'=>array('area'=>'js:this.value'),
-                )
-            )
-        );
-        ?>
-        <?php
-        echo $form->dropDownList($article , 'street' ,$childArea ? CHtml::listData($childArea,'id','name'):array(0=>'--无子分类--') , array('class'=>'form-control input-inline'));
-        ?>
-        <span class="help-block"><?php echo $form->error($article, 'area').$form->error($article, 'street'); ?></span>
-    </div>
-</div>
+                <label class="col-md-2 control-label text-nowrap">所在区域<span class="required" aria-required="true">*</span></label>
+                <div class="col-md-10">
+                    <?php
+                    echo $form->dropDownList($article , 'city' ,CHtml::listData($parentArea,'id','name') , array(
+                            'class'=>'form-control input-inline',
+                            'ajax' =>array(
+                                'url' => Yii::app()->createUrl('admin/area/ajaxGetArea'),
+                                'update' => '#CompanyExt_area',
+                                'data'=>array('area'=>'js:this.value'),
+                            )
+                        )
+                    );
+                    ?>
+                    <?php
+                    echo $form->dropDownList($article , 'area' ,$childArea ? CHtml::listData($childArea,'id','name'):array(0=>'--无子分类--') , array(
+                            'class'=>'form-control input-inline',
+                            'ajax' =>array(
+                                'url' => Yii::app()->createUrl('admin/area/ajaxGetArea'),
+                                'update' => '#CompanyExt_street',
+                                'data'=>array('area'=>'js:this.value'),
+                            )
+                        ));
+                    echo $form->dropDownList($article , 'street' ,$childArea1 ? CHtml::listData($childArea1,'id','name'):array(0=>'--无子分类--') , array('class'=>'form-control input-inline'));
+                    ?>
+                </div>
+            </div>
 <div class="form-group">
     <label class="col-md-2 control-label">公司地址</label>
     <div class="col-md-4">

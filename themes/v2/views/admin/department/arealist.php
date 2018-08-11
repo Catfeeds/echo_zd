@@ -31,7 +31,7 @@ Yii::app()->clientScript->registerCssFile("/static/global/plugins/jquery-nestabl
                         });
                         $('button[data-action=\"collapse\"]').css('display','none');
                         $('button[data-action=\"expand\"]').css('display','block');
-                        $('#treeDepartmentExt .dd-item').prepend('<span style=\"float:right;cursor: pointer; line-height:30px;\"><span style=\"margin:0 10px;\" onclick=\"editArea($(this))\">编辑</span>|<span style=\"margin:0 10px;\" onclick=\"staffList($(this))\">成员管理</span>|<span style=\"margin:0 10px;\"  onclick=\"delArea($(this))\">删除</span></span>');
+                        $('#treeDepartmentExt .dd-item').prepend('<span style=\"float:right;cursor: pointer; line-height:30px;\"><span style=\"margin:0 10px;\" onclick=\"editArea($(this))\">编辑</span>|<span style=\"margin:0 10px;\" onclick=\"staffList($(this))\">成员管理(<strong></strong>)</span>|<span style=\"margin:0 10px;\"  onclick=\"delArea($(this))\">删除</span></span>');
                         $('#treeDepartmentExt .dd-item[data-status=1]').find('span:first').prepend('<span style=\"margin:0 10px;\" onclick=\"setStatus(this)\" class=\"dd-status\">禁用</span>|');
                         $('#treeDepartmentExt .dd-item[data-status=0] .dd-handle').addClass('bg-red-pink');
                         $('#treeDepartmentExt .dd-item[data-status=0]').find('span:first').prepend('<span class=\"dd-status\" onclick=\"setStatus(this)\" style=\"margin:0 10px;\">启用</span>|');
