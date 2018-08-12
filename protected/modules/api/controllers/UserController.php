@@ -567,16 +567,17 @@ class UserController extends ApiController{
 		if(Yii::app()->request->getIsPostRequest()) {
 			$data['sid'] = $_POST['sid'];
 			$data['imgs'] = $_POST['imgs'];
-			if(!$data['sid'] || !$data['imgs']) {
+			if(!$data['sid']) {
 				return $this->returnError('参数错误');
 			}
 			SubImgExt::model()->deleteAllByAttributes(['sid'=>$data['sid']]);
-			foreach (explode(',', $data['imgs']) as $key => $value) {
-				$obj = new SubImgExt;
-				$obj->sid = $data['sid'];
-				$obj->url = $value;
-				$obj->save();
-			}
+			if($data['imgs'])
+				foreach (explode(',', $data['imgs']) as $key => $value) {
+					$obj = new SubImgExt;
+					$obj->sid = $data['sid'];
+					$obj->url = $value;
+					$obj->save();
+				}
 		}
 	}
 
