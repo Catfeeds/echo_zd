@@ -33,12 +33,15 @@ class IndexController extends ApiController
         $data['title'] = Yii::app()->file->sitename;
         if($ress = RecomExt::model()->normal()->findAll('type=1')) {
             foreach ($ress as $key => $value) {
+                $wyarr = [];
                 $wylx = '';
                 $thisObj = $value->getObj();
                 $wylxarr = $thisObj->wylx;
                 if($wylxarr) {
                     foreach ($wylxarr as $w) {
-                        $wylx = $wylx.TagExt::model()->findByPk($w)->name.' ';
+                        $tgnow = TagExt::model()->findByPk($w);
+                        $wyarr[] = $tgnow->name;
+                        $wylx = $wylx.$tgnow->name.' ';
                     }
                 }
                 if($value->cid==1 && count($data['recomLong'])<1) {
@@ -46,11 +49,11 @@ class IndexController extends ApiController
                     $data['recomLong'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->price?($thisObj->price.PlotExt::$unit[$thisObj->unit]):'暂无售价','addr'=>$wylx,'words'=>PlotExt::$mark[$thisObj->price_mark],'image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image),'sort'=>$thisObj->sort?SiteExt::getAttr('qjpz','topword'):''];
                 } elseif ($value->cid==2 && count($data['recomLong'])<2) {
                     // $thisObj = $value->getObj();
-                    $data['recomShort'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->price?($thisObj->price.PlotExt::$unit[$thisObj->unit]):'暂无售价','addr'=>$wylx,'words'=>PlotExt::$mark[$thisObj->price_mark],'image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image),'sort'=>$thisObj->sort?SiteExt::getAttr('qjpz','topword'):''];
+                    $data['recomShort'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->price?($thisObj->price.PlotExt::$unit[$thisObj->unit]):'暂无售价','addr'=>$wylx,'words'=>$wyarr?$wyarr[0]:'','image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image),'sort'=>$thisObj->sort?SiteExt::getAttr('qjpz','topword'):''];
                 } elseif ($value->cid==3 && count($data['recomLong'])<5) {
                     // $thisObj = $value->getObj();
                     // var_dump($thisObj->pa);exit;
-                    $data['recomYou'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->price?($thisObj->price.PlotExt::$unit[$thisObj->unit]):'暂无售价','addr'=>$wylx,'words'=>PlotExt::$mark[$thisObj->price_mark],'image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image),'sort'=>$thisObj->sort?SiteExt::getAttr('qjpz','topword'):''];
+                    $data['recomYou'][] = ['id'=>$thisObj->id,'title'=>$thisObj->title,'price'=>$thisObj->price?($thisObj->price.PlotExt::$unit[$thisObj->unit]):'暂无售价','addr'=>$wylx,'words'=>$wyarr?$wyarr[0]:'','image'=>ImageTools::fixImage($value->image?$value->image:$thisObj->image),'sort'=>$thisObj->sort?SiteExt::getAttr('qjpz','topword'):''];
                 }
             }
         }
@@ -1005,6 +1008,14 @@ class IndexController extends ApiController
     public function actionGetCodeNote()
     {
         $this->frame['data'] = SiteExt::getAttr('qjpz','codenote');
+    }
+
+    public function actionGetBottom()
+    {
+        $this->frame['data'] = [
+            'image'=>ImageTools::fixImage(SiteExt::getAttr('qjpz','bottomLogo')),
+            'text'=>SiteExt::getAttr('qjpz','bottomWords'),
+        ];
     }
 
 }

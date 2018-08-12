@@ -5,6 +5,8 @@
  *
  * The followings are the available columns in table 'sub_img':
  * @property integer $id
+ * @property integer $user_type
+ * @property integer $uid
  * @property integer $sid
  * @property string $url
  * @property integer $created
@@ -29,11 +31,11 @@ class SubImg extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('created', 'required'),
-			array('sid, created, updated', 'numerical', 'integerOnly'=>true),
+			array('user_type, uid, sid, created, updated', 'numerical', 'integerOnly'=>true),
 			array('url', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, sid, url, created, updated', 'safe', 'on'=>'search'),
+			array('id, user_type, uid, sid, url, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,6 +57,8 @@ class SubImg extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'user_type' => 'User Type',
+			'uid' => 'Uid',
 			'sid' => 'Sid',
 			'url' => 'Url',
 			'created' => 'Created',
@@ -81,6 +85,8 @@ class SubImg extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('user_type',$this->user_type);
+		$criteria->compare('uid',$this->uid);
 		$criteria->compare('sid',$this->sid);
 		$criteria->compare('url',$this->url,true);
 		$criteria->compare('created',$this->created);

@@ -52,7 +52,10 @@ class SiteExt extends Site{
         'openSfz'=>'',
         'sitePwd'=>'',
         'companynopic'=>'',
-        'codenote'=>''
+        'codenote'=>'',
+        'bottomLogo'=>'',
+        'bottomWords'=>'',
+        'sitename'=>'',
     ];
     public static $cateName = [
         'qjpz' => '全局配置',
@@ -67,11 +70,13 @@ class SiteExt extends Site{
             'ttpic'=>['type'=>'image','max'=>1,'name'=>'头条图片'],
             'indexmarquee'=>['type'=>'text','name'=>'头条内容'],
             'topword'=>['type'=>'text','name'=>'楼盘置顶文案'],
-            // 'cname'=>['type'=>'text','name'=>'公司名'],
+            'sitename'=>['type'=>'text','name'=>'站点名'],
             'sitePwd'=>['type'=>'pwd','name'=>'登录密码'],
             'openDl'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启独立经纪人'],
             'openSfz'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启身份证验证'],
             'codenote'=>['type'=>'text','name'=>'绑定门店码备注'],
+            'bottomLogo'=>['type'=>'image','max'=>1,'name'=>'页面底部logo'],
+            'bottomWords'=>['type'=>'text','name'=>'页面底部文案'],
             // 'bussiness_tel'=>['type'=>'text','name'=>'业务部联系方式'],
             // 'add_subscribe_words'=>['type'=>'text','name'=>'订阅申请备注'],
             // 'add_vip_words'=>['type'=>'text','name'=>'成为vip备注'],

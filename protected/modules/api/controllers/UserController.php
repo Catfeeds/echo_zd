@@ -565,16 +565,18 @@ class UserController extends ApiController{
 	public function actionAddSubImg()
 	{
 		if(Yii::app()->request->getIsPostRequest()) {
-			$data['sid'] = $_POST['sid'];
-			$data['imgs'] = $_POST['imgs'];
+			$data['sid'] = Yii::app()->request->getPost('sid','');
+			$data['uid'] = Yii::app()->request->getPost('uid','');
+			$data['user_type'] = Yii::app()->request->getPost('user_type',0);
+			$imgs = Yii::app()->request->getPost('imgs',[]);
 			if(!$data['sid']) {
 				return $this->returnError('参数错误');
 			}
 			SubImgExt::model()->deleteAllByAttributes(['sid'=>$data['sid']]);
-			if($data['imgs'])
-				foreach (explode(',', $data['imgs']) as $key => $value) {
+			if($imgs)
+				foreach (explode(',', $imgs) as $key => $value) {
 					$obj = new SubImgExt;
-					$obj->sid = $data['sid'];
+					$obj->attributes = $data;
 					$obj->url = $value;
 					$obj->save();
 				}

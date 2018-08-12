@@ -1,43 +1,40 @@
 <?php
 class ConfigController extends ApiController{
 	public function actionIndex($phone='')
-	{
-		$userinfo = '';
-		$oths = CacheExt::gas('wap_all_config','AreaExt',0,'wap配置缓存',function (){
-	            $tmp = [
-					'login_img'=>ImageTools::fixImage(SiteExt::getAttr('qjpz','login_img')),
-					'regis_words'=>SiteExt::getAttr('qjpz','regis_words'),
-					'report_words'=>SiteExt::getAttr('qjpz','report_words'),
-					'coo_words'=>SiteExt::getAttr('qjpz','coo_words'),
-					'add_market_words'=>SiteExt::getAttr('qjpz','add_market_words'),
-					'add_subscribe_words'=>SiteExt::getAttr('qjpz','add_subscribe_words'),
-					'add_vip_words'=>SiteExt::getAttr('qjpz','add_vip_words'),
-					'our_uids'=>SiteExt::getAttr('qjpz','ouruids'),
-					'kf_id'=>SiteExt::getAttr('qjpz','kfuid'),
-				];
-		            return $tmp;
-		        });
-		if(!$phone) {
-			if(!empty($_COOKIE['phone'])) {
-				$phone = $_COOKIE['phone'];
-			}
-		}
-		if($phone)
-			$userinfo = Yii::app()->db->createCommand("select id,status from user where  phone='$phone'")->queryRow();
-		if($userinfo && $userinfo['status']==0) {
-			$is_jy = 1;
-		} else {
-			$is_jy = 0;
-		}
+	// {
+	// 	$userinfo = '';
+	// 	$oths = CacheExt::gas('wap_all_config','AreaExt',0,'wap配置缓存',function (){
+	//             $tmp = [
+	// 				'login_img'=>ImageTools::fixImage(SiteExt::getAttr('qjpz','login_img')),
+	// 				'regis_words'=>SiteExt::getAttr('qjpz','regis_words'),
+	// 				'report_words'=>SiteExt::getAttr('qjpz','report_words'),
+	// 				'coo_words'=>SiteExt::getAttr('qjpz','coo_words'),
+	// 				'add_market_words'=>SiteExt::getAttr('qjpz','add_market_words'),
+	// 				'add_subscribe_words'=>SiteExt::getAttr('qjpz','add_subscribe_words'),
+	// 				'add_vip_words'=>SiteExt::getAttr('qjpz','add_vip_words'),
+	// 				'our_uids'=>SiteExt::getAttr('qjpz','ouruids'),
+	// 				'kf_id'=>SiteExt::getAttr('qjpz','kfuid'),
+	// 			];
+	// 	            return $tmp;
+	// 	        });
+	// 	if(!$phone) {
+	// 		if(!empty($_COOKIE['phone'])) {
+	// 			$phone = $_COOKIE['phone'];
+	// 		}
+	// 	}
+	// 	if($phone)
+	// 		$userinfo = Yii::app()->db->createCommand("select id,status from user where  phone='$phone'")->queryRow();
+	// 	if($userinfo && $userinfo['status']==0) {
+	// 		$is_jy = 1;
+	// 	} else {
+	// 		$is_jy = 0;
+	// 	}
+		$sitename = SiteExt::getAttr('qjpz','sitename');
 		$data = [
-			'is_user'=>!Yii::app()->user->getIsGuest(),
-			'user'=>$this->staff,
-			'companyname'=>isset($this->staff->companyinfo)?$this->staff->companyinfo->name:'',
-			'user_image'=>isset($this->staff->ava)?$this->staff->ava:'',
-			'is_jy'=>$is_jy,
-			'uid'=>$userinfo?$userinfo['id']:0,
+			'sitename'=>$sitename?$sitename:Yii::app()->file->sitename,
+			'tel'=>SiteExt::getAttr('qjpz','site_phone')
 		];
-		$data = array_merge($oths,$data);
+		// $data = array_merge($oths,$data);
 		$this->frame['data'] = $data;
 	}
 	
