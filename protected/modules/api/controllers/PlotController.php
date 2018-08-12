@@ -842,7 +842,7 @@ class PlotController extends ApiController{
 	public function actionAddSub()
 	{
 		if(Yii::app()->request->getIsPostRequest()) {
-			if(($hid = Yii::app()->request->getPost('hid','') && ($tmp['phone'] = $this->cleanXss(Yii::app()->request->getPost('phone',''))) {
+			if(($hid = Yii::app()->request->getPost('hid','')) && ($tmp['phone'] = $this->cleanXss(Yii::app()->request->getPost('phone','')))) {
 
 				$tmp['name'] = $this->cleanXss(Yii::app()->request->getPost('name','');
 				$tmp['time'] = strtotime($this->cleanXss(Yii::app()->request->getPost('time',''));
