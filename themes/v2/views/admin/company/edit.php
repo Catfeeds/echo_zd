@@ -94,6 +94,12 @@ $childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->find
         <?php $this->widget('FileUpload',array('model'=>$article,'attribute'=>'image','inputName'=>'img','width'=>400,'height'=>300)); ?>
     </div>
 </div>
+<div class="form-group">
+    <label class="col-md-2 control-label text-nowrap">门店照片</label>
+    <div class="col-md-8">
+        <?php $this->widget('FileUpload',array('model'=>$article,'attribute'=>'ava','inputName'=>'img','width'=>400,'height'=>300)); ?>
+    </div>
+</div>
 
 <div class="form-group">
     <label class="col-md-2 control-label">状态</label>

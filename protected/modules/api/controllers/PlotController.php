@@ -36,6 +36,7 @@ class PlotController extends ApiController{
 		$infoid = (int)Yii::app()->request->getQuery('infoid',0);
 		$company = (int)Yii::app()->request->getQuery('company',0);
 		$showPay = Yii::app()->request->getQuery('showPay',1);
+		$is_login = Yii::app()->request->getQuery('is_login',1);
 		$uid = (int)Yii::app()->request->getQuery('uid',0);
 		$myuid = (int)Yii::app()->request->getQuery('myuid',0);
 		$mkstaff = (int)Yii::app()->request->getQuery('mkstaff',0);
@@ -50,7 +51,7 @@ class PlotController extends ApiController{
 		$isxcx = (int)Yii::app()->request->getQuery('isxcx',0);
 		$kw = $this->cleanXss(Yii::app()->request->getQuery('kw',''));
 		$this->frame['data'] = ['list'=>[],'page'=>$page,'num'=>0,'page_count'=>0,];
-		
+		$is_login && $showPay = 0;
 		// if(!$isxcx&&$this->is_HTTPS()&&$limit!=6){
 		// 	$city = $area;
 		// 	$area = $street;
@@ -396,7 +397,7 @@ class PlotController extends ApiController{
         return $s;
 	}
 
-	public function actionInfo($id='',$phone='',$uid='',$ask_limit='1',$map_lat='',$map_lng='')
+	public function actionInfo($id='',$phone='',$uid='',$ask_limit='1',$map_lat='',$map_lng='',$is_login=0)
 	{
 		if($id && strstr($id,'_')) {
 			list($id,$phone) = explode('_', $id);
@@ -452,7 +453,7 @@ class PlotController extends ApiController{
 		// } else {
 		// 	$companyArr = [];
 		// }
-		if($pays = $info->pays) {
+		if($is_login && ($pays = $info->pays)) {
 			$pay[] = ['title'=>$pays[0]['name'],'content'=>$pays[0]['content'],'num'=>count($pays)];
 		} else {
 			$pay = [];
@@ -841,15 +842,15 @@ class PlotController extends ApiController{
 	public function actionAddSub()
 	{
 		if(Yii::app()->request->getIsPostRequest()) {
-			if(($hid = $_POST['hid']) && ($tmp['phone'] = $this->cleanXss($_POST['phone']))) {
+			if(($hid = Yii::app()->request->getPost('hid','') && ($tmp['phone'] = $this->cleanXss(Yii::app()->request->getPost('phone',''))) {
 
-				$tmp['name'] = $this->cleanXss($_POST['name']);
-				$tmp['time'] = strtotime($this->cleanXss($_POST['time']));
-				$tmp['sex'] = $this->cleanXss($_POST['sex']);
+				$tmp['name'] = $this->cleanXss(Yii::app()->request->getPost('name','');
+				$tmp['time'] = strtotime($this->cleanXss(Yii::app()->request->getPost('time',''));
+				$tmp['sex'] = $this->cleanXss(Yii::app()->request->getPost('sex','');
 				$tmp['note'] = $this->cleanXss(Yii::app()->request->getPost('note',''));
-				$tmp['visit_way'] = $this->cleanXss($_POST['visit_way']);
-				$tmp['visit_num'] = $this->cleanXss($_POST['visit_num']);
-				$tmp['uid'] = $this->cleanXss($_POST['uid']);
+				$tmp['visit_way'] = $this->cleanXss(Yii::app()->request->getPost('visit_way','');
+				$tmp['visit_num'] = $this->cleanXss(Yii::app()->request->getPost('visit_num','');
+				$tmp['uid'] = $this->cleanXss(Yii::app()->request->getPost('uid','');
 				$hid = explode(',', $hid);
 				// $tmp['uid'] = $this->staff->id;
 
@@ -2588,7 +2589,7 @@ class PlotController extends ApiController{
     	}
     }
 
-    public function actionGetUserList($uid='')
+    public function actionGetUserList($uid='',$kw='')
     {
     	$data = [];
     	$user = UserExt::model()->findByPk($uid);
@@ -2596,7 +2597,13 @@ class PlotController extends ApiController{
     	if(!$user) {
     		return $this->returnError('参数错误');
     	}
-    	$sql = "select phone,name,sex from sub where uid=$uid group by phone order by updated desc";
+    	$and = '';
+    	if(is_numeric($kw)) {
+    		$and = " and phone like '%$kw%'";
+    	} else {
+    		$and = " and name like '%$kw%'";
+    	}
+    	$sql = "select phone,name,sex from sub where uid=$uid $and  group by phone order by updated desc";
     	if($subs = Yii::app()->db->createCommand($sql)->queryAll()) {
     		foreach ($subs as $key => $value) {
     			$data[] = [

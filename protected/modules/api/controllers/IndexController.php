@@ -1002,4 +1002,9 @@ class IndexController extends ApiController
         $this->frame['data'] = SiteExt::getAttr('qjpz','openSfz');
     }
 
+    public function actionGetCodeNote()
+    {
+        $this->frame['data'] = SiteExt::getAttr('qjpz','codenote');
+    }
+
 }

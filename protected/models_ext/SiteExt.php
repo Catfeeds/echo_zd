@@ -52,6 +52,7 @@ class SiteExt extends Site{
         'openSfz'=>'',
         'sitePwd'=>'',
         'companynopic'=>'',
+        'codenote'=>''
     ];
     public static $cateName = [
         'qjpz' => '全局配置',
@@ -70,7 +71,7 @@ class SiteExt extends Site{
             'sitePwd'=>['type'=>'pwd','name'=>'登录密码'],
             'openDl'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启独立经纪人'],
             'openSfz'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启身份证验证'],
-            // 'add_market_words'=>['type'=>'text','name'=>'对接人申请备注'],
+            'codenote'=>['type'=>'text','name'=>'绑定门店码备注'],
             // 'bussiness_tel'=>['type'=>'text','name'=>'业务部联系方式'],
             // 'add_subscribe_words'=>['type'=>'text','name'=>'订阅申请备注'],
             // 'add_vip_words'=>['type'=>'text','name'=>'成为vip备注'],
