@@ -51,7 +51,7 @@ class PlotController extends ApiController{
 		$isxcx = (int)Yii::app()->request->getQuery('isxcx',0);
 		$kw = $this->cleanXss(Yii::app()->request->getQuery('kw',''));
 		$this->frame['data'] = ['list'=>[],'page'=>$page,'num'=>0,'page_count'=>0,];
-		$is_login && $showPay = 0;
+		!$is_login && $showPay = 0;
 		// if(!$isxcx&&$this->is_HTTPS()&&$limit!=6){
 		// 	$city = $area;
 		// 	$area = $street;
