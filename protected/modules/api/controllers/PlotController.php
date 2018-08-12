@@ -958,8 +958,8 @@ class PlotController extends ApiController{
 			// }
 			$obj = new CompanyExt;
 			$obj->attributes = $values;
-			$obj->area = $area;
-			$obj->street = $street;
+			// $obj->area = $area;
+			// $obj->street = $street;
 			$obj->status = 0;
 			$obj->save();
 		}
