@@ -948,14 +948,14 @@ class PlotController extends ApiController{
 			if(CompanyExt::model()->undeleted()->find("name='".$values['name']."'")) {
 				return $this->returnError('公司名已存在');
 			}
-			$area = $street = 0;
-			if($values['area']) {
-				$streetobj = AreaExt::model()->findByPk($values['area']);
-				if($streetobj) {
-					$area = $streetobj->parent;
-					$street = $streetobj->id;
-				}
-			}
+			// $area = $street = 0;
+			// if($values['street']) {
+			// 	$streetobj = AreaExt::model()->findByPk($values['area']);
+			// 	if($streetobj) {
+			// 		$area = $streetobj->parent;
+			// 		$street = $streetobj->id;
+			// 	}
+			// }
 			$obj = new CompanyExt;
 			$obj->attributes = $values;
 			$obj->area = $area;
