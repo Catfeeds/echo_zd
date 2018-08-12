@@ -844,13 +844,13 @@ class PlotController extends ApiController{
 		if(Yii::app()->request->getIsPostRequest()) {
 			if(($hid = Yii::app()->request->getPost('hid','')) && ($tmp['phone'] = $this->cleanXss(Yii::app()->request->getPost('phone','')))) {
 
-				$tmp['name'] = $this->cleanXss(Yii::app()->request->getPost('name','');
-				$tmp['time'] = strtotime($this->cleanXss(Yii::app()->request->getPost('time',''));
-				$tmp['sex'] = $this->cleanXss(Yii::app()->request->getPost('sex','');
+				$tmp['name'] = $this->cleanXss(Yii::app()->request->getPost('name',''));
+				$tmp['time'] = strtotime($this->cleanXss(Yii::app()->request->getPost('time','')));
+				$tmp['sex'] = $this->cleanXss(Yii::app()->request->getPost('sex',''));
 				$tmp['note'] = $this->cleanXss(Yii::app()->request->getPost('note',''));
-				$tmp['visit_way'] = $this->cleanXss(Yii::app()->request->getPost('visit_way','');
-				$tmp['visit_num'] = $this->cleanXss(Yii::app()->request->getPost('visit_num','');
-				$tmp['uid'] = $this->cleanXss(Yii::app()->request->getPost('uid','');
+				$tmp['visit_way'] = $this->cleanXss(Yii::app()->request->getPost('visit_way',''));
+				$tmp['visit_num'] = $this->cleanXss(Yii::app()->request->getPost('visit_num',''));
+				$tmp['uid'] = $this->cleanXss(Yii::app()->request->getPost('uid',''));
 				$hid = explode(',', $hid);
 				// $tmp['uid'] = $this->staff->id;
 
