@@ -56,6 +56,8 @@ class SiteExt extends Site{
         'bottomLogo'=>'',
         'bottomWords'=>'',
         'sitename'=>'',
+        'confirmNote'=>'',
+        // 'sitename'=>'',
     ];
     public static $cateName = [
         'qjpz' => '全局配置',
@@ -77,7 +79,7 @@ class SiteExt extends Site{
             'codenote'=>['type'=>'text','name'=>'绑定门店码备注'],
             'bottomLogo'=>['type'=>'image','max'=>1,'name'=>'页面底部logo'],
             'bottomWords'=>['type'=>'text','name'=>'页面底部文案'],
-            // 'bussiness_tel'=>['type'=>'text','name'=>'业务部联系方式'],
+            'confirmNote'=>['type'=>'text','name'=>'审核通知文案'],
             // 'add_subscribe_words'=>['type'=>'text','name'=>'订阅申请备注'],
             // 'add_vip_words'=>['type'=>'text','name'=>'成为vip备注'],
             // 'ouruids'=>['type'=>'text','name'=>'业务部uid'],

@@ -72,6 +72,9 @@ class PlotController extends ApiController{
 			}
 			$criteria->addInCondition('id',$savehidsarr);
 		}
+		if(!$uid) {
+			$criteria->addCondition('status=1');
+		}
 		// if($uid>0) {
 		// 	if(!$save) {
 		// 		if(!$this->staff) {
@@ -962,6 +965,7 @@ class PlotController extends ApiController{
 			// $obj->street = $street;
 			$obj->status = 0;
 			$obj->save();
+			$this->frame['data'] = SiteExt::getAttr('qjpz','confirmNote');
 		}
     }
     public function actionGetPhones($hid='')

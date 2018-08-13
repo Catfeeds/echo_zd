@@ -79,6 +79,7 @@ class UserController extends ApiController{
 				if(!$user->save()) {
 					return $this->returnError(current(current($user->getErrors())));
 				} else {
+					$this->frame['data'] = SiteExt::getAttr('qjpz','confirmNote');
 					// if($company) {
 					// 	$managers = $company->managers;
 					// 	if($managers) {
