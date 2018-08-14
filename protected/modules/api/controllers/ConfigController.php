@@ -1,7 +1,7 @@
 <?php
 class ConfigController extends ApiController{
 	public function actionIndex($phone='')
-	// {
+	{
 	// 	$userinfo = '';
 	// 	$oths = CacheExt::gas('wap_all_config','AreaExt',0,'wap配置缓存',function (){
 	//             $tmp = [
