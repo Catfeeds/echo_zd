@@ -68,8 +68,9 @@ $this->breadcrumbs = array($this->pageTitle);
                 
              ?></td>
              <td class="text-center"><?php $sds = $v->departments; if($sds) {
-                foreach ($sds as $k) {
-                    echo $k->name.' ';
+                foreach ($sds as $n=>$k) {
+                    // if($n!=count($sds))
+                        echo $k->name.($n!=count($sds)-1?' | ':'');
                 }
                 } ?></td>
                 <td class="text-center"><?=$v->zw?></td>

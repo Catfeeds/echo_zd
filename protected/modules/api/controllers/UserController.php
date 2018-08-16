@@ -1,4 +1,4 @@
-<?php
+r<?php
 class UserController extends ApiController{
 
 	public function actionCheckPhone($phone='')
@@ -37,6 +37,7 @@ class UserController extends ApiController{
 	{
 		if(Yii::app()->request->getIsPostRequest()) {
 			$obj = Yii::app()->request->getPost('UserExt',[]);
+			$code = '';
 			if(!$obj['phone']) {
 				return $this->returnError('请绑定手机号再进行提交');
 			}
@@ -72,14 +73,17 @@ class UserController extends ApiController{
 						$user->cid = $company->id;
 					}
 					$user->status = 1;
+				} else {
+					$user->cid = 0;
 				}
 				$user->attributes = $obj;
 				!$user->pwd && $user->pwd = 'jjqxftv587';
+				
 				$user->pwd = md5($user->pwd);
 				if(!$user->save()) {
 					return $this->returnError(current(current($user->getErrors())));
 				} else {
-					$this->frame['data'] = SiteExt::getAttr('qjpz','confirmNote');
+					$this->frame['data'] = $code&&$company?('绑定公司成功，欢迎加入'.$company->name):SiteExt::getAttr('qjpz','confirmNote');
 					// if($company) {
 					// 	$managers = $company->managers;
 					// 	if($managers) {
@@ -235,11 +239,12 @@ class UserController extends ApiController{
 		// 都是搜索手机+客户姓名+楼盘名
 		// 案场助理看关联的所有项目的报备
 		// 案场销售看分配给自己的报备
-		if(is_numeric($kw)) {
-			$criteria->addSearchCondition('phone',$kw);
-		} else {
-			$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%'");
-		}
+		if($kw)
+			if(is_numeric($kw)) {
+				$criteria->addSearchCondition('phone',$kw);
+			} else {
+				$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%'");
+			}
 		if($hid) {
 			$criteria->addCondition("hid=$hid");
 		}
@@ -459,7 +464,7 @@ class UserController extends ApiController{
 		$firstArr = [
 			'name'=>$sub->name,
 			'phone'=>$sub->phone,
-			'tag'=>'客户姓名',
+			'tag'=>'客户',
 			'company'=>'',
 		];
 		// 项目展示系统用0 案场传1 市场传2
@@ -469,15 +474,15 @@ class UserController extends ApiController{
 				$secondArr = [
 					'name'=>$u->name,
 					'phone'=>$u->phone,
-					'tag'=>'市场资料',
+					'tag'=>'市场对接人',
 					'company'=>'',
 				];
 			}
-			if($u = $sub->an_user) {
+			if($u = $sub->sale_user) {
 				$thirdArr = [
 					'name'=>$u->name,
 					'phone'=>$u->phone,
-					'tag'=>'案场助理',
+					'tag'=>'案场销售',
 					'company'=>'',
 				];
 			}

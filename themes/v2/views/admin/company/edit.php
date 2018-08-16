@@ -74,17 +74,17 @@ $childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->find
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'phone') ?></div>
 </div>
-<div class="form-group">
+<!-- <div class="form-group">
     <label class="col-md-2 control-label">发布人uid</label>
     <div class="col-md-4">
         <?php echo $form->textField($article, 'adduid', array('class' => 'form-control')); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'adduid') ?></div>
-</div>
+</div> -->
 <div class="form-group">
     <label class="col-md-2 control-label">选择父级</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'parent',  CHtml::listData(CompanyExt::model()->findAll(),'id','name'), array('class'=>'form-control select2')); ?>
+        <?php echo $form->dropDownList($article, 'parent',  CHtml::listData(CompanyExt::model()->findAll(),'id','name'), array('class'=>'form-control select2','empty'=>'请选择')); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'parent') ?></div>
 </div>

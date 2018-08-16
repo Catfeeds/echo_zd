@@ -36,7 +36,7 @@ $this->breadcrumbs = array($this->pageTitle);
         <th class="text-center">修改时间</th>
         <th class="text-center">状态</th>
         <th class="text-center">操作</th>
-        <th class="text-center">驳回</th>
+        <!-- <th class="text-center">驳回</th> -->
     </tr>
     </thead>
     <tbody>
@@ -56,15 +56,7 @@ $this->breadcrumbs = array($this->pageTitle);
 
 
             </td>
-            <td class="text-center">
-            <?php if($v->status==0):?>
-            <form action="recall" method="get">
-                <input type="text" name="msg">
-                <input type="hidden" name="id" value="<?=$v->id?>">
-                <input type="submit"  value="提交" class="btn btn-sm blue">
-            </form>
-        <?php endif;?>
-            </td>
+        
         </tr>
     <?php endforeach;?>
     </tbody>

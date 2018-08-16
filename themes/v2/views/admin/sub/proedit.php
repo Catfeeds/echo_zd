@@ -31,7 +31,7 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
 <div class="form-group">
     <label class="col-md-2 control-label">市场/案场</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'staff', CHtml::listData(StaffExt::model()->findAll(),'id','name'), array('class' => 'form-control select2', 'encode' => false,'empty'=>'请选择')); ?>
+        <?php echo $form->dropDownList($article, 'staff', CHtml::listData(StaffExt::model()->findAll(),'id','name_phone'), array('class' => 'form-control select2', 'encode' => false,'empty'=>'请选择')); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'staff') ?></div>
 </div>

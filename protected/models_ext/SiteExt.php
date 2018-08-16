@@ -61,8 +61,8 @@ class SiteExt extends Site{
     ];
     public static $cateName = [
         'qjpz' => '全局配置',
-        'sen'=>'敏感词配置',
-        'app'=>'APP后台配置',
+        // 'sen'=>'敏感词配置',
+        // 'app'=>'APP后台配置',
     ];
 
     // 属性分类
@@ -72,7 +72,7 @@ class SiteExt extends Site{
             'ttpic'=>['type'=>'image','max'=>1,'name'=>'头条图片'],
             'indexmarquee'=>['type'=>'text','name'=>'头条内容'],
             'topword'=>['type'=>'text','name'=>'楼盘置顶文案'],
-            'sitename'=>['type'=>'text','name'=>'站点名'],
+            // 'sitename'=>['type'=>'text','name'=>'站点名'],
             'sitePwd'=>['type'=>'pwd','name'=>'登录密码'],
             'openDl'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启独立经纪人'],
             'openSfz'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启身份证验证'],
@@ -85,25 +85,25 @@ class SiteExt extends Site{
             // 'ouruids'=>['type'=>'text','name'=>'业务部uid'],
             // 'kfuid'=>['type'=>'text','name'=>'客服uid'],
             'site_phone'=>['type'=>'text','name'=>'站点客服'],
-            'site_wx'=>['type'=>'text','name'=>'客服微信'],
-            'siteqq'=>['type'=>'text','name'=>'站点qq'],
-            'map_lng'=>['type'=>'text','name'=>'默认经度'],
-            'map_lat'=>['type'=>'text','name'=>'默认纬度'],
-            'map_zoom'=>['type'=>'text','name'=>'默认缩放值'],
-            'toplimit'=>['type'=>'text','name'=>'城市置顶条数'],
-            'qjtoplimit'=>['type'=>'text','name'=>'全局置顶条数'],
+            // 'site_wx'=>['type'=>'text','name'=>'客服微信'],
+            // 'siteqq'=>['type'=>'text','name'=>'站点qq'],
+            // 'map_lng'=>['type'=>'text','name'=>'默认经度'],
+            // 'map_lat'=>['type'=>'text','name'=>'默认纬度'],
+            // 'map_zoom'=>['type'=>'text','name'=>'默认缩放值'],
+            // 'toplimit'=>['type'=>'text','name'=>'城市置顶条数'],
+            // 'qjtoplimit'=>['type'=>'text','name'=>'全局置顶条数'],
             'appid'=>['type'=>'text','name'=>'小程序开发者ID'],
             'appsecret'=>['type'=>'text','name'=>'小程序开发者密码'],
             'appid1'=>['type'=>'text','name'=>'案场开发者ID'],
             'appsecret1'=>['type'=>'text','name'=>'案场开发者密码'],
             // 'gzhappid'=>['type'=>'text','name'=>'公众号开发者ID'],
             // 'gzhappsecret'=>['type'=>'text','name'=>'公众号开发者密码'],
-            'mch_id'=>['type'=>'text','name'=>'商户ID'],
-            'mch_key'=>['type'=>'text','name'=>'商户支付key'],
+            // 'mch_id'=>['type'=>'text','name'=>'商户ID'],
+            // 'mch_key'=>['type'=>'text','name'=>'商户支付key'],
             // 'wx_share_image'=>['type'=>'image','max'=>1,'name'=>'微信分享头图'],
             'info_no_pic'=>['type'=>'image','max'=>1,'name'=>'房源默认图'],
             // 'mzsm'=>['type'=>'text','name'=>'免责声明'],
-            'vipNotice'=>['type'=>'text','name'=>'后台须知'],
+            // 'vipNotice'=>['type'=>'text','name'=>'后台须知'],
             'usernopic'=>['type'=>'image','max'=>1,'name'=>'用户默认头像'],
             'companynopic'=>['type'=>'image','max'=>1,'name'=>'公司默认封面图'],
             'waterlogo'=>['type'=>'image','max'=>1,'name'=>'水印图片'],
@@ -133,12 +133,12 @@ class SiteExt extends Site{
             // 'productNoPic'=>['type'=>'image','max'=>1,'name'=>'产品默认图'],
             // 'houseNoPic'=>['type'=>'image','max'=>1,'name'=>'酒庄默认图'],
             ],
-        'sen'=>[
-            'sen'=>['type'=>'text','name'=>'敏感词'],
-        ],
-        'app'=>[
-            'app'=>[],
-        ]
+        // 'sen'=>[
+        //     'sen'=>['type'=>'text','name'=>'敏感词'],
+        // ],
+        // 'app'=>[
+        //     'app'=>[],
+        // ]
     ];
 
 	/**

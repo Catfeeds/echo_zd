@@ -17,7 +17,7 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
 <div class="form-group">
     <label class="col-md-2 control-label">选择市场</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'uid', CHtml::listData(StaffExt::model()->findAll(),'id','name'), array('value'=>$hid?$hid:'','class' => 'form-control select2','empty'=>'')); ?>     
+        <?php echo $form->dropDownList($article, 'uid', CHtml::listData(StaffExt::model()->findAll(),'id','name_phone'), array('value'=>$hid?$hid:'','class' => 'form-control select2','empty'=>'')); ?>     
     </div>
 </div>
 <div class="form-group">

@@ -14,102 +14,140 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
         'horizontal','inserttable','|',
         'print','preview','searchreplace']]")); ?>
 <?php $form = $this->beginWidget('HouseForm', array('htmlOptions' => array('class' => 'form-horizontal'))) ?>
-<div class="form-group">
-    <label class="col-md-2 control-label">经纪人</label>
-    <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'uid', CHtml::listData(UserExt::model()->normal()->findAll('type>1'),'id','name'), array('class' => 'form-control', 'encode' => false)); ?>
+<div class="tabbale">
+    <ul class="nav nav-tabs nav-tabs-lg">
+        <li class="active">
+            <a href="#tab_1" data-toggle="tab"> 客户信息 </a>
+        </li>
+        <li>
+            <a href="#tab_2" data-toggle="tab"> 房源信息 </a>
+        </li>
+        <li>
+            <a href="#tab_3" data-toggle="tab"> 人员信息 </a>
+        </li>
+    </ul>
+    <div class="tab-content col-md-12" style="padding-top:20px;">
+    <div class="tab-pane col-md-12 active" id="tab_1">
+      <div class="form-group">
+          <label class="col-md-2 control-label">客户姓名</label>
+          <div class="col-md-4">
+              <?php echo $form->textField($article, 'name', array('class' => 'form-control')); ?>
+          </div>
+          <div class="col-md-2"><?php echo $form->error($article, 'name') ?></div>
+      </div>
+      <div class="form-group">
+          <label class="col-md-2 control-label">客户性别</label>
+          <div class="col-md-4">
+              <?php echo $form->radioButtonList($article, 'sex', UserExt::$sex, array('separator' => '')); ?>
+          </div>
+          <div class="col-md-2"><?php echo $form->error($article, 'sex') ?></div>
+      </div>
+      <div class="form-group">
+          <label class="col-md-2 control-label">客户联系方式</label>
+          <div class="col-md-4">
+              <?php echo $form->textField($article, 'phone', array('class' => 'form-control')); ?>
+          </div>
+          <div class="col-md-2"><?php echo $form->error($article, 'phone') ?></div>
+      </div>
+      <div class="form-group">
+          <label class="col-md-2 control-label">带看时间<span class="required" aria-required="true">*</span></label>
+          <div class="col-md-4">
+              <div class="input-group date form_datetime">
+                        <?php echo $form->textField($article,'time',array('class'=>'form-control','value'=>($article->time?date('Y-m-d',$article->time):''))); ?>
+                        <span class="input-group-btn">
+                          <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                       </span>
+                    </div>
+          </div>
+      </div>
+      <div class="form-group">
+          <label class="col-md-2 control-label">客户备注</label>
+          <div class="col-md-4">
+              <?php echo $form->textarea($article, 'note', array('class' => 'form-control')); ?>
+          </div>
+          <div class="col-md-2"><?php echo $form->error($article, 'note') ?></div>
+      </div>
+      <div class="form-group">
+          <label class="col-md-2 control-label">到访方式</label>
+          <div class="col-md-4">
+              <?php echo $form->radioButtonList($article, 'visit_way', [0=>'自驾',1=>'班车'], array('separator' => '')); ?>
+          </div>
+          <div class="col-md-2"><?php echo $form->error($article, 'visit_way') ?></div>
+      </div>
+      <div class="form-group">
+          <label class="col-md-2 control-label">来访人数</label>
+          <div class="col-md-4">
+              <?php echo $form->textField($article, 'visit_num', array('class' => 'form-control')); ?>
+          </div>
+          <div class="col-md-2"><?php echo $form->error($article, 'visit_num') ?></div>
+      </div>
+      <div class="form-group">
+          <label class="col-md-2 control-label">状态</label>
+          <div class="col-md-4">
+              <?php echo $form->radioButtonList($article, 'status', SubExt::$status, array('separator' => '')); ?>
+          </div>
+          <div class="col-md-2"><?php echo $form->error($article, 'status') ?></div>
+      </div>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'uid') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">楼盘</label>
-    <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'hid', CHtml::listData(PlotExt::model()->normal()->findAll(),'id','title'), array('class' => 'form-control', 'encode' => false)); ?>
+    <div class="tab-pane col-md-12" id="tab_2">
+    <div class="form-group">
+        <label class="col-md-2 control-label">楼盘</label>
+        <div class="col-md-4">
+            <?php echo $form->dropDownList($article, 'hid', CHtml::listData(PlotExt::model()->normal()->findAll(),'id','title'), array('class' => 'form-control', 'encode' => false)); ?>
+        </div>
+        <div class="col-md-2"><?php echo $form->error($article, 'hid') ?></div>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'hid') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">客户姓名</label>
-    <div class="col-md-4">
-        <?php echo $form->textField($article, 'name', array('class' => 'form-control')); ?>
+      <div class="form-group">
+        <label class="col-md-2 control-label">销售金额</label>
+        <div class="col-md-4">
+            <?php echo $form->textField($article, 'sale_price', array('class' => 'form-control')); ?>
+        </div>
+        <div class="col-md-2"><?php echo $form->error($article, 'sale_price') ?></div>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'name') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">客户性别</label>
-    <div class="col-md-4">
-        <?php echo $form->radioButtonList($article, 'sex', UserExt::$sex, array('separator' => '')); ?>
+    <?php foreach (['回款金额'=>'hk_price','折佣金额'=>'zy_price','佣金'=>'yj_price','定金'=>'ding_price','面积'=>'size','房号'=>'house_no','认筹金'=>'rcj'] as $key => $value) {?>
+      <div class="form-group">
+        <label class="col-md-2 control-label"><?=$key?></label>
+        <div class="col-md-4">
+            <?php echo $form->textField($article, $value, array('class' => 'form-control')); ?>
+        </div>
+        <div class="col-md-2"><?php echo $form->error($article, $value) ?></div>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'sex') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">客户联系方式</label>
-    <div class="col-md-4">
-        <?php echo $form->textField($article, 'phone', array('class' => 'form-control')); ?>
+    <?php } ?>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'phone') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">销售金额</label>
-    <div class="col-md-4">
-        <?php echo $form->textField($article, 'sale_price', array('class' => 'form-control')); ?>
+    <div class="tab-pane col-md-12" id="tab_3">
+      <div class="form-group">
+        <label class="col-md-2 control-label">经纪人</label>
+        <div class="col-md-4">
+            <?php echo $form->dropDownList($article, 'uid', CHtml::listData(UserExt::model()->normal()->findAll('type>1'),'id','name'), array('class' => 'form-control', 'encode' => false)); ?>
+        </div>
+        <div class="col-md-2"><?php echo $form->error($article, 'uid') ?></div>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'sale_price') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">带看时间<span class="required" aria-required="true">*</span></label>
-    <div class="col-md-4">
-        <div class="input-group date form_datetime">
-                  <?php echo $form->textField($article,'time',array('class'=>'form-control','value'=>($article->time?date('Y-m-d',$article->time):''))); ?>
-                  <span class="input-group-btn">
-                    <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-                 </span>
-              </div>
+      <div class="form-group">
+        <label class="col-md-2 control-label">市场对接人</label>
+        <div class="col-md-4">
+            <?php echo $form->dropDownList($article, 'market_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
+        </div>
+        <div class="col-md-2"><?php echo $form->error($article, 'market_uid') ?></div>
     </div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">备注</label>
-    <div class="col-md-4">
-        <?php echo $form->textarea($article, 'note', array('class' => 'form-control')); ?>
+    <div class="form-group">
+        <label class="col-md-2 control-label">案场助理</label>
+        <div class="col-md-4">
+            <?php echo $form->dropDownList($article, 'an_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
+        </div>
+        <div class="col-md-2"><?php echo $form->error($article, 'an_uid') ?></div>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'note') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">是否只报备</label>
-    <div class="col-md-4">
-        <?php echo $form->radioButtonList($article, 'is_only_sub', ['否','是'], array('separator' => '')); ?>
+    <div class="form-group">
+        <label class="col-md-2 control-label">案场销售</label>
+        <div class="col-md-4">
+            <?php echo $form->dropDownList($article, 'sale_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
+        </div>
+        <div class="col-md-2"><?php echo $form->error($article, 'sale_uid') ?></div>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'is_only_sub') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">市场对接人</label>
-    <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'market_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'market_uid') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">案场助理</label>
-    <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'an_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'an_uid') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">案场销售</label>
-    <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'sale_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'sale_uid') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">状态</label>
-    <div class="col-md-4">
-        <?php echo $form->radioButtonList($article, 'status', SubExt::$status, array('separator' => '')); ?>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'status') ?></div>
-</div>
-<div class="form-actions">
+    
+    
+    <div class="form-actions">
     <div class="row">
         <div class="col-md-offset-3 col-md-9">
             <button type="submit" class="btn green">保存</button>
@@ -117,103 +155,51 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
         </div>
     </div>
 </div>
+    
+</div>
 
-<?php $this->endWidget() ?>
 
 <?php
-$js = "
+Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootbox/bootbox.min.js', CClientScript::POS_END);
+Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bmap.js', CClientScript::POS_END);
+Yii::app()->clientScript->registerScriptFile('/static/admin/pages/scripts/map.js', CClientScript::POS_END);
+?>
 
-    var getHousesAjax =
-     {
-        url: '".$this->createUrl('/admin/plot/AjaxGetHouse')."',"."
-        dataType: 'json',
-        delay: 250,
-        data: function (params) {
-            return {
-                kw:params
-            };
-        },
-        results:function(data){
-            var items = [];
+<?php $this->endWidget(); ?>
 
-             $.each(data.results,function(){
-                var tmp = {
-                    id : this.id,
-                    text : this.name
-                }
-                items.push(tmp);
-            });
-
-            return {
-                results: items
-            };
-        },
-        processResults: function (data, page) {
-            var items = [];
-             $.each(data.msg,function(){
-                var tmp = {
-                    id : this.id,
-                    text : this.title
-                }
-                items.push(tmp);
-            });
-            return {
-                results: items
-            };
-        }
-    }
-        $(function(){
-
-           $('.select2').select2({
-              placeholder: '请选择',
-              allowClear: true
-           });
-
-        var houses_edit = $('#plot');
-        var data = {};
-        if( houses_edit.length && houses_edit.data('houses') ){
-          data = eval(houses_edit.data('houses'));
-        }
-
-        $('#plot').select2({
-          multiple:true,
-          ajax: getHousesAjax,
-          language: 'zh-CN',
-          initSelection: function(element, callback){
-            callback(data);
-          }
-        });
-
-             $('.form_datetime').datetimepicker({
-                 autoclose: true,
-                 isRTL: Metronic.isRTL(),
-                 format: 'yyyy-mm-dd hh:ii',
-                 // minView: 'm',
-                 language: 'zh-CN',
-                 pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
-             });
-
-             $('.form_datetime1').datetimepicker({
-                 autoclose: true,
-                 isRTL: Metronic.isRTL(),
-                 format: 'yyyy-mm-dd',
-                 minView: 'month',
-                 language: 'zh-CN',
-                 pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
-             });
-        });
-        ";
-
-
-Yii::app()->clientScript->registerScript('add',$js,CClientScript::POS_END);
+<?php
+//Select2
 Yii::app()->clientScript->registerScriptFile('/static/global/plugins/select2/select2.min.js', CClientScript::POS_END);
-Yii::app()->clientScript->registerScriptFile('/static/global/plugins/select2/select2_locale_zh-CN.js', CClientScript::POS_END);
 Yii::app()->clientScript->registerCssFile('/static/global/plugins/select2/select2.css');
 Yii::app()->clientScript->registerCssFile('/static/admin/pages/css/select2_custom.css');
 
-Yii::app()->clientScript->registerScriptFile('/static/admin/pages/scripts/addCustomizeDialog.js', CClientScript::POS_END);
+//boostrap datetimepicker
 Yii::app()->clientScript->registerCssFile('/static/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
 Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js', CClientScript::POS_END);
 Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js', CClientScript::POS_END, array('charset'=> 'utf-8'));
-Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootbox/bootbox.min.js', CClientScript::POS_END);
+
+// Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootbox/bootbox.min.js', CClientScript::POS_END);
+
+$js = "
+            $(function(){
+               $('.select2').select2({
+                  placeholder: '请选择',
+                  allowClear: true
+               });
+
+                 $('.form_datetime').datetimepicker({
+                     autoclose: true,
+                     isRTL: Metronic.isRTL(),
+                     format: 'yyyy-mm-dd',
+                     minView: 'month',
+                     language: 'zh-CN',
+                     pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
+                 });
+
+            });
+
+
+            ";
+
+Yii::app()->clientScript->registerScript('add',$js,CClientScript::POS_END);
 ?>

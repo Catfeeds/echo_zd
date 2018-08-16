@@ -230,13 +230,6 @@ $childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->find
                 </div>
                 <div class="col-md-12"><?php echo $form->error($plot, 'sfprice'); ?></div>
             </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label text-nowrap">顶部标签</label>
-                <div class="col-md-10">
-                    <?php echo $form->dropDownList($plot, 'wzlm',  CHtml::listData(TagExt::model()->getTagByCate('wzlm')->normal()->findAll(),'id','name'), array('class'=>'form-control select2','multiple'=>'multiple')); ?>
-                </div>
-                <div class="col-md-12"><?php echo $form->error($plot, 'wzlm'); ?></div>
-            </div>
             
             <div class="form-group">
                 <label class="col-md-2 control-label text-nowrap">带看规则</label>
@@ -244,6 +237,27 @@ $childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->find
                     <?php echo $form->textarea($plot,'dk_rule'); ?>
                 </div>
                 <div class="col-md-12"><?php echo $form->error($plot, 'dk_rule'); ?></div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label text-nowrap">总套数<span class="required" aria-required="true">*</span></label>
+                <div class="col-md-10">
+                    <?php echo $form->textField($plot,'all_num',array('class'=>'form-control')); ?>
+                </div>
+                <div class="col-md-12"><?php echo $form->error($plot, 'all_num'); ?></div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label text-nowrap">总面积<span class="required" aria-required="true">*</span></label>
+                <div class="col-md-10">
+                    <?php echo $form->textField($plot,'all_size',array('class'=>'form-control')); ?>
+                </div>
+                <div class="col-md-12"><?php echo $form->error($plot, 'all_size'); ?></div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label text-nowrap">总金额<span class="required" aria-required="true">*</span></label>
+                <div class="col-md-10">
+                    <?php echo $form->textField($plot,'all_price',array('class'=>'form-control')); ?>
+                </div>
+                <div class="col-md-12"><?php echo $form->error($plot, 'all_price'); ?></div>
             </div>
         </div>
     </div>
@@ -351,6 +365,7 @@ $childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->find
                 <div class="col-md-12"><?php echo $form->error($plot, 'floor_desc'); ?></div>
             </div>
 
+
         </div>
         <div class="col-md-6">
             
@@ -406,12 +421,19 @@ $childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->find
                 </div>
                 <div class="col-md-12"><?php echo $form->error($plot, 'carport'); ?></div>
             </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label text-nowrap">建造年代</label>
+                <div class="col-md-10">
+                    <?php echo $form->textField($plot,'build_year',array('class'=>'form-control input-inline'))?>
+                </div>
+                <div class="col-md-12"><?php echo $form->error($plot,'build_year')?></div>
+            </div>
         </div>
     </div>
 
     <div class="tab-pane col-md-12" id="tab_3">
         <div class="col-md-6">
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label class="col-md-2 control-label text-nowrap">项目特色</label>
                 <div class="col-md-10">
                 <?php echo $form->textField($plot,'xmts',array('class'=>'form-control','data-target'=>'pointname')); ?>
@@ -424,15 +446,9 @@ $childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->find
                     <?php echo $form->textArea($plot, 'content', array('id'=>'content','class'=>'form-control','rows'=>5)); ?>
                 </div>
                 <div class="col-md-12"><?php echo $form->error($plot, 'content'); ?></div>
-            </div>
+            </div> -->
 
-            <div class="form-group">
-                <label class="col-md-2 control-label text-nowrap">建造年代</label>
-                <div class="col-md-10">
-                    <?php echo $form->textField($plot,'build_year',array('class'=>'form-control input-inline'))?>
-                </div>
-                <div class="col-md-12"><?php echo $form->error($plot,'build_year')?></div>
-            </div>
+            
             <div class="form-group">
                 <div class="form-group">
                     <label class="col-md-2 control-label text-nowrap">楼盘排序</label>
@@ -447,39 +463,7 @@ $childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->find
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="form-group">
-                    <label class="col-md-2 control-label text-nowrap">用户提交户型描述</label>
-                    <div class="col-md-6">
-                        <?php echo $form->textarea($plot,'hxjs',array('class'=>'form-control')); ?>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-group">
-                    <label class="col-md-2 control-label text-nowrap">用户提交结佣方案</label>
-                    <div class="col-md-6">
-                        <?php echo $form->textarea($plot,'yjfa',array('class'=>'form-control')); ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="form-group">
-                    <label class="col-md-2 control-label text-nowrap">楼盘点评1</label>
-                    <div class="col-md-6">
-                        <?php echo $form->textarea($plot,'dp1',array('class'=>'form-control')); ?>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-group">
-                    <label class="col-md-2 control-label text-nowrap">楼盘点评2</label>
-                    <div class="col-md-6">
-                        <?php echo $form->textarea($plot,'dp2',array('class'=>'form-control')); ?>
-                    </div>
-                </div>
-            </div>
+            
             
 
         </div>
