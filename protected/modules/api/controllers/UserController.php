@@ -586,14 +586,14 @@ class UserController extends ApiController{
 					$obj->url = $value;
 					$obj->save();
 				}
-			if($subimgs = $sub->imgs) {
-				foreach ($subimgs as $key => $value) {
-					$imguser = $value->getUser();
-					$imgs[] = ['key'=>$value->url,'imageURL'=>ImageTools::fixImage($value->url)];
-					$imgpros[] = ['name'=>$imguser?$imguser->name:'用户','time'=>date('m-d H:i',$value->created)];
-				}
-			}
-			$this->frame['data'] = ['imgs'=>$imgs,'imgpros'=>$imgpros];
+			// if($subimgs = $sub->imgs) {
+			// 	foreach ($subimgs as $key => $value) {
+			// 		$imguser = $value->getUser();
+			// 		$imgs[] = ['key'=>$value->url,'imageURL'=>ImageTools::fixImage($value->url)];
+			// 		$imgpros[] = ['name'=>$imguser?$imguser->name:'用户','time'=>date('m-d H:i',$value->created)];
+			// 	}
+			// }
+			// $this->frame['data'] = ['imgs'=>$imgs,'imgpros'=>$imgpros];
 		}
 
 	}
