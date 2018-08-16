@@ -312,9 +312,9 @@ class UserController extends ApiController{
 				}
 				$criteria->addInCondition('hid',$ids);
 			}
-			var_dump($criteria);exit;
+			// var_dump($criteria);exit;
 			$subs = SubExt::model()->findAll($criteria);
-			var_dump(count($subs));exit;
+			// var_dump(count($subs));exit;
 			if($subs) {
 				foreach ($subs as $key => $value) {
 					$market_user = $value->user;
