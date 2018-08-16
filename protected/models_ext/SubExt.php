@@ -26,7 +26,7 @@ class SubExt extends Sub{
             'an_user'=>array(self::BELONGS_TO, 'StaffExt', 'an_uid'),
             'plot'=>array(self::BELONGS_TO, 'PlotExt', 'hid'),
             'pros'=>array(self::HAS_MANY, 'SubProExt', 'sid','order'=>'pros.created desc'),
-            'imgs'=>array(self::HAS_MANY, 'SubImgExt', 'sid','order'=>'imgs.created desc'),
+            'imgs'=>array(self::HAS_MANY, 'SubImgExt', 'sid','order'=>'imgs.created asc'),
             'company'=>array(self::BELONGS_TO, 'CompanyExt', 'cid'),
         );
     }
