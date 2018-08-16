@@ -116,4 +116,13 @@ class SubImgExt extends SubImg{
         );
     }
 
+    public function getUser()
+    {
+        if(!$this->user_type) {
+            return UserExt::model()->findByPk($this->uid);
+        } else {
+            return StaffExt::model()->findByPk($this->uid);
+        }
+    }
+
 }

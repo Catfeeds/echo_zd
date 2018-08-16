@@ -433,7 +433,7 @@ class UserController extends ApiController{
 
 	public function actionSubInfo($id='',$user_type='')
 	{
-		$data = $pros = $imgs = $firstArr = $secondArr = $thirdArr = [];
+		$data = $pros = $imgs = $firstArr = $secondArr = $thirdArr = $imgpros = [];
 		$sub = SubExt::model()->findByPk($id);
 		$subArr  = SubExt::$status;
 		if(!$sub) {
@@ -451,7 +451,9 @@ class UserController extends ApiController{
 		}
 		if($subimgs = $sub->imgs) {
 			foreach ($subimgs as $key => $value) {
+				$imguser = $value->getUser();
 				$imgs[] = ['key'=>$value->url,'imageURL'=>ImageTools::fixImage($value->url)];
+				$imgpros[] = ['name'=>$imguser?$imguser->name:'用户','time'=>date('m-d H:i',$value->created)];
 			}
 		}
 		$firstArr = [
@@ -511,6 +513,7 @@ class UserController extends ApiController{
 			// 'vip_phone'=>$sub->phone,
 			// 'vip_tag'=>'客户姓名',
 			'pros'=>$pros,
+			'imgpros'=>$imgpros,
 			'imgs'=>$imgs,
 			'secondArr'=>$secondArr,
 			'firstArr'=>$firstArr,
@@ -566,6 +569,7 @@ class UserController extends ApiController{
 	public function actionAddSubImg()
 	{
 		if(Yii::app()->request->getIsPostRequest()) {
+			$imgs = $imgpros = [];
 			$data['sid'] = Yii::app()->request->getPost('sid','');
 			$data['uid'] = Yii::app()->request->getPost('uid','');
 			$data['user_type'] = Yii::app()->request->getPost('user_type',0);
@@ -573,6 +577,7 @@ class UserController extends ApiController{
 			if(!$data['sid']) {
 				return $this->returnError('参数错误');
 			}
+			$sub = SubExt::model()->findByPk($data['sid']);
 			SubImgExt::model()->deleteAllByAttributes(['sid'=>$data['sid']]);
 			if($imgs)
 				foreach (explode(',', $imgs) as $key => $value) {
@@ -581,7 +586,16 @@ class UserController extends ApiController{
 					$obj->url = $value;
 					$obj->save();
 				}
+			if($subimgs = $sub->imgs) {
+				foreach ($subimgs as $key => $value) {
+					$imguser = $value->getUser();
+					$imgs[] = ['key'=>$value->url,'imageURL'=>ImageTools::fixImage($value->url)];
+					$imgpros[] = ['name'=>$imguser?$imguser->name:'用户','time'=>date('m-d H:i',$value->created)];
+				}
+			}
+			$this->frame['data'] = ['imgs'=>$imgs,'imgpros'=>$imgpros];
 		}
+
 	}
 
 	public function actionLeave($uid='')
