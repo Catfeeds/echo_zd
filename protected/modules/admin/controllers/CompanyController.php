@@ -119,4 +119,31 @@ class CompanyController extends AdminController{
 			
 		}
 	}
+
+	public function actionLoglist($id='')
+	{
+		$criteria = new CDbCriteria;
+		$criteria->addCondition("cid=$id");
+
+		$ress = CompanyLogExt::model()->getList($criteria,20);
+		$this->render('loglist',['infos'=>$ress->data,'pager'=>$ress->pagination,'cid'=>$id]);
+	}
+
+	public function actionLogedit($cid='',$id='')
+	{
+		$modelName = 'CompanyLogExt';
+		$info = $id ? $modelName::model()->findByPk($id) : new $modelName;
+		if(Yii::app()->request->getIsPostRequest()) {
+			$info->attributes = Yii::app()->request->getPost($modelName,[]);
+			$info->cid = $cid;
+			// $info->time =  is_numeric($info->time)?$info->time : strtotime($info->time);
+			if($info->save()) {
+				$this->setMessage('操作成功','success',['loglist?id='.$cid]);
+			} else {
+				$this->setMessage(array_values($info->errors)[0][0],'error');
+			}
+					
+		} 
+		$this->render('logedit',['article'=>$info,'cid'=>$cid]);
+	}
 }

@@ -200,7 +200,7 @@ class PlotExt extends Plot{
         else {
             $this->updated = time();
         }
-        if(!$this->first_pay) {
+        if(!$this->first_pay && !$this->getIsNewRecord()) {
             $this->first_pay = Yii::app()->db->createCommand("select price from plot_pay where hid=".$this->id." and deleted=0 and status=1 and price!=''")->queryScalar();
             // var_dump($this->first_pay);
             // $this->save();

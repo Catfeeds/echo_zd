@@ -1,67 +1,36 @@
 <?php
-$this->pageTitle = $this->controllerName.'列表';
+$this->pageTitle = '公司跟进列表';
 $this->breadcrumbs = array($this->pageTitle);
 ?>
 <div class="table-toolbar">
-    <div class="btn-group pull-left">
-        <form class="form-inline">
-            <div class="form-group">
-                <?php echo CHtml::dropDownList('type',$type,array('title'=>'标题','code'=>'门店码'),array('class'=>'form-control','encode'=>false)); ?>
-            </div>
-            <div class="form-group">
-                <?php echo CHtml::textField('value',$value,array('class'=>'form-control chose_text')) ?>
-            </div>
-            <div class="form-group">
-                <?php echo CHtml::dropDownList('time_type',$time_type,array('created'=>'添加时间','updated'=>'修改时间'),array('class'=>'form-control','encode'=>false)); ?>
-            </div>
-            <?php Yii::app()->controller->widget("DaterangepickerWidget",['time'=>$time,'params'=>['class'=>'form-control chose_text']]);?>
-            <div class="form-group">
-                <?php echo CHtml::dropDownList('status',$status,['未通过','已通过'],array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择状态--')); ?>
-            </div>
-            <button type="submit" class="btn blue">搜索</button>
-            <a class="btn yellow" onclick="removeOptions()"><i class="fa fa-trash"></i>&nbsp;清空</a>
-        </form>
-    </div>
+    
     <div class="pull-right">
-        <a href="<?php echo $this->createAbsoluteUrl('edit') ?>" class="btn blue">
-            添加<?=$this->controllerName?> <i class="fa fa-plus"></i>
+        <a href="<?php echo $this->createAbsoluteUrl('logedit',['cid'=>$cid]) ?>" class="btn blue">
+            添加跟进 <i class="fa fa-plus"></i>
         </a>
     </div>
 </div>
    <table class="table table-bordered table-striped table-condensed flip-content table-hover">
     <thead class="flip-content">
     <tr>
-        <th class="text-center">排序</th>
         <th class="text-center">ID</th>
-        <th class="text-center">公司名</th>
-        <th class="text-center">父级公司</th>
-        <th class="text-center">地址</th>
-        <th class="text-center">公司联系</th>
-        <th class="text-center">门店码</th>
+        <th class="text-center">跟进人</th>
+        <th class="text-center">跟进内容</th>
+        <th class="text-center">是否修改资料</th>
         <th class="text-center">添加时间</th>
-        <!-- <th class="text-center">修改时间</th> -->
-        <th class="text-center">状态</th>
+        <!-- <th class="text-center">状态</th> -->
         <th class="text-center">操作</th>
     </tr>
     </thead>
     <tbody>
-    <?php foreach($infos as $k=>$v): ?>
+    <?php foreach($infos as $k=>$v): $staff = $v->staff;?>
         <tr>
-            <td style="text-align:center;vertical-align: middle" class="warning sort_edit"
-                data-id="<?php echo $v['id'] ?>"><?php echo $v['sort'] ?></td>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
-            <td class="text-center"><?=$v->name?></td>
-            <td class="text-center"><?=$v->parentCompany?$v->parentCompany->name:''?></td>
-            <td class="text-center"><?=$v->address?></td> 
-            <td class="text-center"><?=$v->manager.'/'.$v->phone?></td> 
-            <td class="text-center"><?=$v->code?></td> 
+            <td class="text-center"><?=$v->staff?$staff->name:'暂无'?></td>
+            <td class="text-center"><?=$v->note?></td> 
+            <td class="text-center"><?=$v->is_xg?'是':'否'?></td> 
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
-            <!-- <td class="text-center"><?=date('Y-m-d',$v->updated)?></td> -->
-            <td class="text-center"><?php echo CHtml::ajaxLink(UserExt::$status[$v->status],$this->createUrl('changeStatus'), array('type'=>'get', 'data'=>array('id'=>$v->id,'class'=>get_class($v)),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$v->status])); ?></td>
-
             <td style="text-align:center;vertical-align: middle">
-                <a href="<?php echo $this->createUrl('loglist',array('id'=>$v->id)); ?>" class="btn default btn-xs default"> 公司跟进 </a>
-                <?php echo CHtml::ajaxLink('生成门店码',$this->createUrl('setCode'), array('type'=>'get', 'data'=>array('id'=>$v->id),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm red'.UserExt::$statusStyle[$v->status])); ?>
                 <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id)); ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 修改 </a>
                 <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?>
 

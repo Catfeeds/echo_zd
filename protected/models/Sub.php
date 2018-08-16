@@ -22,6 +22,14 @@
  * @property string $phone
  * @property string $notice
  * @property string $code
+ * @property integer $fk_type
+ * @property string $hk_price
+ * @property string $zy_price
+ * @property string $yj_price
+ * @property string $ding_price
+ * @property string $size
+ * @property string $house_no
+ * @property string $rcj
  * @property string $company_name
  * @property integer $visit_num
  * @property integer $visit_way
@@ -56,15 +64,15 @@ class Sub extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('uid, status, created, updated', 'required'),
-			array('uid, cid, an_uid, market_uid, time, visit_num, visit_way, sale_uid, sex, is_check, is_only_sub, status, deleted, sort, created, updated', 'numerical', 'integerOnly'=>true),
-			array('hid, plot_title, market_staff, sale_price, name', 'length', 'max'=>100),
+			array('uid, cid, an_uid, market_uid, time, fk_type, visit_num, visit_way, sale_uid, sex, is_check, is_only_sub, status, deleted, sort, created, updated', 'numerical', 'integerOnly'=>true),
+			array('hid, plot_title, market_staff, sale_price, name, hk_price, zy_price, yj_price, ding_price, size, house_no, rcj', 'length', 'max'=>100),
 			array('qr, company_name, note', 'length', 'max'=>255),
 			array('fx_phone, an_phone, market_phone, phone, sale_phone', 'length', 'max'=>20),
 			array('notice', 'length', 'max'=>12),
 			array('code', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hid, uid, cid, qr, fx_phone, plot_title, an_uid, an_phone, market_uid, market_phone, time, market_staff, sale_price, name, phone, notice, code, company_name, visit_num, visit_way, sale_phone, sale_uid, sex, is_check, is_only_sub, note, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
+			array('id, hid, uid, cid, qr, fx_phone, plot_title, an_uid, an_phone, market_uid, market_phone, time, market_staff, sale_price, name, phone, notice, code, fk_type, hk_price, zy_price, yj_price, ding_price, size, house_no, rcj, company_name, visit_num, visit_way, sale_phone, sale_uid, sex, is_check, is_only_sub, note, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -103,6 +111,14 @@ class Sub extends CActiveRecord
 			'phone' => 'Phone',
 			'notice' => 'Notice',
 			'code' => 'Code',
+			'fk_type' => 'Fk Type',
+			'hk_price' => 'Hk Price',
+			'zy_price' => 'Zy Price',
+			'yj_price' => 'Yj Price',
+			'ding_price' => 'Ding Price',
+			'size' => 'Size',
+			'house_no' => 'House No',
+			'rcj' => 'Rcj',
 			'company_name' => 'Company Name',
 			'visit_num' => 'Visit Num',
 			'visit_way' => 'Visit Way',
@@ -156,6 +172,14 @@ class Sub extends CActiveRecord
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('notice',$this->notice,true);
 		$criteria->compare('code',$this->code,true);
+		$criteria->compare('fk_type',$this->fk_type);
+		$criteria->compare('hk_price',$this->hk_price,true);
+		$criteria->compare('zy_price',$this->zy_price,true);
+		$criteria->compare('yj_price',$this->yj_price,true);
+		$criteria->compare('ding_price',$this->ding_price,true);
+		$criteria->compare('size',$this->size,true);
+		$criteria->compare('house_no',$this->house_no,true);
+		$criteria->compare('rcj',$this->rcj,true);
 		$criteria->compare('company_name',$this->company_name,true);
 		$criteria->compare('visit_num',$this->visit_num);
 		$criteria->compare('visit_way',$this->visit_way);
