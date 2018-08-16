@@ -716,6 +716,7 @@ class IndexController extends ApiController
                 }
                 // Yii::app()->end();
             }
+            Yii::log(11);
                 
         }
     }
