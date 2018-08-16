@@ -661,7 +661,7 @@ class IndexController extends ApiController
         }
     }
 
-    public function actionGetOpenIdAn($code='')
+    public function actionGetOpenidAn($code='')
     {
         $appid=SiteExt::getAttr('qjpz','appid1');$apps=SiteExt::getAttr('qjpz','appsecret1');
         $is_true = 0;
