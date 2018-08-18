@@ -318,6 +318,7 @@ class UserController extends ApiController{
 			if($subs) {
 				foreach ($subs as $key => $value) {
 					$market_user = $value->user;
+					// if()
 					$all[] = [
 						'id'=>$value->id,
 						'userName'=>$value->name,
@@ -327,7 +328,7 @@ class UserController extends ApiController{
 						'staffName'=>$market_user?$market_user->name:'暂无',
 						'staffPhone'=>$market_user?$market_user->phone:'暂无',
 						'time'=>date("m-d H:i",$value->created),
-						'thirdLine'=>$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
+						'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 					];
 				}
 				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
