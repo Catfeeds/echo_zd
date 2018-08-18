@@ -715,8 +715,11 @@ class IndexController extends ApiController
                     // $this->returnError($cont['errorMsg']);
                 }
                 // Yii::app()->end();
+            } else {
+                Yii::log(11);
             }
-            Yii::log(11);
+
+            
                 
         }
     }
