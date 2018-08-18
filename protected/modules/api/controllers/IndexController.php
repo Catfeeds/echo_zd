@@ -295,6 +295,7 @@ class IndexController extends ApiController
                         'avatarUrl'=>ImageTools::fixImage($user->ava?$user->ava:SiteExt::getAttr('qjpz','usernopic'),200,200),
                         'image'=>ImageTools::fixImage($user->image),
                         'wx_word'=>$companyinfo?($companyinfo->name):'独立经纪人',
+                        'image'=>['key'=>$user->image,'imageURL'=>ImageTools::fixImage($user->image)],
                         // 'is_true'=>$user->is_true,
                         'company_name'=>$companyinfo?$companyinfo->name:'独立经纪人',
                     ];
