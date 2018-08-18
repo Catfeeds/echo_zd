@@ -1,4 +1,4 @@
-r<?php
+<?php
 class UserController extends ApiController{
 
 	public function actionCheckPhone($phone='')
