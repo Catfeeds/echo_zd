@@ -36,7 +36,7 @@ class PlotController extends ApiController{
 		$infoid = (int)Yii::app()->request->getQuery('infoid',0);
 		$company = (int)Yii::app()->request->getQuery('company',0);
 		$showPay = Yii::app()->request->getQuery('showPay',1);
-		$is_login = Yii::app()->request->getQuery('is_login',1);
+		$is_login = Yii::app()->request->getQuery('is_login',0);
 		$uid = (int)Yii::app()->request->getQuery('uid',0);
 		$myuid = (int)Yii::app()->request->getQuery('myuid',0);
 		$mkstaff = (int)Yii::app()->request->getQuery('mkstaff',0);
