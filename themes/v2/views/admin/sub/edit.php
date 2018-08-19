@@ -81,30 +81,26 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
           </div>
           <div class="col-md-2"><?php echo $form->error($article, 'visit_num') ?></div>
       </div>
-      <div class="form-group">
+      
+    </div>
+    <div class="tab-pane col-md-12" id="tab_2">
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">楼盘</label>
+        <div class="col-md-4">
+            <?php echo $form->dropDownList($article, 'hid', CHtml::listData(PlotExt::model()->normal()->findAll(),'id','title'), array('class' => 'form-control', 'encode' => false,'disabled'=>'disabled')); ?>
+        </div>
+        <div class="col-md-2"><?php echo $form->error($article, 'hid') ?></div>
+    </div>
+    <div class="form-group">
           <label class="col-md-2 control-label">状态</label>
           <div class="col-md-4">
               <?php echo $form->radioButtonList($article, 'status', SubExt::$status, array('separator' => '')); ?>
           </div>
           <div class="col-md-2"><?php echo $form->error($article, 'status') ?></div>
       </div>
-    </div>
-    <div class="tab-pane col-md-12" id="tab_2">
-    <div class="form-group">
-        <label class="col-md-2 control-label">楼盘</label>
-        <div class="col-md-4">
-            <?php echo $form->dropDownList($article, 'hid', CHtml::listData(PlotExt::model()->normal()->findAll(),'id','title'), array('class' => 'form-control', 'encode' => false)); ?>
-        </div>
-        <div class="col-md-2"><?php echo $form->error($article, 'hid') ?></div>
-    </div>
-      <div class="form-group">
-        <label class="col-md-2 control-label">销售金额</label>
-        <div class="col-md-4">
-            <?php echo $form->textField($article, 'sale_price', array('class' => 'form-control')); ?>
-        </div>
-        <div class="col-md-2"><?php echo $form->error($article, 'sale_price') ?></div>
-    </div>
-    <?php foreach (['回款金额'=>'hk_price','折佣金额'=>'zy_price','佣金'=>'yj_price','定金'=>'ding_price','面积'=>'size','房号'=>'house_no','认筹金'=>'rcj'] as $key => $value) {?>
+    
+    <?php foreach (['认筹金'=>'rcj','房号'=>'house_no','面积'=>'size','合同总价'=>'sale_price','定金'=>'ding_price','折佣金额'=>'zy_price','渠道佣金'=>'yj_price','回款金额'=>'hk_price',] as $key => $value) {?>
       <div class="form-group">
         <label class="col-md-2 control-label"><?=$key?></label>
         <div class="col-md-4">
