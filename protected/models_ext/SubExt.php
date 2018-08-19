@@ -85,7 +85,9 @@ class SubExt extends Sub{
             }
             $this->code = $code;
         }
-
+        if($this->cid&&!$this->company_name) {
+            $this->company_name = $this->company->name;
+        }
         if($this->getIsNewRecord()) {
             // $res = Yii::app()->controller->sendNotice(($this->plot?$this->plot->title:'').'有新的报备，请登陆后台审核','',1);
             $this->created = $this->updated = time();

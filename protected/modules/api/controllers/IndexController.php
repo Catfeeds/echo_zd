@@ -28,7 +28,17 @@ class IndexController extends ApiController
             }
         }
         $data['topNewsImage'] = ImageTools::fixImage(SiteExt::getAttr('qjpz','ttpic'));
-        $data['topNewsList'] = explode(' ', SiteExt::getAttr('qjpz','indexmarquee'));
+        // 成交列表
+        $subs = SubExt::model()->with("user")->findAll(["condition"=>"t.status>2 and t.status<9 and t.yj_price>0",'limit'=>20,'order'=>'t.updated desc']);
+        $xxarr = [];
+        if($subs) {
+            foreach ($subs as $s) {
+                $uss = $s->user?$s->user->name:'员工';
+
+                $xxarr[] = "恭喜".$s->company_name.$uss."，成交".$s->plot_title."一套，收获佣金".$s->yj_price."元";
+            }
+        }
+        $data['topNewsList'] = array_merge(explode(' ', SiteExt::getAttr('qjpz','indexmarquee')),$xxarr);
         $data['recomLong'] = $data['recomShort'] = $data['recomYou'] = [];
         $data['title'] = Yii::app()->file->sitename;
         if($ress = RecomExt::model()->normal()->findAll('type=1')) {
@@ -295,7 +305,7 @@ class IndexController extends ApiController
                         'avatarUrl'=>ImageTools::fixImage($user->ava?$user->ava:SiteExt::getAttr('qjpz','usernopic'),200,200),
                         'image'=>ImageTools::fixImage($user->image),
                         'wx_word'=>$companyinfo?($companyinfo->name):'独立经纪人',
-                        'image'=>['key'=>$user->image,'imageURL'=>ImageTools::fixImage($user->image)],
+                        'image'=>$user->image?['key'=>$user->image,'imageURL'=>ImageTools::fixImage($user->image)]:'',
                         // 'is_true'=>$user->is_true,
                         'company_name'=>$companyinfo?$companyinfo->name:'独立经纪人',
                     ];

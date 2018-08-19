@@ -55,6 +55,17 @@ class SubController extends AdminController{
 		if(Yii::app()->request->getIsPostRequest()) {
 			$info->attributes = Yii::app()->request->getPost($modelName,[]);
 			$info->time =  is_numeric($info->time)?$info->time : strtotime($info->time);
+			// 新增操作流水
+			if(!$info->getIsNewRecord()) {
+				if(Yii::app()->db->createCommand("select status from sub where id=".$info->id)->queryScalar()!=$info->status) {
+					// 记录操作
+					$ii = new SubProExt;
+					$ii->sid = $info->id;
+					$ii->staff = Yii::app()->user->id;
+					$ii->status = $info->status;
+					$ii->save();
+				}
+			}
 			if($info->save()) {
 				$this->setMessage('操作成功','success',['list']);
 			} else {
@@ -74,9 +85,20 @@ class SubController extends AdminController{
 			}
 		foreach ($ids as $key => $id) {
 			$model = SubExt::model()->findByPk($id);
-			$model->status = $kw;
-			if(!$model->save())
-				$this->setMessage(current(current($model->getErrors())),'error');
+			if($model->status!=$kw) {
+				$model->status = $kw;
+				if(!$model->save())
+					$this->setMessage(current(current($model->getErrors())),'error');
+				else {
+					// 记录操作
+					$ii = new SubProExt;
+					$ii->sid = $id;
+					$ii->staff = Yii::app()->user->id;
+					$ii->status = $kw;
+					$ii->save();
+				}
+			}
+				
 		}
 		$this->setMessage('操作成功','success');	
 	}

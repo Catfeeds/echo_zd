@@ -363,6 +363,7 @@ class PlotController extends ApiController{
 						'status'=>$value->status,
 						'zd_company'=>$value->address,
 						'pay'=>$showPay?$value->first_pay:'暂无权限查看',
+						'yj_origin'=>$value->first_pay,
 						'sort'=>$value->sort?SiteExt::getAttr('qjpz','topword'):'',
 						'can_edit'=>$can_edit,
 						'expire'=>$this->staff&&$expire,
