@@ -274,15 +274,10 @@ class UserController extends ApiController{
 						'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
 						'thirdL'=>'案场',
 						'thirdR'=>$an_user?($an_user->name.' '.$an_user->phone):'暂无',
-						// 'userPhone'=>$value->phone,
 						'isShowCode'=>1,
-						// 'rightWord'=>'客户码',
 						'type'=>$value->status,
 						'typeWords'=>SubExt::$status[$value->status],
-						// 'staffName'=>$market_user?$market_user->name:'暂无',
-						// 'staffPhone'=>$market_user?$market_user->phone:'暂无',
 						'time'=>date("Y-m-d H:i",$value->created),
-						// 'thirdLine'=>$value->plot?$value->plot->title:'暂无',
 					];
 				}
 				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
@@ -321,18 +316,34 @@ class UserController extends ApiController{
 			// var_dump(count($subs));exit;
 			if($subs) {
 				foreach ($subs as $key => $value) {
-					$market_user = $value->user;
+					$market_user = $value->market_user;
+					$dj_user = $value->user;
 					// if()
 					$all[] = [
 						'id'=>$value->id,
-						'userName'=>$value->name,
-						'userPhone'=>$value->phone,
+						'plot_title'=>$value->plot_title,
+						'firstL'=>'客户',
+						'firstR'=>$value->name.' '.$value->phone,
+						'secondL'=>'市场',
+						'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
+						'thirdL'=>'分销',
+						'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
+						'fouthL'=>'公司',
+						'fouthR'=>$dj_user->companyinfo?($dj_user->companyinfo->name):'暂无',
 						'isShowCode'=>1,
 						'type'=>$value->status,
-						'staffName'=>$market_user?$market_user->name:'暂无',
-						'staffPhone'=>$market_user?$market_user->phone:'暂无',
-						'time'=>date("m-d H:i",$value->created),
-						'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
+						'typeWords'=>SubExt::$status[$value->status],
+						'time'=>date("Y-m-d H:i",$value->created),
+
+						// 'id'=>$value->id,
+						// 'userName'=>$value->name,
+						// 'userPhone'=>$value->phone,
+						// 'isShowCode'=>1,
+						// 'type'=>$value->status,
+						// 'staffName'=>$market_user?$market_user->name:'暂无',
+						// 'staffPhone'=>$market_user?$market_user->phone:'暂无',
+						// 'time'=>date("m-d H:i",$value->created),
+						// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 					];
 				}
 				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
@@ -370,17 +381,33 @@ class UserController extends ApiController{
 			$subs = SubExt::model()->findAll($criteria);
 			if($subs) {
 				foreach ($subs as $key => $value) {
-					$market_user = $value->user;
+					$dj_user = $value->user;
+					$an_user = $value->an_user;
 					$all[] = [
 						'id'=>$value->id,
-						'userName'=>$value->name,
-						'userPhone'=>$value->phone,
+						'plot_title'=>$value->plot_title,
+						'firstL'=>'客户',
+						'firstR'=>$value->name.' '.$value->phone,
+						'secondL'=>'案场',
+						'secondR'=>$an_user?($an_user->name.' '.$an_user->phone):'暂无',
+						'thirdL'=>'分销',
+						'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
+						'fouthL'=>'公司',
+						'fouthR'=>$dj_user->companyinfo?($dj_user->companyinfo->name):'暂无',
 						'isShowCode'=>1,
 						'type'=>$value->status,
-						'staffName'=>$market_user?$market_user->name:'暂无',
-						'staffPhone'=>$market_user?$market_user->phone:'暂无',
-						'time'=>date("m-d H:i",$value->created),
-						'thirdLine'=>$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
+						'typeWords'=>SubExt::$status[$value->status],
+						'time'=>date("Y-m-d H:i",$value->created),
+
+						// 'id'=>$value->id,
+						// 'userName'=>$value->name,
+						// 'userPhone'=>$value->phone,
+						// 'isShowCode'=>1,
+						// 'type'=>$value->status,
+						// 'staffName'=>$market_user?$market_user->name:'暂无',
+						// 'staffPhone'=>$market_user?$market_user->phone:'暂无',
+						// 'time'=>date("m-d H:i",$value->created),
+						// 'thirdLine'=>$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 					];
 				}
 				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
