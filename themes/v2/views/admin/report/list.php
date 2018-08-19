@@ -40,11 +40,11 @@ $this->breadcrumbs = array($this->pageTitle);
     </tr>
     </thead>
     <tbody>
-    <?php foreach($infos as $k=>$v): ?>
+    <?php foreach($infos as $k=>$v): $user = $v->user;?>
         <tr>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td class="text-center"><a target="_blank" href="<?=$this->createUrl('/api/index/detail',['id'=>$v->hid])?>"><?=$v->plot?$v->plot->title:''?></a></td>
-            <td class="text-center"><?=$v->user->name.'/'.$v->user->phone?></td> 
+            <td class="text-center"><?=$user?($user->name.'/'.$user->phone):''?></td> 
             <td class="text-center"><?=$v->reason?></td>
             <td class="text-center"><?=date('Y-m-d',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>
