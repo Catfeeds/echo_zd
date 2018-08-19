@@ -465,7 +465,7 @@ class PlotController extends ApiController{
 		if($news = $info->used_news) {
 			$news_num = count($news);
 			$news_time = date('Y-m-d H:i:s',$news[0]['updated']);
-			$news = Tools::u8_title_substr($news[0]['content'],200);
+			$news = Tools::u8_title_substr($news[0]['content'],188);
 		} else {
 			$news_time = $news = '';
 		}
