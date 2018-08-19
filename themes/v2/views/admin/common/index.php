@@ -119,7 +119,7 @@ $this->pageTitle = $cname.'后台欢迎您';
     </div>
 </div>
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
         <!-- Begin: life time stats -->
         <div class="portlet box red-sunglo">
             <div class="portlet-title">
@@ -190,8 +190,7 @@ $this->pageTitle = $cname.'后台欢迎您';
         </div>
         <!-- End: life time stats -->
     </div>
-    <div class="col-md-4">
-        <!-- Begin: life time stats -->
+    <div class="col-md-12" style="display: none">
         <div class="portlet box blue-steel">
             <div class="portlet-title">
                 <div class="caption">
@@ -223,29 +222,6 @@ $this->pageTitle = $cname.'后台欢迎您';
                             <a href="#overview_3" data-toggle="tab" aria-expanded="false">
                                             市场签约排行 </a>
                         </li>
-                        <!-- <li class="dropdown">
-                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                            Orders <i class="fa fa-angle-down"></i>
-                                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="#overview_4" tabindex="-1" data-toggle="tab">
-                                                    Latest 10 Orders </a>
-                                </li>
-                                <li>
-                                    <a href="#overview_4" tabindex="-1" data-toggle="tab">
-                                                    Pending Orders </a>
-                                </li>
-                                <li>
-                                    <a href="#overview_4" tabindex="-1" data-toggle="tab">
-                                                    Completed Orders </a>
-                                </li>
-                                <li>
-                                    <a href="#overview_4" tabindex="-1" data-toggle="tab">
-                                                    Rejected Orders </a>
-                                </li>
-                            </ul>
-                        </li> -->
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="overview_1">
