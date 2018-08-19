@@ -166,18 +166,18 @@ $this->pageTitle = $cname.'后台欢迎您';
                     <div class="row">
                         <div class="col-md-3 col-sm-3 col-xs-6 text-stat">
                             <span class="label label-success">
-                                            销售额: </span>
+                                            总销售额: </span>
                             <h3>￥<?=$saleNum?></h3>
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-6 text-stat">
                             <span class="label label-info">
-                                            销售面积: </span>
+                                            总销面积: </span>
                             <h3><?=$sizeNum?> ㎡</h3>
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-6 text-stat">
                             <span class="label label-danger">
-                                            已销楼盘数: </span>
-                            <h3><?=$qyNum?></h3>
+                                            总销套数: </span>
+                            <h3><?=$qyNum+$ddNum?></h3>
                         </div>
                         <!-- <div class="col-md-3 col-sm-3 col-xs-6 text-stat">
                             <span class="label label-warning">
