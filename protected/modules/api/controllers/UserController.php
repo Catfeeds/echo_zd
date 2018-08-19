@@ -264,7 +264,7 @@ class UserController extends ApiController{
 			if($subs) {
 				foreach ($subs as $key => $value) {
 					$market_user = $value->market_user;
-					$an_user = $value->an_user;
+					$an_user = $value->sale_user;
 					$all[] = [
 						'id'=>$value->id,
 						'plot_title'=>$value->plot_title,
