@@ -153,6 +153,7 @@ class UserController extends ApiController{
 	public function actionIndex($uid='',$user_type=0)
 	{
 		$data = [];
+		$is_true = 0;
 		if(!$user_type) {
 			$user = UserExt::model()->normal()->findByPk($uid);
 			if(!$user) {
@@ -165,6 +166,8 @@ class UserController extends ApiController{
 				}
 			}
 			$companyinfo = $user->companyinfo;
+			if($user->type==2&&$user->cid&&$user->status||$user->type==3&&$user->status)
+				$is_true = 1;
 			$data = [
 				'name'=>$user->name,
 				'id'=>$user->id,
@@ -174,6 +177,7 @@ class UserController extends ApiController{
 				'company'=>$companyinfo?(Tools::u8_title_substr($companyinfo->name,24).' '.$companyinfo->code):'独立经纪人',
 				'tags'=>$tagarr,
 				'tel'=>SiteExt::getAttr('qjpz','site_phone'),
+				'is_true'=>$is_true,
 			];
 		} elseif ($user_type==1) {
 			$user = StaffExt::model()->normal()->findByPk($uid);
