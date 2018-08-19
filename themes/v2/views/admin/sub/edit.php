@@ -43,11 +43,18 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
           <div class="col-md-2"><?php echo $form->error($article, 'sex') ?></div>
       </div>
       <div class="form-group">
-          <label class="col-md-2 control-label">客户联系方式</label>
+          <label class="col-md-2 control-label">报备客户号码</label>
           <div class="col-md-4">
               <?php echo $form->textField($article, 'phone', array('class' => 'form-control')); ?>
           </div>
           <div class="col-md-2"><?php echo $form->error($article, 'phone') ?></div>
+      </div>
+      <div class="form-group">
+          <label class="col-md-2 control-label">客户真实号码</label>
+          <div class="col-md-4">
+              <?php echo $form->textField($article, 'true_phone', array('class' => 'form-control')); ?>
+          </div>
+          <div class="col-md-2"><?php echo $form->error($article, 'true_phone') ?></div>
       </div>
       <div class="form-group">
           <label class="col-md-2 control-label">带看时间<span class="required" aria-required="true">*</span></label>
