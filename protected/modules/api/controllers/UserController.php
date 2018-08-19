@@ -506,7 +506,7 @@ class UserController extends ApiController{
 				$secondArr = [
 					'name'=>$u->name,
 					'phone'=>$u->phone,
-					'tag'=>'市场对接人',
+					'tag'=>'市场对接',
 					'company'=>'',
 				];
 			}
