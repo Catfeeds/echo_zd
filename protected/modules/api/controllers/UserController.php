@@ -361,7 +361,7 @@ class UserController extends ApiController{
 			$criteria->addCondition("market_uid=$uid");
 			// 搜项目、分销公司
 			// $criteria = new CDbCriteria;
-			$criteria->addCondition("company_name like '%$kw%' or plot_title like '%$kw%'");
+			$kw && $criteria->addCondition("company_name like '%$kw%' or plot_title like '%$kw%'");
 			// $criteria->order = 'updated desc';
 			// if(is_numeric($kw)) {
 			// 	$criteria->addSearchCondition('phone',$kw);
