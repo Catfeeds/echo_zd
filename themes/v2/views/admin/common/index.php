@@ -195,17 +195,17 @@ $this->pageTitle = $cname.'后台欢迎您';
         <div class="portlet box blue-steel">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-thumb-tack"></i>Overview
+                    <i class="fa fa-thumb-tack"></i> 排行榜
                 </div>
                 <div class="tools">
-                    <a href="javascript:;" class="collapse" data-original-title="" title="">
-                                    </a>
+                    <!-- <a href="javascript:;" class="collapse" data-original-title="" title="">
+                                    </a> -->
                     <a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title="">
                                     </a>
                     <a href="javascript:;" class="reload" data-original-title="" title="">
                                     </a>
-                    <a href="javascript:;" class="remove" data-original-title="" title="">
-                                    </a>
+                    <!-- <a href="javascript:;" class="remove" data-original-title="" title="">
+                                    </a> -->
                 </div>
             </div>
             <div class="portlet-body">
@@ -213,17 +213,17 @@ $this->pageTitle = $cname.'后台欢迎您';
                     <ul class="nav nav-tabs">
                         <li class="active">
                             <a href="#overview_1" data-toggle="tab" aria-expanded="true">
-                                            Top Selling </a>
+                                            部门成交排行 </a>
                         </li>
                         <li class="">
                             <a href="#overview_2" data-toggle="tab" aria-expanded="false">
-                                            Most Viewed </a>
+                                            案场成交排行 </a>
                         </li>
                         <li class="">
                             <a href="#overview_3" data-toggle="tab" aria-expanded="false">
-                                            New Customers </a>
+                                            市场签约排行 </a>
                         </li>
-                        <li class="dropdown">
+                        <!-- <li class="dropdown">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                                             Orders <i class="fa fa-angle-down"></i>
                                             </a>
@@ -245,7 +245,7 @@ $this->pageTitle = $cname.'后台欢迎您';
                                                     Rejected Orders </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> -->
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="overview_1">

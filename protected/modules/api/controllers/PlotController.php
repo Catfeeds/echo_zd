@@ -856,7 +856,11 @@ class PlotController extends ApiController{
 				$tmp['uid'] = $this->cleanXss(Yii::app()->request->getPost('uid',''));
 				!$tmp['time'] && $tmp['time'] = 0;
 				$hid = explode(',', $hid);
-
+				if($user = UserExt::model()->findByPk($tmp['uid'])) {
+					if($user->type==2&&!$user->cid) {
+						return $this->returnError('请认证后操作');
+					}
+				}
 				// $tmp['uid'] = $this->staff->id;
 
 				// if($this->staff->type<=1) {
@@ -914,6 +918,9 @@ class PlotController extends ApiController{
 				// $tmp['com_phone'] = $this->cleanXss($_POST['com_phone']);
 				$tmp['uid'] = $this->cleanXss($_GET['uid']);
 				$user = UserExt::model()->findByPk($tmp['uid']);
+				if($user->type==2&&!$user->cid) {
+					return $this->returnError('请认证后操作');
+				}
 // var_dump($plot);exit;
 				if($plot && !Yii::app()->db->createCommand("select id from cooperate where deleted=0 and uid=".$tmp['uid']." and hid=".$tmp['hid'])->queryScalar()) {
 					if($user->type!=2||!$user->cid) {

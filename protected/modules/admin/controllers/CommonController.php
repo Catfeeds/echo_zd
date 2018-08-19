@@ -38,6 +38,8 @@ class CommonController extends AdminController
         // 总销售额
         $saleNum = Yii::app()->db->createCommand("select sum(sale_price) from sub")->queryScalar();
         $sizeNum = Yii::app()->db->createCommand("select sum(size) from sub")->queryScalar();
+        // 部门成交排行
+        
         // $sizeNum = Yii::app()->db->createCommand("select count(id) from sub")->queryScalar();
         $this->render('index',['notSaleNum'=>$notSaleNum,'ddNum'=>$ddNum,'qyNum'=>$qyNum,'qyarr'=>$qyarr,'ddarr'=>$ddarr,'wsarr'=>$wsarr,'plt'=>$plt,'saleNum'=>$saleNum,'saleNum'=>$saleNum,'sizeNum'=>$sizeNum]);
     }
