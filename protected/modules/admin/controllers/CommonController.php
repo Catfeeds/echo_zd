@@ -10,7 +10,36 @@ class CommonController extends AdminController
 {
     public function actionIndex()
     {
-        $this->render('index');
+        // 所有项目总数
+        $houseNum = Yii::app()->db->createCommand("select sum(all_num) from plot")->queryScalar();
+        // 签约的总数
+        $qyNum = Yii::app()->db->createCommand("select count(id) from sub where status>=4 and status<9")->queryScalar();
+        // 大定的总数
+        $ddNum = Yii::app()->db->createCommand("select count(id) from sub where status=3")->queryScalar();
+        // 未售的总数
+        $notSaleNum = $houseNum-$qyNum-$ddNum;
+        // 所有的项目
+        $addplottitles = PlotExt::model()->findAll("all_num>0");
+        $qyarr = $ddarr = $wsarr = $plt = [];
+        if($addplottitles) {
+            foreach ($addplottitles as $key => $value) {
+                // 签约的总数
+                $iqyNum = Yii::app()->db->createCommand("select count(id) from sub where status>=4 and status<9 and hid=".$value->id)->queryScalar();
+                $qyarr[] = $iqyNum;
+                // 大定的总数
+                $iddNum = Yii::app()->db->createCommand("select count(id) from sub where status=3 and hid=".$value->id)->queryScalar();
+                $ddarr[] = $iddNum;
+                // 未售的总数
+                $inotSaleNum = $value->all_num-$iqyNum-$iddNum;
+                $wsarr[] = $inotSaleNum;
+                $plt[] = $value->title;
+            }
+        }
+        // 总销售额
+        $saleNum = Yii::app()->db->createCommand("select sum(sale_price) from sub")->queryScalar();
+        $sizeNum = Yii::app()->db->createCommand("select sum(size) from sub")->queryScalar();
+        // $sizeNum = Yii::app()->db->createCommand("select count(id) from sub")->queryScalar();
+        $this->render('index',['notSaleNum'=>$notSaleNum,'ddNum'=>$ddNum,'qyNum'=>$qyNum,'qyarr'=>$qyarr,'ddarr'=>$ddarr,'wsarr'=>$wsarr,'plt'=>$plt,'saleNum'=>$saleNum,'saleNum'=>$saleNum,'sizeNum'=>$sizeNum]);
     }
 
     /**
