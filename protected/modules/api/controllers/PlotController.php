@@ -860,6 +860,9 @@ class PlotController extends ApiController{
 					if($user->type==2&&!$user->cid) {
 						return $this->returnError('请认证后操作');
 					}
+					if(!$user->status) {
+						return $this->returnError('用户处于禁用状态，请联系客服处理');
+					}
 				}
 				// $tmp['uid'] = $this->staff->id;
 
