@@ -172,7 +172,7 @@ $this->pageTitle = $cname.'后台欢迎您';
                         <div class="col-md-3 col-sm-3 col-xs-6 text-stat">
                             <span class="label label-info">
                                             销售面积: </span>
-                            <h3><?=$sizeNum?></h3>
+                            <h3><?=$sizeNum?> ㎡</h3>
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-6 text-stat">
                             <span class="label label-danger">

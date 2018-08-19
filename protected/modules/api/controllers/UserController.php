@@ -779,4 +779,26 @@ class UserController extends ApiController{
     	$sub->sale_uid = $uid;
     	$sub->save();
 	}
+
+	public function actionAnIndex($uid='',$user_type='')
+	{
+		$user = StaffExt::model()->findByPk($uid);
+		$data = $tags = [];
+		if($ress = TagExt::model()->findAll("status=1 and cate='indextag'")) {
+            foreach ($ress as $key => $value) {
+                $tags[] = [
+                    'name'=>$value->name,
+                    'image'=>ImageTools::fixImage($value->icon),
+                    'url'=>$value->url,
+                ];
+            }
+        }
+		$data = [
+			'topArr'=>['name'=>$user->name,'tag'=>StaffExt::$is_jls[$user_type],'company'=>Yii::app()->file->sitename],
+			'topNewsList'=>explode(' ', SiteExt::getAttr('qjpz','indexmarquee')),
+			'todayList'=>[['num'=>100,'text'=>'报备'],['num'=>100,'text'=>'到访'],['num'=>100,'text'=>'大定'],['num'=>100,'text'=>'签约'],],
+			'tags'=>$tags,
+		];
+		$this->frame['data'] = $data;
+	}
 }
