@@ -56,6 +56,9 @@ class StaffExt extends Staff{
     }
 
     public function beforeValidate() {
+        if(!$this->name_phone) {
+            $this->name_phone = $this->name.$this->phone;
+        }
         if($this->getIsNewRecord())
             $this->created = $this->updated = time();
         else
