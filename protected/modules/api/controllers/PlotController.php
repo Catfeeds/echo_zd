@@ -168,7 +168,7 @@ class PlotController extends ApiController{
 			// 市场看对接人库 案场销售看分配的项目sub 案场助理看plot_an
 			$mkids = [];
 			if($user_type==1) {
-				$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where uid=".$staffuid)->queryAll();
+				$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where type=1 and uid=".$staffuid)->queryAll();
 			} elseif ($user_type==2) {
 				$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_makert_user where uid=".$staffuid)->queryAll();
 			} else {

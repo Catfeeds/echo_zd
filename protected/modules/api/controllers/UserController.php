@@ -316,7 +316,7 @@ class UserController extends ApiController{
 		} elseif ($user_type==1) {
 			$mkids = [];
 
-			$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where uid=".$uid)->queryAll();
+			$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where type=1 and uid=".$uid)->queryAll();
 			if($idrr) {
 				foreach ($idrr as $mkid) {
 					$mkids[] = $mkid['hid'];
