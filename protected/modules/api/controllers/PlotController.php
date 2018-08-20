@@ -39,8 +39,9 @@ class PlotController extends ApiController{
 		$is_login = Yii::app()->request->getQuery('is_login',0);
 		$uid = (int)Yii::app()->request->getQuery('uid',0);
 		$myuid = (int)Yii::app()->request->getQuery('myuid',0);
-		$mkstaff = (int)Yii::app()->request->getQuery('mkstaff',0);
-		$anstaff = (int)Yii::app()->request->getQuery('anstaff',0);
+		$staffuid = (int)Yii::app()->request->getQuery('staffuid',0);
+		$user_type = (int)Yii::app()->request->getQuery('user_type',0);
+		// $anstaff = (int)Yii::app()->request->getQuery('anstaff',0);
 		$status = Yii::app()->request->getQuery('status','');
 		$map_lat = Yii::app()->request->getQuery('map_lat','');
 		$map_lng = Yii::app()->request->getQuery('map_lng','');
@@ -163,19 +164,17 @@ class PlotController extends ApiController{
 			$criteria->addCondition('price<=:maxprice');
 			$criteria->params[':maxprice'] = $maxprice;
 		}
-		if($mkstaff) {
+		if($staffuid&&$user_type) {
+			// 市场看对接人库 案场销售看分配的项目sub 案场助理看plot_an
 			$mkids = [];
-			$idrr = Yii::app()->db->createCommand("select hid from plot_makert_user where uid=".$mkstaff)->queryAll();
-			if($idrr) {
-				foreach ($idrr as $mkid) {
-					$mkids[] = $mkid['hid'];
-				}
+			if($user_type==1) {
+				$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where uid=".$staffuid)->queryAll();
+			} elseif ($user_type==2) {
+				$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_makert_user where uid=".$staffuid)->queryAll();
+			} else {
+				$idrr = Yii::app()->db->createCommand("select distinct(hid) from sub where an_uid=".$staffuid)->queryAll();
 			}
-			$criteria->addInCondition('id',$mkids);
-		}
-		if($anstaff) {
-			$mkids = [];
-			$idrr = Yii::app()->db->createCommand("select hid from plot_an where uid=".$anstaff)->queryAll();
+			
 			if($idrr) {
 				foreach ($idrr as $mkid) {
 					$mkids[] = $mkid['hid'];
