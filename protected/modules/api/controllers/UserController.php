@@ -314,7 +314,15 @@ class UserController extends ApiController{
 				}
 			}
 		} elseif ($user_type==1) {
-			$criteria->addCondition("an_uid=$uid or sale_uid=$uid");
+			$mkids = [];
+
+			$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where uid=".$uid)->queryAll();
+			if($idrr) {
+				foreach ($idrr as $mkid) {
+					$mkids[] = $mkid['hid'];
+				}
+			}
+			$criteria->addInCondition("hid",$mkids);
 			// 搜项目和客户电话
 			// $criteria = new CDbCriteria;
 			// $criteria->addCondition("uid=$uid");
@@ -379,8 +387,16 @@ class UserController extends ApiController{
 					}
 				}
 			} 
-		} else {
-			$criteria->addCondition("market_uid=$uid");
+		} elseif($user_type==2) {
+			$mkids = [];
+
+			$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_makert_user where uid=".$uid)->queryAll();
+			if($idrr) {
+				foreach ($idrr as $mkid) {
+					$mkids[] = $mkid['hid'];
+				}
+			}
+			$criteria->addInCondition("hid",$mkids);
 			// 搜项目、分销公司
 			// $criteria = new CDbCriteria;
 			$kw && $criteria->addCondition("company_name like '%$kw%' or plot_title like '%$kw%'");
@@ -443,6 +459,72 @@ class UserController extends ApiController{
 					}
 				}
 			}
+		} else {
+			$criteria->addCondition("an_uid=$uid");
+			// 搜项目和客户电话
+			// $criteria = new CDbCriteria;
+			// $criteria->addCondition("uid=$uid");
+			// $criteria->order = 'updated desc';
+			if(is_numeric($kw)) {
+				$criteria->addSearchCondition('phone',$kw);
+			} elseif($kw) {
+				$ids = [];
+				$cre = new CDbCriteria;
+				$cre->addSearchCondition('title',$kw);
+				$ress = PlotExt::model()->findAll($cre);
+				if($ress) {
+					foreach ($ress as $key => $value) {
+						$ids[] = $value->id;
+					}
+				}
+				$criteria->addInCondition('hid',$ids);
+			}
+			// var_dump($criteria);exit;
+			$subs = SubExt::model()->findAll($criteria);
+			// var_dump(count($subs));exit;
+			if($subs) {
+				foreach ($subs as $key => $value) {
+					$market_user = $value->market_user;
+					$dj_user = $value->user;
+					// if()
+					$all[] = [
+						'id'=>$value->id,
+						'plot_title'=>$value->plot_title,
+						'firstL'=>'客户',
+						'firstR'=>$value->name.' '.$value->phone,
+						'secondL'=>'市场',
+						'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
+						'thirdL'=>'分销',
+						'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
+						'fouthL'=>'公司',
+						'fouthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
+						'isShowCode'=>1,
+						'type'=>$value->status,
+						'typeWords'=>SubExt::$status[$value->status],
+						'time'=>date("Y-m-d H:i",$value->created),
+
+						// 'id'=>$value->id,
+						// 'userName'=>$value->name,
+						// 'userPhone'=>$value->phone,
+						// 'isShowCode'=>1,
+						// 'type'=>$value->status,
+						// 'staffName'=>$market_user?$market_user->name:'暂无',
+						// 'staffPhone'=>$market_user?$market_user->phone:'暂无',
+						// 'time'=>date("m-d H:i",$value->created),
+						// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
+					];
+				}
+				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
+				if($all) {
+					foreach (SubExt::$status as $key => $value) {
+						$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
+					}
+					foreach ($all as $key => $value) {
+						$data[$value['type']+1]['num']++;
+						$data[$value['type']+1]['list'][] = $value;
+					}
+				}
+			} 
 		}
 		$this->frame['data'] = $data;
 
