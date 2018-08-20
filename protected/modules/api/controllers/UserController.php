@@ -195,13 +195,13 @@ class UserController extends ApiController{
 				'name'=>$user->name,
 				'id'=>$user->id,
 				'type'=>$user_type,
-				'typename'=>'案场',
+				'typename'=>'案场助理',
 				'wx_word'=>Yii::app()->file->sitename,
 				// 'company'=>$companyinfo?(Tools::u8_title_substr($companyinfo->name,24).' '.$companyinfo->code):'独立经纪人',
 				'tags'=>$tagarr,
 				'tel'=>SiteExt::getAttr('qjpz','site_phone'),
 			];
-		} else {
+		} elseif($user_type==2) {
 			$user = StaffExt::model()->normal()->findByPk($uid);
 			if(!$user) {
 				return $this->returnError('用户不存在或禁用');
@@ -217,7 +217,29 @@ class UserController extends ApiController{
 				'name'=>$user->name,
 				'id'=>$user->id,
 				'type'=>$user_type,
-				'typename'=>'市场',
+				'typename'=>'市场专员',
+				'wx_word'=>Yii::app()->file->sitename,
+				// 'company'=>$companyinfo?(Tools::u8_title_substr($companyinfo->name,24).' '.$companyinfo->code):'独立经纪人',
+				'tags'=>$tagarr,
+				'tel'=>SiteExt::getAttr('qjpz','site_phone'),
+			];
+		} else {
+			$user = StaffExt::model()->normal()->findByPk($uid);
+			if(!$user) {
+				return $this->returnError('用户不存在或禁用');
+			}
+			$tagarr = [];
+			if($tags = TagExt::model()->findAll("status=1 and cate='anxs'")) {
+				foreach ($tags as $key => $value) {
+					$tagarr[] = ['name'=>$value->name,'image'=>ImageTools::fixImage($value->icon),'url'=>$value->url];
+				}
+			}
+			// $companyinfo = $user->companyinfo;
+			$data = [
+				'name'=>$user->name,
+				'id'=>$user->id,
+				'type'=>$user_type,
+				'typename'=>'案场销售',
 				'wx_word'=>Yii::app()->file->sitename,
 				// 'company'=>$companyinfo?(Tools::u8_title_substr($companyinfo->name,24).' '.$companyinfo->code):'独立经纪人',
 				'tags'=>$tagarr,
