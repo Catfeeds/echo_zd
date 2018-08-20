@@ -888,7 +888,8 @@ class UserController extends ApiController{
 	{
 		$user = StaffExt::model()->findByPk($uid);
 		$data = $tags = [];
-		if($ress = TagExt::model()->findAll("status=1 and cate='indextag'")) {
+		$tacs = $user_type==1?'anindex':($user_type==2?'scindex':'anxsindex');
+		if($ress = TagExt::model()->findAll("status=1 and cate='$tacs'")) {
             foreach ($ress as $key => $value) {
                 $tags[] = [
                     'name'=>$value->name,
