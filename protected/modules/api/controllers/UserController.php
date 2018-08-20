@@ -898,12 +898,103 @@ class UserController extends ApiController{
                 ];
             }
         }
+        $todarr = [
+        	'报备'=>0,
+        	'到访'=>0,
+        	'大定'=>0,
+        	'签约'=>0,
+        ];
+        $cres = new CDbCriteria;
+        $tobe = TimeTools::getDayBeginTime(time());
+        // var_dump($tobe);
+        $cres->addCondition("updated>$tobe");
+        if($user_type==1) {
+        	$ans = [];
+        	// 案场助理
+        	$zgbms = StaffDepartmentExt::model()->findAll("is_major=1 and uid=$uid");
+        	// 如果是主管 递归找出所有子部门的所有成员的案场绑定项目
+        	if($zgbms) {
+        		$des = [];
+        		foreach ($zgbms as $ms) {
+        			// var_dump($ms->did);
+        			$dids = $this->getChild($ms->did);
+        			// var_dump($dids);exit;
+        			$criteria = new CDbCriteria;
+        			$criteria->addInCondition('did',$dids);
+        			$mems = StaffDepartmentExt::model()->findAll($criteria);
+        			if($mems) {
+        				foreach ($mems as $mem) {
+	        				if(!in_array($mem->uid, $des)) {
+	        					$ans[] = $mem->uid;
+	        				}
+        				}
+        				// if($des) {
+        				// 	$cre = new CDbCriteria;
+        				// 	$cre->addInCondition('uid',$des);
+        				// 	$cre->addCondition("type=1");
+        				// 	$plotans = PlotAnExt::model()->findAll($cre);
+        				// 	if($plotans) {
+        				// 		foreach ($plotans as $pa) {
+        				// 			$hids[] = $pa->hid;
+        				// 		}
+        				// 	}
+        				// }
+        			}
+        			// var_dump($ans);exit;
+        		}
+        		
+        		$cres->addInCondition("an_uid",$ans);
+        	} else {
+        		// $cres = new CDbCriteria;
+        		$cres->addCondition("an_uid=$uid");
+        	}
+        	// $cres = new CDbCriteria;
+        	// $cres->addInCondition("hid",$hids);
+        	
+        } elseif ($user_type==2) {
+        	# code...
+        } else {
+
+        }
+        $subs = SubExt::model()->findAll($cres);
+    	if($subs) {
+    		foreach ($subs as $s) {
+    			// var_dump($s->id);
+    			if($s->status==0) {
+    				$todarr['报备'] += 1;
+    			} elseif ($s->status==1) {
+    				$todarr['到访'] += 1;
+    			} elseif ($s->status==3) {
+    				$todarr['大定'] += 1;
+    			} elseif ($s->status==4) {
+    				$todarr['签约'] += 1;
+    			}
+    		}
+    	}
+        $todayList = [];
+        foreach ($todarr as $key => $value) {
+        	$todayList[] = ['num'=>$value,'text'=>$key];
+        }
 		$data = [
 			'topArr'=>['name'=>$user->name,'tag'=>StaffExt::$is_jls[$user_type],'company'=>Yii::app()->file->sitename],
 			'topNewsList'=>explode(' ', SiteExt::getAttr('qjpz','indexmarquee')),
-			'todayList'=>[['num'=>100,'text'=>'报备'],['num'=>100,'text'=>'到访'],['num'=>100,'text'=>'大定'],['num'=>100,'text'=>'签约'],],
+			'todayList'=>$todayList,
 			'tags'=>$tags,
 		];
 		$this->frame['data'] = $data;
+	}
+
+	public function getChild($obj)
+	{
+		$ids = [];
+		if($dds = DepartmentExt::model()->findAll("parent=".$obj)) {
+			foreach ($dds as $key => $value) {
+				$ids[] = $value->id;
+				if($res = $this->getChild($value->id)) {
+					$ids = array_merge($res,$ids);
+				}
+			}
+		}
+		return $ids;
 	}
 }
