@@ -887,7 +887,13 @@ class UserController extends ApiController{
     	}
     	$sub->status = 1;
     	$sub->an_uid = $uid;
-    	$sub->save();
+    	if($sub->save()) {
+    		$obj = new SubProExt;
+    		$obj->sid = $sid;
+    		$obj->staff = $uid;
+    		$obj->status = $sub->status;
+    		$obj->save();
+    	}
     	
 
 	}
