@@ -155,9 +155,25 @@ class UserController extends ApiController{
 		$data = [];
 		$is_true = 0;
 		if(!$user_type) {
-			$user = UserExt::model()->normal()->findByPk($uid);
+			$user = UserExt::model()->findByPk($uid);
 			if(!$user) {
 				return $this->returnError('用户不存在或禁用');
+			}
+			$companyinfo = $user->companyinfo;
+			if($user->status==0) {
+				$data = [
+					'name'=>$user->name,
+					'id'=>$user->id,
+					'type'=>$user->type,
+					'typename'=>$user->type==2?'分销':($user->type==3?'独立经纪人':'总代'),
+					'wx_word'=>'用户正在审核中',
+					'company'=>$companyinfo?(Tools::u8_title_substr($companyinfo->name,24).' '.$companyinfo->code):'独立经纪人',
+					'tags'=>[],
+					'tel'=>SiteExt::getAttr('qjpz','site_phone'),
+					'is_true'=>$is_true,
+				];
+				$this->frame['data'] = $data;
+				return $this->returnError('用户正在审核中');
 			}
 			$tagarr = [];
 			if($tags = TagExt::model()->findAll("status=1 and cate='fxmy'")) {
@@ -165,7 +181,7 @@ class UserController extends ApiController{
 					$tagarr[] = ['name'=>$value->name,'image'=>ImageTools::fixImage($value->icon),'url'=>$value->url];
 				}
 			}
-			$companyinfo = $user->companyinfo;
+			
 			if($user->type==2&&$user->cid&&$user->status||$user->type==3&&$user->status)
 				$is_true = 1;
 			$data = [
