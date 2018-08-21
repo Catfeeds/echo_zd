@@ -763,7 +763,7 @@ class UserController extends ApiController{
 		}
 	}
 
-	public function actionCheckPwd($kw='',$pwd='')
+	public function actionCheckPwd($kw='',$pwd='',$openid='')
 	{
 		if(!$kw||!$pwd)
 			return $this->returnError('参数错误');
@@ -774,6 +774,10 @@ class UserController extends ApiController{
 		}
 		if($user) {
 			if($user->password==$pwd) {
+				if(!$user->openid) {
+					$user->openid = $openid;
+					$user->save();
+				}
 				$this->frame['data'] = ['uid'=>$user->id,'type'=>$user->is_jl?$user->is_jl:1];
 			} else {
 				$this->returnError('用户名或密码错误');

@@ -2661,6 +2661,7 @@ class PlotController extends ApiController{
     		return $this->returnError('参数错误');
     	}
     	$plot = $sub->plot;
+    	// var_dump($sub->plot);exit;
     	$sales = Yii::app()->db->createCommand("select distinct s.id,s.name,s.phone from staff s left join plot_an a on a.uid=s.id where s.status=1 and a.type=2 and a.hid=".$plot->id)->queryAll();
     	if($sales) {
     		foreach ($sales as $key => $value) {
