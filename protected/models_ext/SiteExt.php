@@ -57,6 +57,7 @@ class SiteExt extends Site{
         'bottomWords'=>'',
         'sitename'=>'',
         'confirmNote'=>'',
+        'isAllPhone'=>'',
         // 'sitename'=>'',
     ];
     public static $cateName = [
@@ -76,6 +77,7 @@ class SiteExt extends Site{
             'sitePwd'=>['type'=>'pwd','name'=>'登录密码'],
             'openDl'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启独立经纪人'],
             'openSfz'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启身份证验证'],
+            'isAllPhone'=>['type'=>'radio','list'=>['否','是'],'name'=>'只支持全号报备'],
             'codenote'=>['type'=>'text','name'=>'绑定门店码备注'],
             'bottomLogo'=>['type'=>'image','max'=>1,'name'=>'页面底部logo'],
             'bottomWords'=>['type'=>'text','name'=>'页面底部文案'],

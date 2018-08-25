@@ -576,7 +576,7 @@ class UserController extends ApiController{
 			'id'=>$id,
 			'name'=>$sub->name,
 			'phone'=>$sub->phone,
-			'time'=>date('Y-m-d H:i',$sub->time),
+			'time'=>date('Y-m-d H:i',$sub->created),
 			'status'=>SubExt::$status[$sub->status],
 			'plot'=>$sub->plot_title,
 			'code'=>$sub->code,
@@ -709,7 +709,7 @@ class UserController extends ApiController{
 
 	public function actionGetSubTag()
 	{
-		$this->frame['data'] = SubExt::$status;
+		$this->frame['data'] = ['tagArr'=>SubExt::$status,'textArr'=>['2'=>[['text'=>'认筹金','placeholder'=>'请输入认筹金','param'=>'rcj','type'=>1,'typeArr'=>[]]],'3'=>[['text'=>'房号','placeholder'=>'请输入房号','param'=>'house_no','type'=>1,'typeArr'=>[]],['text'=>'面积','placeholder'=>'请输入面积','param'=>'size','type'=>1,'typeArr'=>[]],['text'=>'合同总价','placeholder'=>'请输入合同总价','param'=>'sale_price','type'=>1,'typeArr'=>[]],['text'=>'定金','placeholder'=>'请输入定金','param'=>'ding_price','type'=>1,'typeArr'=>[]],['text'=>'折佣金额','placeholder'=>'请输入折佣金额','param'=>'zy_price','type'=>1,'typeArr'=>[]],['text'=>'渠道佣金','placeholder'=>'请输入渠道佣金','param'=>'yj_price','type'=>1,'typeArr'=>[]],['text'=>'回款金额','placeholder'=>'请输入回款金额','param'=>'hk_price','type'=>1,'typeArr'=>[]],['text'=>'签约时间','placeholder'=>'请输入签约时间','param'=>'qy_time','type'=>2,'typeArr'=>[]]],'4'=>[['text'=>'付款方式','placeholder'=>'请选择付款方式','param'=>'fk_type','type'=>3,'typeArr'=>CHtml::listData(TagExt::model()->findAll("cate='pricetype'"),'id','name')]]]];
 	}
 
 	public function actionGetSubPrice($sid='')
@@ -867,7 +867,7 @@ class UserController extends ApiController{
 		}
 	}
 
-	public function actionSetCome($sid='',$uid='')
+	public function actionSetCome($sid='',$uid='',$user_type='')
 	{
 		$data = 0;
     	$sub = SubExt::model()->findByPk($sid);
@@ -886,7 +886,11 @@ class UserController extends ApiController{
     		return $this->returnError('客户已到访，请勿重复确认');
     	}
     	$sub->status = 1;
-    	$sub->an_uid = $uid;
+    	if($user_type==1)
+    		$sub->an_uid = $uid;
+    	elseif ($user_type==3) {
+    		$sub->sale_uid = $uid;
+    	}
     	if($sub->save()) {
     		$obj = new SubProExt;
     		$obj->sid = $sid;
@@ -983,6 +987,7 @@ class UserController extends ApiController{
 
         }
         $subs = SubExt::model()->findAll($cres);
+        // var_dump(count($subs));exit;
     	if($subs) {
     		foreach ($subs as $s) {
     			// var_dump($s->id);

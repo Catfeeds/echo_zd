@@ -1033,4 +1033,9 @@ class IndexController extends ApiController
         ];
     }
 
+    public function actionGetPhoneType()
+    {
+       $this->frame['data'] = SiteExt::getAttr('qjpz','isAllPhone');
+    }
+
 }
