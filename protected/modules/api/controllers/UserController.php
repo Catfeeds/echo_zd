@@ -688,7 +688,16 @@ class UserController extends ApiController{
 			$data['status'] = Yii::app()->request->getPost('status',9);
 			$data['uid'] = Yii::app()->request->getPost('uid',0);
 			$data['staff'] = Yii::app()->request->getPost('staff',0);
-			$sale_price = Yii::app()->request->getPost('price',0);
+			$tmp['rcj'] = Yii::app()->request->getPost('rcj','');
+			$tmp['house_no'] = Yii::app()->request->getPost('house_no','');
+			$tmp['size'] = Yii::app()->request->getPost('size','');
+			$tmp['sale_price'] = Yii::app()->request->getPost('sale_price','');
+			$tmp['ding_price'] = Yii::app()->request->getPost('ding_price','');
+			$tmp['zy_price'] = Yii::app()->request->getPost('zy_price','');
+			$tmp['yj_price'] = Yii::app()->request->getPost('yj_price','');
+			$tmp['hk_price'] = Yii::app()->request->getPost('hk_price','');
+			$tmp['qy_time'] = Yii::app()->request->getPost('qy_time','');
+			$tmp['fk_type'] = Yii::app()->request->getPost('fk_type','');
 			if($data['sid']) {
 				$obj = new SubProExt;
 				$obj->attributes = $data;
@@ -699,7 +708,10 @@ class UserController extends ApiController{
 					$sub = $obj->sub;
 					if($obj->status!=9) {
 						$sub->status = $obj->status;
-						$sub->sale_price = $sale_price;
+						foreach ($tmp as $key => $value) {
+							$sub->$key = $value;
+						}
+						// $sub->sale_price = $sale_price;
 						$sub->save();
 					}
 				}
@@ -707,9 +719,13 @@ class UserController extends ApiController{
 		}
 	}
 
-	public function actionGetSubTag()
+	public function actionGetSubTag($sid='')
 	{
-		$this->frame['data'] = ['tagArr'=>SubExt::$status,'textArr'=>['2'=>[['text'=>'认筹金','placeholder'=>'请输入认筹金','param'=>'rcj','type'=>1,'typeArr'=>[]]],'3'=>[['text'=>'房号','placeholder'=>'请输入房号','param'=>'house_no','type'=>1,'typeArr'=>[]],['text'=>'面积','placeholder'=>'请输入面积','param'=>'size','type'=>1,'typeArr'=>[]],['text'=>'合同总价','placeholder'=>'请输入合同总价','param'=>'sale_price','type'=>1,'typeArr'=>[]],['text'=>'定金','placeholder'=>'请输入定金','param'=>'ding_price','type'=>1,'typeArr'=>[]],['text'=>'折佣金额','placeholder'=>'请输入折佣金额','param'=>'zy_price','type'=>1,'typeArr'=>[]],['text'=>'渠道佣金','placeholder'=>'请输入渠道佣金','param'=>'yj_price','type'=>1,'typeArr'=>[]],['text'=>'回款金额','placeholder'=>'请输入回款金额','param'=>'hk_price','type'=>1,'typeArr'=>[]],['text'=>'签约时间','placeholder'=>'请输入签约时间','param'=>'qy_time','type'=>2,'typeArr'=>[]]],'4'=>[['text'=>'付款方式','placeholder'=>'请选择付款方式','param'=>'fk_type','type'=>3,'typeArr'=>CHtml::listData(TagExt::model()->findAll("cate='pricetype'"),'id','name')]]]];
+		$sub = SubExt::model()->findByPk($sid);
+		if(!$sub) {
+			return $this->returnError('参数错误');
+		}
+		$this->frame['data'] = ['tagArr'=>SubExt::$status,'textArr'=>['2'=>[['text'=>'认筹金','value'=>$sub->rcj,'placeholder'=>'请输入认筹金','param'=>'rcj','type'=>1,'typeArr'=>[]]],'3'=>[['text'=>'房号','value'=>$sub->house_no,'placeholder'=>'请输入房号','param'=>'house_no','type'=>1,'typeArr'=>[]],['text'=>'面积','value'=>$sub->size,'placeholder'=>'请输入面积','param'=>'size','type'=>1,'typeArr'=>[]],['text'=>'合同总价','value'=>$sub->sale_price,'placeholder'=>'请输入合同总价','param'=>'sale_price','type'=>1,'typeArr'=>[]],['text'=>'定金','value'=>$sub->ding_price,'placeholder'=>'请输入定金','param'=>'ding_price','type'=>1,'typeArr'=>[]],['text'=>'折佣金额','value'=>$sub->zy_price,'placeholder'=>'请输入折佣金额','param'=>'zy_price','type'=>1,'typeArr'=>[]],['text'=>'渠道佣金','value'=>$sub->yj_price,'placeholder'=>'请输入渠道佣金','param'=>'yj_price','type'=>1,'typeArr'=>[]],['text'=>'回款金额','value'=>$sub->hk_price,'placeholder'=>'请输入回款金额','param'=>'hk_price','type'=>1,'typeArr'=>[]],['text'=>'签约时间','value'=>date('Y-m-d H:i:s',$sub->qy_time),'placeholder'=>'请输入签约时间','param'=>'qy_time','type'=>2,'typeArr'=>[]]],'4'=>[['text'=>'付款方式','value'=>$sub->fk_type,'placeholder'=>'请选择付款方式','param'=>'fk_type','type'=>3,'typeArr'=>CHtml::listData(TagExt::model()->findAll("cate='pricetype'"),'id','name')]]]];
 	}
 
 	public function actionGetSubPrice($sid='')
