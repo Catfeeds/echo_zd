@@ -567,7 +567,7 @@ class UserController extends ApiController{
 		if($sub->qr) {
 			$image = $sub->qr;
 		} else {
-			QRcode::png($id, $filename, $errorCorrectionLevel, $matrixPointSize, 2); 
+			QRcode::png(['id'=>$id,'name'=>$sub->name], $filename, $errorCorrectionLevel, $matrixPointSize, 2); 
 			$image = $sub->qr = $filename;
 			$sub->save();
 		}
