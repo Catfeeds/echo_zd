@@ -189,7 +189,7 @@ class UserController extends ApiController{
 				'id'=>$user->id,
 				'type'=>$user->type,
 				'typename'=>$user->type==2?'分销':($user->type==3?'独立经纪人':'总代'),
-				'wx_word'=>$companyinfo?$companyinfo->name:'独立经纪人',
+				'wx_word'=>$user->type==2&&!$companyinfo?'未加入任何公司':($companyinfo?$companyinfo->name:'独立经纪人'),
 				'company'=>$companyinfo?(Tools::u8_title_substr($companyinfo->name,24).' '.$companyinfo->code):'独立经纪人',
 				'tags'=>$tagarr,
 				'tel'=>SiteExt::getAttr('qjpz','site_phone'),
@@ -281,18 +281,34 @@ class UserController extends ApiController{
 		// 都是搜索手机+客户姓名+楼盘名
 		// 案场助理看关联的所有项目的报备
 		// 案场销售看分配给自己的报备
-		if($kw)
-			if(is_numeric($kw)) {
-				$criteria->addSearchCondition('phone',$kw);
-			} else {
-				$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%'");
-			}
+		
 		if($hid) {
 			$criteria->addCondition("hid=$hid");
 		}
 		$criteria->order = 'updated desc';
 		if($user_type==0) {
-			$criteria->addCondition("uid=$uid");
+			// 搜索条件
+			if($kw)
+			if(is_numeric($kw)) {
+				$criteria->addSearchCondition('phone',$kw);
+			} else {
+				$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%'");
+			}
+
+			$tmp = [];
+			$is_major = 0;
+			$company = $user->companyinfo;
+			if($company && $user->phone==$company->phone) {
+				$is_major = 1;
+				$uidss = $company->users;
+				foreach ($uidss as $us) {
+					$tmp[] = $us['id'];
+				}
+				$criteria->addInCondition("uid",$tmp);
+			} else {
+				$criteria->addCondition("uid=$uid");
+			}
+			
 			// 搜项目和客户电话
 			// $criteria = new CDbCriteria;
 			// $criteria->addCondition("uid=$uid");
@@ -303,7 +319,7 @@ class UserController extends ApiController{
 				foreach ($subs as $key => $value) {
 					$market_user = $value->market_user;
 					$an_user = $value->sale_user;
-					$all[] = [
+					$tmpp = [
 						'id'=>$value->id,
 						'plot_title'=>$value->plot_title,
 						'firstL'=>'客户',
@@ -317,7 +333,18 @@ class UserController extends ApiController{
 						'typeWords'=>SubExt::$status[$value->status],
 						'time'=>date("Y-m-d H:i",$value->created),
 					];
+					if($is_major) {
+						$user = $value->user;
+						$tmpp['fouthL'] = '分销';
+						$tmpp['fouthR'] = $user?($user->name.' '.$user->phone):'暂无';
+						// array_merge($all,[
+						// 	'fouthL'=>'分销',
+						// 	'fouthR'=>$user?($user->name.' '.$user->phone):'暂无',
+						// ]);
+					}
+					$all[] = $tmpp;
 				}
+				// var_dump($all);exit;
 				$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
 				if($all) {
 					foreach (SubExt::$status as $key => $value) {
@@ -330,6 +357,13 @@ class UserController extends ApiController{
 				}
 			}
 		} elseif ($user_type==1) {
+			// 搜索条件
+			if($kw)
+			if(is_numeric($kw)) {
+				$criteria->addSearchCondition('phone',$kw);
+			} else {
+				$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%' or company_name like '%$kw%'");
+			}
 			$mkids = [];
 
 			$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where type=1 and uid=".$uid)->queryAll();
@@ -343,20 +377,20 @@ class UserController extends ApiController{
 			// $criteria = new CDbCriteria;
 			// $criteria->addCondition("uid=$uid");
 			// $criteria->order = 'updated desc';
-			if(is_numeric($kw)) {
-				$criteria->addSearchCondition('phone',$kw);
-			} elseif($kw) {
-				$ids = [];
-				$cre = new CDbCriteria;
-				$cre->addSearchCondition('title',$kw);
-				$ress = PlotExt::model()->findAll($cre);
-				if($ress) {
-					foreach ($ress as $key => $value) {
-						$ids[] = $value->id;
-					}
-				}
-				$criteria->addInCondition('hid',$ids);
-			}
+			// if(is_numeric($kw)) {
+			// 	$criteria->addSearchCondition('phone',$kw);
+			// } elseif($kw) {
+			// 	$ids = [];
+			// 	$cre = new CDbCriteria;
+			// 	$cre->addSearchCondition('title',$kw);
+			// 	$ress = PlotExt::model()->findAll($cre);
+			// 	if($ress) {
+			// 		foreach ($ress as $key => $value) {
+			// 			$ids[] = $value->id;
+			// 		}
+			// 	}
+			// 	$criteria->addInCondition('hid',$ids);
+			// }
 			// var_dump($criteria);exit;
 			$subs = SubExt::model()->findAll($criteria);
 			// var_dump(count($subs));exit;
@@ -404,6 +438,13 @@ class UserController extends ApiController{
 				}
 			} 
 		} elseif($user_type==2) {
+			// 搜索条件
+			if($kw)
+			if(is_numeric($kw)) {
+				$criteria->addSearchCondition('phone',$kw);
+			} else {
+				$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%' or company_name like '%$kw%'");
+			}
 			$mkids = [];
 
 			$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_makert_user where uid=".$uid)->queryAll();
@@ -415,7 +456,7 @@ class UserController extends ApiController{
 			$criteria->addInCondition("hid",$mkids);
 			// 搜项目、分销公司
 			// $criteria = new CDbCriteria;
-			$kw && $criteria->addCondition("company_name like '%$kw%' or plot_title like '%$kw%'");
+			// $kw && $criteria->addCondition("company_name like '%$kw%'",'OR');
 			// $criteria->order = 'updated desc';
 			// if(is_numeric($kw)) {
 			// 	$criteria->addSearchCondition('phone',$kw);
@@ -476,7 +517,7 @@ class UserController extends ApiController{
 				}
 			}
 		} else {
-			$criteria->addCondition("an_uid=$uid");
+			$criteria->addCondition("sale_uid=$uid");
 			// 搜项目和客户电话
 			// $criteria = new CDbCriteria;
 			// $criteria->addCondition("uid=$uid");
@@ -955,7 +996,7 @@ class UserController extends ApiController{
         // var_dump($tobe);
         $cres->addCondition("updated>$tobe");
         if($user_type==1) {
-        	$ans = [];
+        	$ans = [$uid];
         	// 案场助理
         	$zgbms = StaffDepartmentExt::model()->findAll("is_major=1 and uid=$uid");
         	// 如果是主管 递归找出所有子部门的所有成员的案场绑定项目
@@ -998,9 +1039,87 @@ class UserController extends ApiController{
         	// $cres->addInCondition("hid",$hids);
         	
         } elseif ($user_type==2) {
-        	# code...
+        	// 市场
+        	$ans = [$uid];
+        	// 案场助理
+        	$zgbms = StaffDepartmentExt::model()->findAll("is_major=1 and uid=$uid");
+        	// var_dump($zgbms);exit;
+        	// 如果是主管 递归找出所有子部门的所有成员的案场绑定项目
+        	if($zgbms) {
+        		$des = [];
+        		foreach ($zgbms as $ms) {
+        			// var_dump($ms->did);
+        			$dids = $this->getChild($ms->did);
+        			// var_dump($dids);exit;
+        			$criteria = new CDbCriteria;
+        			$criteria->addInCondition('did',$dids);
+        			$mems = StaffDepartmentExt::model()->findAll($criteria);
+        			if($mems) {
+        				foreach ($mems as $mem) {
+	        				if(!in_array($mem->uid, $des)) {
+	        					$ans[] = $mem->uid;
+	        				}
+        				}
+        				// if($des) {
+        				// 	$cre = new CDbCriteria;
+        				// 	$cre->addInCondition('uid',$des);
+        				// 	$cre->addCondition("type=1");
+        				// 	$plotans = PlotAnExt::model()->findAll($cre);
+        				// 	if($plotans) {
+        				// 		foreach ($plotans as $pa) {
+        				// 			$hids[] = $pa->hid;
+        				// 		}
+        				// 	}
+        				// }
+        			}
+        			// var_dump($ans);exit;
+        		}
+        		
+        		$cres->addInCondition("market_uid",$ans);
+        	} else {
+        		// $cres = new CDbCriteria;
+        		$cres->addCondition("market_uid=$uid");
+        	}
         } else {
-
+        	$ans = [$uid];
+        	// 案场销售
+        	$zgbms = StaffDepartmentExt::model()->findAll("is_major=1 and uid=$uid");
+        	// 如果是主管 递归找出所有子部门的所有成员的案场绑定项目
+        	if($zgbms) {
+        		$des = [];
+        		foreach ($zgbms as $ms) {
+        			// var_dump($ms->did);
+        			$dids = $this->getChild($ms->did);
+        			// var_dump($dids);exit;
+        			$criteria = new CDbCriteria;
+        			$criteria->addInCondition('did',$dids);
+        			$mems = StaffDepartmentExt::model()->findAll($criteria);
+        			if($mems) {
+        				foreach ($mems as $mem) {
+	        				if(!in_array($mem->uid, $des)) {
+	        					$ans[] = $mem->uid;
+	        				}
+        				}
+        				// if($des) {
+        				// 	$cre = new CDbCriteria;
+        				// 	$cre->addInCondition('uid',$des);
+        				// 	$cre->addCondition("type=1");
+        				// 	$plotans = PlotAnExt::model()->findAll($cre);
+        				// 	if($plotans) {
+        				// 		foreach ($plotans as $pa) {
+        				// 			$hids[] = $pa->hid;
+        				// 		}
+        				// 	}
+        				// }
+        			}
+        			// var_dump($ans);exit;
+        		}
+        		
+        		$cres->addInCondition("sale_uid",$ans);
+        	} else {
+        		// $cres = new CDbCriteria;
+        		$cres->addCondition("sale_uid=$uid");
+        	}
         }
         $subs = SubExt::model()->findAll($cres);
         // var_dump(count($subs));exit;

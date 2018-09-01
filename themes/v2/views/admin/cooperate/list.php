@@ -6,7 +6,7 @@ $this->breadcrumbs = array($this->pageTitle);
     <div class="btn-group pull-left">
         <form class="form-inline">
             <div class="form-group">
-                <?php echo CHtml::dropDownList('type',$type,array('title'=>'标题'),array('class'=>'form-control','encode'=>false)); ?>
+                <?php echo CHtml::dropDownList('type',$type,array('title'=>'分销公司','name'=>'市场人名','plot'=>'楼盘名'),array('class'=>'form-control','encode'=>false)); ?>
             </div>
             <div class="form-group">
                 <?php echo CHtml::textField('value',$value,array('class'=>'form-control chose_text')) ?>
@@ -51,7 +51,7 @@ $this->breadcrumbs = array($this->pageTitle);
                 data-id="<?php echo $v['id'] ?>"><?php echo $v['sort'] ?></td>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td class="text-center"><?=$plot?$plot->title:''?></td>
-            <td class="text-center"><?=$staff?$staff->name:''?></td>
+            <td class="text-center"><?=$staff?($staff->name.$staff->phone):''?></td>
             <td class="text-center"><?=$company?$company->name:''?></td>
             <td class="text-center"><?=date('Y-m-d',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>

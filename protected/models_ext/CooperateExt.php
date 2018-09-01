@@ -50,8 +50,14 @@ class CooperateExt extends Cooperate{
             $this->user_phone = $user->phone;
             $this->user_company = $user->companyinfo?$user->companyinfo->name:'';
         }
-        if($this->getIsNewRecord())
+        $obj = CooperateExt::model()->find("hid=".$this->hid." and cid=".$this->cid);
+        if($obj && $obj->staff>0 && $obj->staff!=$this->staff) {
+            return $this->addError('staff','已存在其他员工绑定');
+        }
+        if($this->getIsNewRecord()){
+            
             $this->created = $this->updated = time();
+        }
         else
             $this->updated = time();
         return parent::beforeValidate();

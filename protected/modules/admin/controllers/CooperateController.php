@@ -25,8 +25,20 @@ class CooperateController extends AdminController{
 		$criteria = new CDbCriteria;
 		if($value = trim($value))
             if ($type=='title') {
-                $criteria->addSearchCondition('name', $value);
-            } 
+                $criteria->addSearchCondition('user_company', $value);
+            } elseif ($type=='name') {
+            	$criteria->addSearchCondition('user_name', $value);
+            } elseif ($type=='plot') {
+            	$ids = [];
+            	$cre = new CDbCriteria;
+            	$cre->addSearchCondition('title',$value);
+            	if($ress = PlotExt::model()->findAll($cre)) {
+            		foreach ($ress as $res) {
+            			$ids[] = $res->id;
+            		}
+            	}
+            	$criteria->addInCondition('hid',$ids);
+            }
         //添加时间、刷新时间筛选
         if($time_type!='' && $time!='')
         {
