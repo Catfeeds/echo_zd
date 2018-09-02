@@ -59,8 +59,12 @@ class StaffExt extends Staff{
         if(!$this->name_phone) {
             $this->name_phone = $this->name.$this->phone;
         }
-        if($this->getIsNewRecord())
+        if($this->getIsNewRecord()) {
+            if($this->phone&&$this->password) {
+                SmsExt::sendMsg('后台新增员工',$this->phone,['name'=>$this->name,'phone'=>$this->phone,'pwd'=>$this->password,'sitename'=>Yii::app()->file->sitename1]);
+            }
             $this->created = $this->updated = time();
+        }
         else
             $this->updated = time();
         return parent::beforeValidate();

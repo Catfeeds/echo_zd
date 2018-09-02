@@ -430,23 +430,30 @@ $childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->find
             </div>
         </div>
     </div>
-
+<?php $allstaffs = StaffExt::model()->findAll(); ?>
     <div class="tab-pane col-md-12" id="tab_3">
         <div class="col-md-6">
-            <!-- <div class="form-group">
-                <label class="col-md-2 control-label text-nowrap">项目特色</label>
+            <div class="form-group">
+                <label class="col-md-2 control-label text-nowrap">在线签约通知员工</label>
                 <div class="col-md-10">
-                <?php echo $form->textField($plot,'xmts',array('class'=>'form-control','data-target'=>'pointname')); ?>
+                <?php echo $form->dropDownList($plot, 'cotz',  CHtml::listData($allstaffs,'id','name_phone'), array('class'=>'form-control select2','multiple'=>'multiple')); ?>
                 </div>
-                <div class="col-md-12"><?php echo $form->error($plot, 'xmts'); ?></div>
+                <div class="col-md-12"><?php echo $form->error($plot, 'cotz'); ?></div>
             </div>
             <div class="form-group">
-                <label class="col-md-2 control-label text-nowrap">项目介绍</label>
+                <label class="col-md-2 control-label text-nowrap">新增报备通知员工</label>
                 <div class="col-md-10">
-                    <?php echo $form->textArea($plot, 'content', array('id'=>'content','class'=>'form-control','rows'=>5)); ?>
+                    <?php echo $form->dropDownList($plot, 'subtz',  CHtml::listData($allstaffs,'id','name_phone'), array('class'=>'form-control select2','multiple'=>'multiple')); ?>
                 </div>
-                <div class="col-md-12"><?php echo $form->error($plot, 'content'); ?></div>
-            </div> -->
+                <div class="col-md-12"><?php echo $form->error($plot, 'subtz'); ?></div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label text-nowrap">新增举报通知员工</label>
+                <div class="col-md-10">
+                    <?php echo $form->dropDownList($plot, 'jbtz',  CHtml::listData($allstaffs,'id','name_phone'), array('class'=>'form-control select2','multiple'=>'multiple')); ?>
+                </div>
+                <div class="col-md-12"><?php echo $form->error($plot, 'jbtz'); ?></div>
+            </div>
 
             
             <div class="form-group">

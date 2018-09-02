@@ -93,9 +93,10 @@ class UserController extends AdminController{
     {
         if($id) {
             $info = UserExt::model()->findByPk($id);
-            if($msg && $info && $info->qf_uid) {
-                Yii::app()->controller->sendNotice($msg,$info->qf_uid);
-                UserExt::model()->deleteAllByAttributes(['id'=>$id]);
+            if($info) {
+                SmsExt::sendMsg('用户注册驳回',$info->phone,['type'=>$info->type==3?'独立经纪人信息':'分销信息','tel'=>SiteExt::getAttr('qjpz','site_phone')]);
+                // Yii::app()->controller->sendNotice($msg,$info->qf_uid);
+                // UserExt::model()->deleteAllByAttributes(['id'=>$id]);
                 $this->setMessage('操作成功');
             } else {
                 $this->setMessage('操作失败');

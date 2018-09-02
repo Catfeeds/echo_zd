@@ -84,6 +84,14 @@ class UserController extends ApiController{
 					return $this->returnError(current(current($user->getErrors())));
 				} else {
 					$this->frame['data'] = $code&&$company?('绑定公司成功，欢迎加入'.$company->name):SiteExt::getAttr('qjpz','confirmNote');
+					if($code&&$company&&$company->phone) {
+						SmsExt::sendMsg('绑定门店码成功通知店长',$company->phone,['comname'=>$company->manager,'com'=>$company->name,'code'=>$code,'name'=>$user->name]);
+					}
+					if($code&&$company) {
+						SmsExt::sendMsg('绑定门店码成功通知用户',$user->phone,['com'=>$company->name,'name'=>$user->name]);
+					} else {
+						SmsExt::sendMsg('独立经纪人注册',$user->phone,['name'=>$user->name,'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
+					}
 					// if($company) {
 					// 	$managers = $company->managers;
 					// 	if($managers) {
@@ -969,6 +977,10 @@ class UserController extends ApiController{
     	}
     	$sub->sale_uid = $uid;
     	$sub->save();
+    	if($staff = StaffExt::model()->findByPk($uid)) {
+    		SmsExt::sendMsg('客户分配案场销售 ',$staff->phone,['anname'=>'案场助理','user'=>$sub->name.$sub->phone,'pro'=>$sub->plot_title]);
+    	}
+    	
 	}
 
 	public function actionAnIndex($uid='',$user_type='')

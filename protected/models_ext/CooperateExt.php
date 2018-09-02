@@ -54,8 +54,12 @@ class CooperateExt extends Cooperate{
         if($obj && $obj->staff>0 && $obj->staff!=$this->staff) {
             return $this->addError('staff','已存在其他员工绑定');
         }
+
         if($this->getIsNewRecord()){
-            
+            if($staffObj = $this->staffObj) {
+                if($company = $this->company)
+                    SmsExt::sendMsg('渠道绑定公司项目成功',$staffObj->phone,['scname'=>$staffObj->name,'com'=>$company->name,'pro'=>$this->plot->title,'code'=>$company->code]);
+            }
             $this->created = $this->updated = time();
         }
         else

@@ -67,6 +67,11 @@ class AdminController extends Controller
             //     ['label' => '合作公司', 'url' => ['/admin/companyPackage/list'],'active'=>$this->route=='admin/companyPackage/edit'],
             // ]],
             ['label'=>'报备管理','icon'=>'icon-speedometer','url'=>['/admin/sub/list'],'active'=>$this->route=='admin/sub/edit'],
+            ['label' => '数据统计', 'icon' => 'icon-speedometer', 'items' => [
+                ['label' => '案场数据统计', 'url' => ['/admin/sub/ancount']],
+                ['label' => '市场数据统计', 'url' => ['/admin/sub/sccount']],
+                // ['label' => '合作公司', 'url' => ['/admin/companyPackage/list'],'active'=>$this->route=='admin/companyPackage/edit'],
+            ]],
             ['label' => '分销管理', 'icon' => 'icon-speedometer', 'items' => [
                 ['label' => '公司管理', 'url' => ['/admin/company/list'],'active'=>$this->route=='admin/company/edit'],
                 ['label' => '签约管理', 'url' => ['/admin/cooperate/list'],'active'=>$this->route=='admin/cooperate/edit'],

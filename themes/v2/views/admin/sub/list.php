@@ -1,5 +1,5 @@
 <?php
-$this->pageTitle = $this->controllerName.'列表';
+$this->pageTitle = '报备列表';
 $this->breadcrumbs = array($this->pageTitle);
 $statusArr = SubExt::$status;
 ?>
@@ -7,7 +7,7 @@ $statusArr = SubExt::$status;
     <div class="btn-group pull-left">
         <form class="form-inline">
             <div class="form-group">
-                <?php echo CHtml::dropDownList('type',$type,array('title'=>'标题'),array('class'=>'form-control','encode'=>false)); ?>
+                <?php echo CHtml::dropDownList('type',$type,array('title'=>'楼盘名','name'=>'客户名','phone'=>'客户手机号','fx_phone'=>'分销手机号','sc_phone'=>'市场手机号','an_phone'=>'案场助理手机号','sale_phone'=>'案场销售手机号'),array('class'=>'form-control','encode'=>false)); ?>
             </div>
             <div class="form-group">
                 <?php echo CHtml::textField('value',$value,array('class'=>'form-control chose_text')) ?>
@@ -57,7 +57,7 @@ $statusArr = SubExt::$status;
      ?>
         <tr>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
-            <td class="text-center"><a target="_blank" href="<?=$this->createUrl('/api/index/detail',['id'=>$v->hid])?>"><?=$v->plot->title?></a></td>
+            <td class="text-center"><?=$v->plot->title?></td>
             <td class="text-center"><?=$user?($user->name.'/'.$user->phone.($company?('<br>'.$company->name):'')):''?></td> 
             <td class="text-center"><?=$v->name.'/'.$v->phone?></td> 
             <td class="text-center"><?=$market_user?$market_user->name:''?></td> 

@@ -871,6 +871,7 @@ class PlotController extends ApiController{
 				// } 
 				foreach ($hid as $key => $value) {
 					$tmp['hid'] = $value;
+					$plot = PlotExt::model()->findByPk($tmp['hid']);
 					if(Yii::app()->db->createCommand("select id from sub where uid=".$tmp['uid']." and hid=".$tmp['hid']." and deleted=0 and phone='".$tmp['phone']."' and created<=".TimeTools::getDayEndTime()." and created>=".TimeTools::getDayBeginTime())->queryScalar()) {
 						return $this->returnError("同一组客户每天最多报备一次，请勿重复操作");
 					}
@@ -898,6 +899,10 @@ class PlotController extends ApiController{
 					}
 					$obj->code = $code;
 					if($obj->save()) {
+						if($plot->subtz && $staff = StaffExt::model()->findByPk($plot->subtz)) {
+
+							SmsExt::sendMsg('添加报备通知',$staff->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'name'=>$obj->name.$obj->phone,'pro'=>$plot->title]);
+						}
 						$pro = new SubProExt;
 						$pro->sid = $obj->id;
 						$pro->uid = $tmp['uid'];
@@ -934,6 +939,10 @@ class PlotController extends ApiController{
 					$obj->cid = $user->cid;
 					$obj->status = 1;
 					$obj->save();
+					if($plot->cotz && $staff = StaffExt::model()->findByPk($plot->cotz)) {
+
+						SmsExt::sendMsg('在线签约通知',$staff->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'pro'=>$plot->title]);
+					}
 				} else {
 					$this->returnError('您已经提交申请，请勿重复提交');
 				}
@@ -977,6 +986,10 @@ class PlotController extends ApiController{
 			// $obj->street = $street;
 			$obj->status = 0;
 			$obj->save();
+			$user = UserExt::model()->findByPk($obj->adduid);
+			if($user)
+				SmsExt::sendMsg('申请门店码',$user->phone,['name'=>$user->name,'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
+
 			$this->frame['data'] = SiteExt::getAttr('qjpz','confirmNote');
 		}
     }
@@ -1038,6 +1051,7 @@ class PlotController extends ApiController{
 				}
 				$tmp['reason'] = $this->cleanXss($_POST['reason']);
 				$tmp['uid'] = $_POST['uid'];
+				$user = UserExt::model()->findByPk($tmp['uid']);
 // var_dump($plot);exit;
 				if(!Yii::app()->db->createCommand("select id from report where deleted=0 and uid=".$tmp['uid']." and hid=".$tmp['hid'])->queryScalar()) {
 					
@@ -1045,6 +1059,10 @@ class PlotController extends ApiController{
 					$obj->attributes = $tmp;
 					$obj->status = 0;
 					if($obj->save()) {
+						if($plot->jbtz && $staff = StaffExt::model()->findByPk($plot->jbtz)) {
+
+							SmsExt::sendMsg('投诉举报',$staff->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'pro'=>$plot->title,'note'=>$tmp['reason']]);
+						}
 						return $this->returnSuccess('操作成功');
 					}
 				} else {
@@ -2472,43 +2490,27 @@ class PlotController extends ApiController{
 
     }
 
-    public function actionCallPhone($key='',$hid='',$fxphone='')
+    public function actionCallPhone($phone='',$hid='',$uid='')
     {
-    	if($key) {
-    		$aphone = '';
-    		$name = '';
-    		if($this->staff) {
-    			$name = $this->staff->name;
-    			$aphone = $this->staff->phone;
-    		} elseif ($fxphone) {
-    			$name = '用户';
-    			$aphone = $fxphone;
-    		}
-
-    		$res = str_replace('tel:', '', $key);
-    		if(strstr($res, ',')) {
-    			list($a,$b) = explode(',', $res);
-    			$user = UserExt::model()->find("virtual_no='$a' and virtual_no_ext='$b'");
-    			
-    		} else {
-    			$user = UserExt::model()->find("phone='$res'");
-    		}
-    		if($user && $aphone && $hid) {
+    	if($phone&&$hid&&$uid) {
+    		$user = UserExt::model()->findByPk($uid);
+    		$staff = StaffExt::model()->find("phone='$phone'");
+    		if($user && $staff && $hid) {
     			$plot = PlotExt::model()->findByPk($hid);
     			// 保存该情况
 	    		$obj = new PlotCallExt;
-	    		$obj->calla = $aphone;
-	    		$obj->callb = $user->phone;
+	    		$obj->calla = $user->phone;
+	    		$obj->callb = $phone;
 	    		$obj->time = time();
 	    		$obj->hid = $hid;
 	    		$obj->title = $plot->title;
 	    		// 每小时只能一次
-	    		if(PlotCallExt::model()->find("hid=$hid and calla='".$aphone."' and callb='".$user->phone."' and msg_time>".(time()-3600))) {
+	    		if(PlotCallExt::model()->find("hid=$hid and calla='".$user->phone."' and callb='".$phone."' and msg_time>".(time()-3600))) {
 	    			$obj->msg_time = '';
 	    		} else {
-	    			$rr = SmsExt::sendMsg('呼叫用户短信',$user->phone,['lpmc'=>$plot->title,'name'=>$user->name,'obj'=>$name.$aphone]);
+	    			$rr = SmsExt::sendMsg('拨打电话通知',$phone,['pro'=>$plot->title,'name'=>$user->name,'proname'=>$staff->name]);
 	    			// 千帆app通知
-	    			$user->qf_uid && Yii::app()->controller->sendNotice("尊敬的".$plot->title."对接人".$user->name."您好！".$name.$aphone."正在拨打您的电话，祝您多多开单哦！",$user->qf_uid);
+	    			// $user->qf_uid && Yii::app()->controller->sendNotice("尊敬的".$plot->title."对接人".$user->name."您好！".$name.$aphone."正在拨打您的电话，祝您多多开单哦！",$user->qf_uid);
 	    			$obj->msg_time = time();
 	    			$obj->save();
 	    		}

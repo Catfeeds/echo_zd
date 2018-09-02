@@ -54,29 +54,29 @@ class SubProExt extends SubPro{
 
     public function beforeValidate() {
         if($this->getIsNewRecord()) {
+            $sub = $this->sub;
+            $user = $sub->user;
+            $scuser = $sub->market_user;
+
+            $plotname = $sub->plot_title;
+            // $salename = $user->name.$user->phone;
+            // $cumsname = $sub->name.$sub->phone;
             if($this->status==7) {
-                // 跟进通知分销业务员和分销店长
-                $sub = $this->sub;
-                $user = $this->user;
-                $plotname = $sub->plot->title;
-                $salename = $user->name.$user->phone;
-                $cumsname = $sub->name.$sub->phone;
-                $words = "{$plotname}的案场销售【{$salename}】对您的客户【{$cumsname}】跟进内容如下：".$this->note;
-                $fx = $sub->user;
-                if($fx) {
-                    $fx->qf_uid && Yii::app()->controller->sendNotice($words,$fx->qf_uid);
-                    $bosss = UserExt::model()->normal()->findAll('is_manage=1 and cid='.$fx->cid);
-                    if($bosss) {
-                        foreach ($bosss as $key => $value) {
-                            $value->qf_uid && Yii::app()->controller->sendNotice($words,$value->qf_uid);
-                        }
-                    }
+                SmsExt::sendMsg('跟进通知用户',$user->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'pro'=>$plotname,'name'=>$sub->name]);
+            } else {
+                if($this->staffObj && $staff->type)
+                    SmsExt::sendMsg('客户状态变更通知',$user->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'pro'=>$plotname,'name'=>$sub->name,'typename'=>StaffExt::$is_jls[$staffObj->type].$staffObj->name,'usertype'=>SubProExt::$status[$this->status]]);
+                if($this->status==2||$this->status==3) {
+                    if($scuser)
+                        SmsExt::sendMsg('客户成交认筹通知市场',$scuser->phone,['scname'=>$scuser->name,'com'=>$sub->company_name,'fxname'=>$user->name.$user->phone,'pro'=>$plotname,'name'=>$sub->name,'typename'=>StaffExt::$is_jls[$staffObj->type].$staffObj->name,'usertype'=>SubProExt::$status[$this->status]]);
                 }
             }
             $this->created = $this->updated = time();
         }
-        else
+        else {
+
             $this->updated = time();
+        }
         return parent::beforeValidate();
     }
 
