@@ -69,7 +69,7 @@ class SubProExt extends SubPro{
                     SmsExt::sendMsg('客户状态变更通知',$user->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'pro'=>$plotname,'name'=>$sub->name,'typename'=>StaffExt::$is_jls[$staffObj->is_jl].$staffObj->name,'usertype'=>SubProExt::$status[$this->status]]);
                 if($this->status==2||$this->status==3) {
                     if($scuser)
-                        SmsExt::sendMsg('客户成交认筹通知市场',$scuser->phone,['scname'=>$scuser->name,'com'=>$sub->company_name,'fxname'=>$user->name.$user->phone,'pro'=>$plotname,'name'=>$sub->name,'typename'=>StaffExt::$is_jls[$staffObj->type].$staffObj->name,'usertype'=>SubProExt::$status[$this->status]]);
+                        SmsExt::sendMsg('客户成交认筹通知市场',$scuser->phone,['scname'=>$scuser->name,'com'=>$sub->company_name,'fxname'=>$user->name.$user->phone,'pro'=>$plotname,'name'=>$sub->name,'typename'=>StaffExt::$is_jls[$staffObj->is_jl].$staffObj->name,'usertype'=>SubProExt::$status[$this->status]]);
                 }
             }
             $this->created = $this->updated = time();
