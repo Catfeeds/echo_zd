@@ -61,7 +61,7 @@ class SubProExt extends SubPro{
             $plotname = $sub->plot_title;
             // $salename = $user->name.$user->phone;
             // $cumsname = $sub->name.$sub->phone;
-            if($this->status==7) {
+            if($this->status==9) {
                 SmsExt::sendMsg('跟进通知用户',$user->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'pro'=>$plotname,'name'=>$sub->name]);
             } else {
                 $staffObj = $this->staffObj;
