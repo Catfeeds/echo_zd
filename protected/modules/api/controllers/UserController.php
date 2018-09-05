@@ -455,13 +455,13 @@ class UserController extends ApiController{
 			}
 			$mkids = [];
 
-			$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_makert_user where uid=".$uid)->queryAll();
-			if($idrr) {
-				foreach ($idrr as $mkid) {
-					$mkids[] = $mkid['hid'];
-				}
-			}
-			$criteria->addInCondition("hid",$mkids);
+			// $idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_makert_user where uid=".$uid)->queryAll();
+			// if($idrr) {
+			// 	foreach ($idrr as $mkid) {
+			// 		$mkids[] = $mkid['hid'];
+			// 	}
+			// }
+			$criteria->addCondition("market_uid=$uid");
 			// 搜项目、分销公司
 			// $criteria = new CDbCriteria;
 			// $kw && $criteria->addCondition("company_name like '%$kw%'",'OR');
