@@ -64,7 +64,8 @@ class SubProExt extends SubPro{
             if($this->status==7) {
                 SmsExt::sendMsg('跟进通知用户',$user->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'pro'=>$plotname,'name'=>$sub->name]);
             } else {
-                if($this->staffObj && $staff->type)
+                $staffObj = $this->staffObj;
+                if($staffObj && $staffObj->type)
                     SmsExt::sendMsg('客户状态变更通知',$user->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'pro'=>$plotname,'name'=>$sub->name,'typename'=>StaffExt::$is_jls[$staffObj->type].$staffObj->name,'usertype'=>SubProExt::$status[$this->status]]);
                 if($this->status==2||$this->status==3) {
                     if($scuser)
