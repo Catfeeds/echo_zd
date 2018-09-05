@@ -322,7 +322,7 @@ class SubController extends AdminController{
         	}
         }
         // var_dump($plotarr);exit;
-        $this->render("ancount",['time' => $time,'time_type' => $time_type,'hid'=>$hid,'aid'=>$aid,'plotarr'=>$plotarr,'allws'=>$allws,'alldd'=>$alldd,'allqy'=>$allqy,'alldf'=>0,'is_all'=>$is_all,'pt'=>'市场数据统计']);
+        $this->render("ancount",['time' => $time,'time_type' => $time_type,'hid'=>$hid,'aid'=>$aid,'plotarr'=>$plotarr,'allws'=>$allws,'alldd'=>$alldd,'allqy'=>$allqy,'alldf'=>$alldf,'is_all'=>$is_all,'pt'=>'市场数据统计']);
 	}
 	public function getChild($obj)
 	{
