@@ -978,7 +978,7 @@ class UserController extends ApiController{
     	$sub->sale_uid = $uid;
     	$sub->save();
     	if($staff = StaffExt::model()->findByPk($uid)) {
-    		SmsExt::sendMsg('客户分配案场销售 ',$staff->phone,['anname'=>'案场助理','user'=>$sub->name.$sub->phone,'pro'=>$sub->plot_title]);
+    		SmsExt::sendMsg('客户分配案场销售',$staff->phone,['anname'=>'案场助理','user'=>$sub->name.$sub->phone,'pro'=>$sub->plot_title]);
     	}
     	
 	}

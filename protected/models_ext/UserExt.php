@@ -155,7 +155,7 @@ class UserExt extends User{
             // }
             // // var_dump(Yii::app()->db->createCommand('select status from user where id='.$this->id)->queryScalar());exit;
             if($this->type==3 && $this->status==1 && !(Yii::app()->db->createCommand('select status from user where id='.$this->id)->queryScalar())) {
-                SmsExt::sendMsg('独立经纪人通过 ',$this->phone,['name'=>$this->name]);
+                SmsExt::sendMsg('独立经纪人通过',$this->phone,['name'=>$this->name]);
             }
         }
         return parent::beforeValidate();
