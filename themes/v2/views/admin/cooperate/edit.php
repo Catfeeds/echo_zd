@@ -17,21 +17,21 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
 <div class="form-group">
     <label class="col-md-2 control-label">分销公司</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'cid', CHtml::listData(CompanyExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control', 'encode' => false)); ?>
+        <?php echo $form->dropDownList($article, 'cid', CHtml::listData(CompanyExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control', 'empty'=>'请选择', 'encode' => false)); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'cid') ?></div>
 </div>
 <div class="form-group">
     <label class="col-md-2 control-label">市场人员</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'staff', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control', 'encode' => false)); ?>
+        <?php echo $form->dropDownList($article, 'staff', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control', 'empty'=>'请选择', 'encode' => false)); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'staff') ?></div>
 </div>
 <div class="form-group">
     <label class="col-md-2 control-label">楼盘</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'hid', CHtml::listData(PlotExt::model()->normal()->findAll(),'id','title'), array('class' => 'form-control', 'encode' => false)); ?>
+        <?php echo $form->dropDownList($article, 'hid', CHtml::listData(PlotExt::model()->normal()->findAll(),'id','title'), array('class' => 'form-control', 'empty'=>'请选择', 'encode' => false)); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'hid') ?></div>
 </div>
