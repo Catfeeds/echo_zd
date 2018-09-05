@@ -48,21 +48,31 @@ $statusArr = SubExt::$status;
                 <thead>
                     <tr>
                         <th>
-                            未售套数
+                            报备总数
+                        </th>
+                        <?php if($pt=="案场数据统计"): ?>
+                            <th>
+                            到访数
+                        </th>
+                        <?php endif; ?>
+                        <th>
+                            大定数
                         </th>
                         <th>
-                            大定套数
-                        </th>
-                        <th>
-                            签约套数
+                            签约数
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>
-                            <?=$allws?>
+                            <?=$allws+$alldd+$allqy+$alldf?>
                         </td>
+                         <?php if($pt=="案场数据统计"): ?>
+                            <td>
+                            <?=$alldf?>
+                        </td>
+                        <?php endif; ?>
                         <td>
                             <?=$alldd?>
                         </td>
@@ -103,30 +113,38 @@ $statusArr = SubExt::$status;
                             项目名
                         </th>
                         <th>
-                            未售套数
+                            报备总数
+                        </th>
+                        <?php if($pt=="案场数据统计"): ?>
+                            <th>
+                            到访数
+                        </th>
+                        <?php endif; ?>
+                        <th>
+                            大定数
                         </th>
                         <th>
-                            大定套数
-                        </th>
-                        <th>
-                            签约套数
+                            签约数
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                <?php if($plotarr) foreach ($plotarr as $k=> $v) {?>
+                <?php if($plotarr) foreach ($plotarr as $k=> $v) { !isset($v['ws']) && $v['ws'] = 0;!isset($v['df']) && $v['df'] = 0;!isset($v['dd']) && $v['dd'] = 0;!isset($v['qy']) && $v['qy'] = 0; ?>
                     <tr>
                         <td>
                             <?=$k?>
                         </td>
                         <td>
-                            <?=isset($v['ws'])?$v['ws']:'-'?>
+                            <?=$v['ws']+$v['df']+$v['dd']+$v['qy']?>
+                        </td>
+                         <td>
+                            <?=$v['df']?>
                         </td>
                         <td>
-                            <?=isset($v['dd'])?$v['dd']:'-'?>
+                            <?=$v['dd']?>
                         </td>
                         <td>
-                            <?=isset($v['qy'])?$v['qy']:'-'?>
+                            <?=$v['qy']?>
                         </td>
                     </tr>
                 <?php } ?>

@@ -205,7 +205,7 @@ class SubController extends AdminController{
         	}
         }
         $subs = SubExt::model()->findAll($criteria);
-        $allws = $alldd = $allqy = 0;
+        $allws = $alldd = $allqy = $alldf = 0;
         $plotarr = [];
         if($subs) {
         	foreach ($subs as $sub) {
@@ -222,7 +222,13 @@ class SubController extends AdminController{
         				$plotarr[$sub->plot_title]['dd'] = 0;
         			}
         			$plotarr[$sub->plot_title]['dd']++; 
-        		} else {
+        		} elseif ($sub->status==1) {
+                    $alldf++;
+                    if(!isset($plotarr[$sub->plot_title]['df'])) {
+                        $plotarr[$sub->plot_title]['df'] = 0;
+                    }
+                    $plotarr[$sub->plot_title]['df']++; 
+                } else {
         			$allws++;
         			if(!isset($plotarr[$sub->plot_title]['ws'])) {
         				$plotarr[$sub->plot_title]['ws'] = 0;
@@ -233,7 +239,7 @@ class SubController extends AdminController{
         	}
         }
         // var_dump($plotarr);exit;
-        $this->render("ancount",['time' => $time,'time_type' => $time_type,'hid'=>$hid,'aid'=>$aid,'plotarr'=>$plotarr,'allws'=>$allws,'alldd'=>$alldd,'allqy'=>$allqy,'is_all'=>$is_all,'pt'=>'案场数据统计']);
+        $this->render("ancount",['time' => $time,'time_type' => $time_type,'hid'=>$hid,'aid'=>$aid,'plotarr'=>$plotarr,'allws'=>$allws,'alldd'=>$alldd,'allqy'=>$allqy,'alldf'=>$alldf,'is_all'=>$is_all,'pt'=>'案场数据统计']);
 	}
 	public function actionSccount($aid='',$hid='',$time_type='created',$time='',$is_all='')
 	{
@@ -310,7 +316,7 @@ class SubController extends AdminController{
         	}
         }
         // var_dump($plotarr);exit;
-        $this->render("ancount",['time' => $time,'time_type' => $time_type,'hid'=>$hid,'aid'=>$aid,'plotarr'=>$plotarr,'allws'=>$allws,'alldd'=>$alldd,'allqy'=>$allqy,'is_all'=>$is_all,'pt'=>'市场数据统计']);
+        $this->render("ancount",['time' => $time,'time_type' => $time_type,'hid'=>$hid,'aid'=>$aid,'plotarr'=>$plotarr,'allws'=>$allws,'alldd'=>$alldd,'allqy'=>$allqy,'alldf'=>0,'is_all'=>$is_all,'pt'=>'市场数据统计']);
 	}
 	public function getChild($obj)
 	{
