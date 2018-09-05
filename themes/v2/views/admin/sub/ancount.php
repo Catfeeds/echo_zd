@@ -50,11 +50,9 @@ $statusArr = SubExt::$status;
                         <th>
                             报备总数
                         </th>
-                        <?php if($pt=="案场数据统计"): ?>
                             <th>
                             到访数
                         </th>
-                        <?php endif; ?>
                         <th>
                             大定数
                         </th>
@@ -68,11 +66,9 @@ $statusArr = SubExt::$status;
                         <td>
                             <?=$allws+$alldd+$allqy+$alldf?>
                         </td>
-                         <?php if($pt=="案场数据统计"): ?>
                             <td>
                             <?=$alldf?>
                         </td>
-                        <?php endif; ?>
                         <td>
                             <?=$alldd?>
                         </td>

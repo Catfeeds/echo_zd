@@ -288,7 +288,7 @@ class SubController extends AdminController{
         	}
         }
         $subs = SubExt::model()->findAll($criteria);
-        $allws = $alldd = $allqy = 0;
+        $allws = $alldd = $allqy = $alldf = 0;
         $plotarr = [];
         if($subs) {
         	foreach ($subs as $sub) {
@@ -305,7 +305,13 @@ class SubController extends AdminController{
         				$plotarr[$sub->plot_title]['dd'] = 0;
         			}
         			$plotarr[$sub->plot_title]['dd']++; 
-        		} else {
+        		} elseif ($sub->status==1) {
+                    $alldf++;
+                    if(!isset($plotarr[$sub->plot_title]['df'])) {
+                        $plotarr[$sub->plot_title]['df'] = 0;
+                    }
+                    $plotarr[$sub->plot_title]['df']++; 
+                } else {
         			$allws++;
         			if(!isset($plotarr[$sub->plot_title]['ws'])) {
         				$plotarr[$sub->plot_title]['ws'] = 0;
