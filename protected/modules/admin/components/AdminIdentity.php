@@ -18,6 +18,7 @@ class AdminIdentity extends CUserIdentity
 			$this->errorCode = self::ERROR_NONE;
 			$this->setState('id',1);
 			$this->setState('username','管理员');
+			$this->setState('user_type',1);
 			$this->setState('avatar','');
 			return $this->errorCode;
 		} else{
@@ -27,6 +28,7 @@ class AdminIdentity extends CUserIdentity
 					$this->setState('id',$user->id);
 					$this->setState('cid','');
 					$this->setState('username',$user->name);
+					$this->setState('user_type',$user->type);
 					$this->setState('avatar','');
 					return $this->errorCode;
 				}

@@ -127,6 +127,10 @@ class SubController extends AdminController{
 		if(Yii::app()->request->getIsPostRequest()) {
 			$info->attributes = Yii::app()->request->getPost($modelName,[]);
 			$info->sid = $sid;
+            if($info->getIsNewRecord()) {
+                $info->uid = Yii::app()->user->id;
+                $info->user_type = Yii::app()->user->user_type;
+            }
 			// $info->time =  is_numeric($info->time)?$info->time : strtotime($info->time);
 			if($info->save()) {
 				$this->setMessage('操作成功','success',['imagelist?sid='.$sid]);
