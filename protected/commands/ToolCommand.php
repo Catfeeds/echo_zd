@@ -34,7 +34,7 @@ class ToolCommand extends CConsoleCommand
     }
     public function actionDo()
     {
-        // Yii::app()->db->createCommand("truncate user")->execute();
+        Yii::app()->db->createCommand("ALTER TABLE `sub` ADD COLUMN `is_zf`  tinyint(1) NOT NULL DEFAULT 0 AFTER `cid`;")->execute();
         // Yii::app()->db->createCommand("truncate staff")->execute();
         // $infos = PlotExt::model()->normal()->findAll();
         // // var_dump(count($infos));exit;
