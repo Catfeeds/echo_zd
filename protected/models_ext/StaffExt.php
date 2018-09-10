@@ -61,7 +61,7 @@ class StaffExt extends Staff{
         }
         if($this->getIsNewRecord()) {
             if($this->phone&&$this->password) {
-                SmsExt::sendMsg('后台新增员工',$this->phone,['name'=>$this->name,'phone'=>$this->phone,'pwd'=>$this->password,'sitename'=>Yii::app()->file->sitename1]);
+                SmsExt::sendMsg('后台新增员工',$this->phone,['name'=>$this->name,'phone'=>$this->phone,'pwd'=>$this->password."。请在微信小程序内搜索“".Yii::app()->file->sitename1."”登陆！"]);
             }
             $this->created = $this->updated = time();
         }
