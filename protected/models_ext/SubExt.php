@@ -92,6 +92,7 @@ class SubExt extends Sub{
             $this->qy_time = strtotime($this->qy_time);
         }
         if($this->getIsNewRecord()) {
+            // 如果是员工的话 就is_zf=1
             // $res = Yii::app()->controller->sendNotice(($this->plot?$this->plot->title:'').'有新的报备，请登陆后台审核','',1);
             $this->created = $this->updated = time();
         }
