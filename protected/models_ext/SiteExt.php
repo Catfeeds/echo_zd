@@ -70,8 +70,8 @@ class SiteExt extends Site{
     // 属性分类
     public static $cateTag = [
         'qjpz'=> [
-            'pcIndexImages'=>['type'=>'multiImage','max'=>5,'name'=>'pc首页轮播图'],
-            'ttpic'=>['type'=>'image','max'=>1,'name'=>'头条图片'],
+            'pcIndexImages'=>['type'=>'multiImage','max'=>5,'name'=>'首页幻灯片'],
+            'ttpic'=>['type'=>'image','max'=>1,'name'=>'喜讯图片'],
             'indexmarquee'=>['type'=>'text','name'=>'头条内容'],
             'topword'=>['type'=>'text','name'=>'楼盘置顶文案'],
             // 'sitename'=>['type'=>'text','name'=>'站点名'],

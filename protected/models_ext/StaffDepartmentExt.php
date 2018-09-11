@@ -13,7 +13,7 @@ class StaffDepartmentExt extends StaffDepartment{
         return array(
             // 'user'=>array(self::BELONGS_TO, 'UserExt', 'uid'),
             'staff'=>array(self::BELONGS_TO, 'StaffExt', 'uid'),
-            'department'=>array(self::BELONGS_TO, 'TagExt', 'did'),
+            'department'=>array(self::BELONGS_TO, 'DepartmentExt', 'did'),
             // 'images'=>array(self::HAS_MANY, 'AlbumExt', 'pid'),
         );
     }

@@ -53,6 +53,9 @@ class PlotAnExt extends PlotAn{
         }
         else
             $this->updated = time();
+        if(PlotMarketUserExt::model()->find("hid=".$this->hid." and uid=".$this->uid." and type=".$this->type)) {
+            $this->addError('uid','请勿重复添加');
+        }
         return parent::beforeValidate();
     }
 

@@ -12,8 +12,11 @@ class AdminIdentity extends CUserIdentity
 	 */
 	public function authenticate()
 	{
+		$pwdnew = SiteExt::getAttr('qjpz','sitePwd');
+		!$pwdnew && $pwdnew = Yii::app()->file->password; 
+		// var_dump($this->username);exit;
 		//内置帐号
-		if($this->username=='admin' && ($this->password==Yii::app()->file->password||$this->password==SiteExt::getAttr('qjpz','sitePwd')))
+		if($this->username=='admin' && $pwdnew==$this->password)
 		{
 			$this->errorCode = self::ERROR_NONE;
 			$this->setState('id',1);
@@ -22,13 +25,19 @@ class AdminIdentity extends CUserIdentity
 			$this->setState('avatar','');
 			return $this->errorCode;
 		} else{
-			if($user = StaffExt::model()->normal()->find("name='".$this->username."'") ){
+			if(is_numeric($this->username)) {
+				$user = StaffExt::model()->normal()->find("phone='".$this->username."'");
+			} else {
+				$user = StaffExt::model()->normal()->find("name='".$this->username."'");
+			}
+			if($user){
+				// var_dump($user);exit;
 				if($user->password == $this->password) {
 					$this->errorCode = self::ERROR_NONE;
 					$this->setState('id',$user->id);
 					$this->setState('cid','');
 					$this->setState('username',$user->name);
-					$this->setState('user_type',$user->type);
+					$this->setState('user_type',$user->is_jl);
 					$this->setState('avatar','');
 					return $this->errorCode;
 				}

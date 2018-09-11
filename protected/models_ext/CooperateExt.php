@@ -62,8 +62,13 @@ class CooperateExt extends Cooperate{
             }
             $this->created = $this->updated = time();
         }
-        else
+        else {
             $this->updated = time();
+        }
+        // 分销签约禁止重复添加
+        if(CooperateExt::model()->find("hid=".$this->hid." and cid=".$this->cid." and staff=".$this->staff)) {
+            $this->addError('staff','请勿重复绑定');
+        }
         return parent::beforeValidate();
     }
 

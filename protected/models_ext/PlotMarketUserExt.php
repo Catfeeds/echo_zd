@@ -88,6 +88,9 @@ class PlotMarketUserExt extends PlotMakertUser{
         }
         else
             $this->updated = time();
+        if(PlotMarketUserExt::model()->find("hid=".$this->hid." and uid=".$this->uid)) {
+            $this->addError('uid','请勿重复添加');
+        }
         return parent::beforeValidate();
     }
 

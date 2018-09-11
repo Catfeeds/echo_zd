@@ -38,6 +38,8 @@ class SubController extends AdminController{
             	$criteria->addSearchCondition('sale_phone', $value);
             } elseif ($type=='title') {
             	$criteria->addSearchCondition('plot_title', $value);
+            } elseif ($type=='company') {
+                $criteria->addSearchCondition('company_name', $value);
             }
         //添加时间、刷新时间筛选
         if($time_type!='' && $time!='')

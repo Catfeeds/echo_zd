@@ -57,16 +57,16 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
           <div class="col-md-2"><?php echo $form->error($article, 'true_phone') ?></div>
       </div>
       <div class="form-group">
-          <label class="col-md-2 control-label">带看时间<span class="required" aria-required="true">*</span></label>
-          <div class="col-md-4">
-              <div class="input-group date form_datetime">
-                        <?php echo $form->textField($article,'time',array('class'=>'form-control','value'=>($article->time?date('Y-m-d',$article->time):''))); ?>
-                        <span class="input-group-btn">
-                          <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-                       </span>
-                    </div>
-          </div>
-      </div>
+    <label class="col-md-2 control-label">到期时间</label>
+    <div class="col-md-4">
+        <div class="input-group date form_datetime" >
+            <?php echo $form->textField($article,'time',array('class'=>'form-control','value'=>($article->time?date('Y-m-d',$article->time):''))); ?>
+            <span class="input-group-btn">
+              <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+           </span>
+        </div>
+    </div>
+</div>
       <div class="form-group">
           <label class="col-md-2 control-label">客户备注</label>
           <div class="col-md-4">
@@ -162,26 +162,9 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
 </div>
 
 
-<?php
-Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootbox/bootbox.min.js', CClientScript::POS_END);
-Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bmap.js', CClientScript::POS_END);
-Yii::app()->clientScript->registerScriptFile('/static/admin/pages/scripts/map.js', CClientScript::POS_END);
-?>
-
 <?php $this->endWidget(); ?>
 
 <?php
-//Select2
-Yii::app()->clientScript->registerScriptFile('/static/global/plugins/select2/select2.min.js', CClientScript::POS_END);
-Yii::app()->clientScript->registerCssFile('/static/global/plugins/select2/select2.css');
-Yii::app()->clientScript->registerCssFile('/static/admin/pages/css/select2_custom.css');
-
-//boostrap datetimepicker
-Yii::app()->clientScript->registerCssFile('/static/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
-Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js', CClientScript::POS_END);
-Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js', CClientScript::POS_END, array('charset'=> 'utf-8'));
-
-// Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootbox/bootbox.min.js', CClientScript::POS_END);
 
 $js = "
             $(function(){
@@ -205,4 +188,18 @@ $js = "
             ";
 
 Yii::app()->clientScript->registerScript('add',$js,CClientScript::POS_END);
+//Select2
+Yii::app()->clientScript->registerScriptFile('/static/global/plugins/select2/select2.min.js', CClientScript::POS_END);
+Yii::app()->clientScript->registerCssFile('/static/global/plugins/select2/select2.css');
+Yii::app()->clientScript->registerCssFile('/static/admin/pages/css/select2_custom.css');
+
+//boostrap datetimepicker
+Yii::app()->clientScript->registerCssFile('/static/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
+Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js', CClientScript::POS_END);
+Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js', CClientScript::POS_END, array('charset'=> 'utf-8'));
+
+Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootbox/bootbox.min.js', CClientScript::POS_END);
+
+// Yii::app()->clientScript->registerScriptFile('/static/global/plugins/bootbox/bootbox.min.js', CClientScript::POS_END);
+
 ?>

@@ -7,7 +7,7 @@ $statusArr = SubExt::$status;
     <div class="btn-group pull-left">
         <form class="form-inline">
             <div class="form-group">
-                <?php echo CHtml::dropDownList('type',$type,array('title'=>'楼盘名','name'=>'客户名','phone'=>'客户手机号','fx_phone'=>'分销手机号','sc_phone'=>'市场手机号','an_phone'=>'案场助理手机号','sale_phone'=>'案场销售手机号'),array('class'=>'form-control','encode'=>false)); ?>
+                <?php echo CHtml::dropDownList('type',$type,array('title'=>'楼盘名','name'=>'客户名','phone'=>'客户手机号','fx_phone'=>'分销手机号','sc_phone'=>'市场手机号','an_phone'=>'案场助理手机号','sale_phone'=>'案场销售手机号','company'=>'分销公司名'),array('class'=>'form-control','encode'=>false)); ?>
             </div>
             <div class="form-group">
                 <?php echo CHtml::textField('value',$value,array('class'=>'form-control chose_text')) ?>
@@ -84,7 +84,7 @@ $statusArr = SubExt::$status;
                 <a href="<?php echo $this->createUrl('prolist',array('sid'=>$v->id)); ?>" class="btn default btn-xs default"> 跟进列表 </a>
                 <a href="<?php echo $this->createUrl('imagelist',array('sid'=>$v->id)); ?>" class="btn default btn-xs blue"> 材料列表 </a>
                 <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id)); ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 修改 </a>
-                <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?>
+                <!-- <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?> -->
 
 
             </td>

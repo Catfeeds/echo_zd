@@ -20,7 +20,7 @@ class StaffExt extends Staff{
     public static $is_jls = [
         0=>'暂无',
         1=>'案场助理',
-        2=>'市场专员',
+        2=>'市场',
         3=>'案场销售',
         // 4=>'案场助理',
         // 5=>'案场销售',

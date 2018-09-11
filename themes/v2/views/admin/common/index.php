@@ -112,7 +112,7 @@ $this->pageTitle = $cname.'后台欢迎您';
                     今天成交数量/总数
                 </div>
             </div>
-            <a class="more" href="<?php echo $this->createUrl('sub/list',['cj'=>1])?>">
+            <a class="more" href="<?php echo $this->createUrl('sub/list',['cate'=>3])?>">
                 查看更多 <i class="m-icon-swapright m-icon-white"></i>
             </a>
         </div>

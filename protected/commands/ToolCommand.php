@@ -989,4 +989,101 @@ class ToolCommand extends CConsoleCommand
             $value->save();
         }
     }
+
+    public function actionYesterday()
+    {
+        
+        
+        // 所有的部门主管
+        $allzgs = StaffDepartmentExt::model()->findAll("is_major=1");
+        if($allzgs) {
+            foreach ($allzgs as $key => $value) {
+                $staff = $value->staff;
+                $department = $value->department;
+                $dids[] = $value->did;
+                $childs = $this->getChild($value->did);
+                $dids = array_merge($dids,$childs);
+                $cre = new CDbCriteria;
+                $cre->addInCondition("did",$dids);
+                $users = StaffDepartmentExt::model()->findAll($cre);
+                $uids = [];
+                if($users) {
+                    foreach ($users as $user) {
+                        !in_array($user->id,$uids) && $uids[] = $user->uid;
+                    }
+                }
+
+                $criteria = new CDbCriteria;
+                $criteria->addCondition("updated>=:beginTime");
+                $criteria->addCondition("updated<:endTime");
+                $criteria->params[':beginTime'] = TimeTools::getDayBeginTime()-86400;
+                $criteria->params[':endTime'] = TimeTools::getDayEndTime()-86400;
+                
+                // 案场数据
+                $allws = $alldd = $allqy = $alldf = 0;
+                $criteria->addInCondition('sale_uid',$uids);
+                $subs = SubExt::model()->findAll($criteria);
+                if($subs) {
+                    foreach ($subs as $sub) {
+
+                        if($sub->status>=4 && $sub->status<9) {
+                            $allqy++;
+                        } elseif ($sub->status==3) {
+                            $alldd++;
+                        } elseif ($sub->status==1) {
+                            $alldf++;
+                        } else {
+                            $allws++;
+                        }
+                        // $plotarr[] = 
+                    }
+                }
+                $anwords = "案场数据:报备".($allws+$alldf+$alldd+$allqy)."组，到访".$alldf."组，大定".$alldd."组，签约".$allqy."组。";
+
+                $criteria = new CDbCriteria;
+                $criteria->addCondition("updated>=:beginTime");
+                $criteria->addCondition("updated<:endTime");
+                $criteria->params[':beginTime'] = TimeTools::getDayBeginTime()-86400;
+                $criteria->params[':endTime'] = TimeTools::getDayEndTime()-86400;
+                
+                // 市场数据
+                $allws = $alldd = $allqy = $alldf = 0;
+                $criteria->addInCondition('market_uid',$uids);
+                $subs = SubExt::model()->findAll($criteria);
+                if($subs) {
+                    foreach ($subs as $sub) {
+
+                        if($sub->status>=4 && $sub->status<9) {
+                            $allqy++;
+                        } elseif ($sub->status==3) {
+                            $alldd++;
+                        } elseif ($sub->status==1) {
+                            $alldf++;
+                        } else {
+                            $allws++;
+                        }
+                        // $plotarr[] = 
+                    }
+                }
+                $scwords = "市场数据:报备".($allws+$alldf+$alldd+$allqy)."组，到访".$alldf."组，大定".$alldd."组，签约".$allqy."组。";
+                // var_dump($scwords);exit;
+                SmsExt::sendMsg('昨日统计',$staff->phone,['name'=>($department?($department->name):'').'主管'.$staff->name,'data'=>$anwords.$scwords]);
+                
+            }
+        }
+    }
+
+    public function getChild($obj)
+    {
+        $ids = [];
+        if($dds = DepartmentExt::model()->findAll("parent=".$obj)) {
+            foreach ($dds as $key => $value) {
+                $ids[] = $value->id;
+                if($res = $this->getChild($value->id)) {
+                    $ids = array_merge($res,$ids);
+                }
+            }
+        }
+        return $ids;
+    }
 }

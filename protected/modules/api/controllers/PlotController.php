@@ -863,6 +863,10 @@ class PlotController extends ApiController{
 					if(!$user->status) {
 						return $this->returnError('用户处于禁用状态，请联系客服处理');
 					}
+					$com = $user->companyinfo;
+					if($com && $com->status==0) {
+						return $this->returnError('您所在的公司处于禁用状态，请联系客服处理');
+					}
 				}
 				// $tmp['uid'] = $this->staff->id;
 
@@ -928,6 +932,10 @@ class PlotController extends ApiController{
 				$user = UserExt::model()->findByPk($tmp['uid']);
 				if($user->type==2&&!$user->cid) {
 					return $this->returnError('请认证后操作');
+				}
+				$com = $user->companyinfo;
+				if($com && $com->status==0) {
+					return $this->returnError('您所在的公司处于禁用状态，请联系客服处理');
 				}
 // var_dump($plot);exit;
 				if($plot && !Yii::app()->db->createCommand("select id from cooperate where deleted=0 and uid=".$tmp['uid']." and hid=".$tmp['hid'])->queryScalar()) {
