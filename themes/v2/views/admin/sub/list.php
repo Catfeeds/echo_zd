@@ -20,6 +20,9 @@ $statusArr = SubExt::$status;
             <div class="form-group">
                 <?php echo CHtml::dropDownList('cate',$cate,$statusArr,array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择状态--')); ?>
             </div>
+            <div class="form-group">
+                <?php echo CHtml::dropDownList('is_zf',$is_zf,['渠道客','自访客'],array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择客户类型--')); ?>
+            </div>
             <button type="submit" class="btn blue">搜索</button>
             <a class="btn yellow" onclick="removeOptions()"><i class="fa fa-trash"></i>&nbsp;清空</a>
         </form>
@@ -58,7 +61,7 @@ $statusArr = SubExt::$status;
         <tr>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td class="text-center"><?=$v->plot->title?></td>
-            <td class="text-center"><?=$user?($user->name.'/'.$user->phone.($v->is_zf?'自访客':($company?('<br>'.$company->name):''))):''?></td> 
+            <td class="text-center"><?=$user?($user->name.'/'.$user->phone.($v->is_zf?'<br>自访客':($company?('<br>'.$company->name):''))):''?></td> 
             <td class="text-center"><?=$v->name.'/'.$v->phone?></td> 
             <td class="text-center"><?=$market_user?$market_user->name:''?></td> 
             <td class="text-center"><?=$an_user?$an_user->name:''?></td> 

@@ -19,7 +19,7 @@ class SubController extends AdminController{
 		// $this->cates = CHtml::listData(LeagueExt::model()->normal()->findAll(),'id','name');
 		// $this->cates1 = CHtml::listData(TeamExt::model()->normal()->findAll(),'id','name');
 	}
-	public function actionList($type='title',$value='',$time_type='created',$time='',$cate='')
+	public function actionList($type='title',$value='',$time_type='created',$time='',$cate='',$is_zf='')
 	{
 		$modelName = $this->modelName;
 		$criteria = new CDbCriteria;
@@ -57,9 +57,13 @@ class SubController extends AdminController{
 			$criteria->addCondition('status=:cid');
 			$criteria->params[':cid'] = $cate;
 		}
+        if(is_numeric($is_zf)) {
+            $criteria->addCondition('is_zf=:is_zf');
+            $criteria->params[':is_zf'] = $is_zf;
+        }
         $criteria->order = 'sort desc,updated desc';
 		$infos = $modelName::model()->undeleted()->getList($criteria,20);
-		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,]);
+		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'is_zf'=>$is_zf]);
 	}
 
 	public function actionEdit($id='')
