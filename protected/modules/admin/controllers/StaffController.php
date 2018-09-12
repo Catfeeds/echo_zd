@@ -50,7 +50,7 @@ class StaffController extends AdminController{
 
         }
 		if($cate) {
-			$criteria->addCondition('t.status=:cid');
+			$criteria->addCondition('t.is_jl=:cid');
 			$criteria->params[':cid'] = $cate;
 		}
         $criteria->order = 'updated desc';
