@@ -58,7 +58,7 @@ $statusArr = SubExt::$status;
         <tr>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td class="text-center"><?=$v->plot->title?></td>
-            <td class="text-center"><?=$user?($user->name.'/'.$user->phone.($company?('<br>'.$company->name):'')):''?></td> 
+            <td class="text-center"><?=$user?($user->name.'/'.$user->phone.($v->is_zf?'自访客':($company?('<br>'.$company->name):''))):''?></td> 
             <td class="text-center"><?=$v->name.'/'.$v->phone?></td> 
             <td class="text-center"><?=$market_user?$market_user->name:''?></td> 
             <td class="text-center"><?=$an_user?$an_user->name:''?></td> 

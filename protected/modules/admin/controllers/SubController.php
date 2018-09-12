@@ -216,6 +216,17 @@ class SubController extends AdminController{
         if($subs) {
         	foreach ($subs as $sub) {
 
+                if($sub->is_zf) {
+                    if(!isset($plotarr[$sub->plot_title]['zf'])) {
+                        $plotarr[$sub->plot_title]['zf'] = 0;
+                    }
+                    $plotarr[$sub->plot_title]['zf']++; 
+                } else {
+                    if(!isset($plotarr[$sub->plot_title]['tf'])) {
+                        $plotarr[$sub->plot_title]['tf'] = 0;
+                    }
+                    $plotarr[$sub->plot_title]['tf']++; 
+                }
         		if($sub->status>=4 && $sub->status<9) {
         			$allqy++;
         			if(!isset($plotarr[$sub->plot_title]['qy'])) {
@@ -298,7 +309,17 @@ class SubController extends AdminController{
         $plotarr = [];
         if($subs) {
         	foreach ($subs as $sub) {
-
+                if($sub->is_zf) {
+                    if(!isset($plotarr[$sub->plot_title]['zf'])) {
+                        $plotarr[$sub->plot_title]['zf'] = 0;
+                    }
+                    $plotarr[$sub->plot_title]['zf']++; 
+                } else {
+                    if(!isset($plotarr[$sub->plot_title]['tf'])) {
+                        $plotarr[$sub->plot_title]['tf'] = 0;
+                    }
+                    $plotarr[$sub->plot_title]['tf']++; 
+                }
         		if($sub->status>=4 && $sub->status<9) {
         			$allqy++;
         			if(!isset($plotarr[$sub->plot_title]['qy'])) {

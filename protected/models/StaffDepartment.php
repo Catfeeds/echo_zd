@@ -7,6 +7,7 @@
  * @property integer $id
  * @property integer $uid
  * @property integer $did
+ * @property string $phone
  * @property integer $is_major
  * @property integer $created
  * @property integer $updated
@@ -31,9 +32,10 @@ class StaffDepartment extends CActiveRecord
 		return array(
 			array('created', 'required'),
 			array('uid, did, is_major, created, updated', 'numerical', 'integerOnly'=>true),
+			array('phone', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, uid, did, is_major, created, updated', 'safe', 'on'=>'search'),
+			array('id, uid, did, phone, is_major, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,6 +59,7 @@ class StaffDepartment extends CActiveRecord
 			'id' => 'ID',
 			'uid' => 'Uid',
 			'did' => 'Did',
+			'phone' => 'Phone',
 			'is_major' => 'Is Major',
 			'created' => 'Created',
 			'updated' => 'Updated',
@@ -84,6 +87,7 @@ class StaffDepartment extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('uid',$this->uid);
 		$criteria->compare('did',$this->did);
+		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('is_major',$this->is_major);
 		$criteria->compare('created',$this->created);
 		$criteria->compare('updated',$this->updated);

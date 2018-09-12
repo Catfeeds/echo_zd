@@ -111,21 +111,28 @@ $statusArr = SubExt::$status;
                         <th>
                             报备总数
                         </th>
-                        <?php if($pt=="案场数据统计"): ?>
                             <th>
                             到访数
                         </th>
-                        <?php endif; ?>
                         <th>
                             大定数
                         </th>
                         <th>
                             签约数
                         </th>
+                        <th>
+                            自访数
+                        </th>
+                        <th>
+                            渠道客
+                        </th>
+                        <th>
+                            自访比
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                <?php if($plotarr) foreach ($plotarr as $k=> $v) { !isset($v['ws']) && $v['ws'] = 0;!isset($v['df']) && $v['df'] = 0;!isset($v['dd']) && $v['dd'] = 0;!isset($v['qy']) && $v['qy'] = 0; ?>
+                <?php if($plotarr) foreach ($plotarr as $k=> $v) { !isset($v['ws']) && $v['ws'] = 0;!isset($v['zf']) && $v['zf'] = 0;!isset($v['tf']) && $v['tf'] = 0;!isset($v['df']) && $v['df'] = 0;!isset($v['dd']) && $v['dd'] = 0;!isset($v['qy']) && $v['qy'] = 0; ?>
                     <tr>
                         <td>
                             <?=$k?>
@@ -141,6 +148,15 @@ $statusArr = SubExt::$status;
                         </td>
                         <td>
                             <?=$v['qy']?>
+                        </td>
+                        <td>
+                            <?=$v['zf']?>
+                        </td>
+                        <td>
+                            <?=$v['tf']?>
+                        </td>
+                        <td>
+                            <?=($v['tf']+$v['tf'])?(round($v['zf']/($v['tf']+$v['tf']),2)):'-'?>
                         </td>
                     </tr>
                 <?php } ?>
