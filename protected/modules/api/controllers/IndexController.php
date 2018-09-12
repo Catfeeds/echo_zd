@@ -1038,4 +1038,55 @@ class IndexController extends ApiController
        $this->frame['data'] = SiteExt::getAttr('qjpz','isAllPhone');
     }
 
+    public function actionImportExl()
+    {
+        $url = "xctxl.xlsx";
+        $arr = ExcelHelper::read($url);
+        foreach ($arr[0] as $key => $value) {
+            $value = array_values($value);
+            // var_dump($value);exit;
+            if(!$value[0])
+                break;
+            $user = new StaffExt;
+            $user->name = trim($value[0]);
+            list($a,$phone) = explode('-', $value[1]);
+            $user->phone = $phone;
+            $user->zw = trim($value[3]);
+            $user->password = '123456';
+            $user->is_jl = trim($value[5]);
+            $user->status = 1;
+            if($user->save()) {
+                $uid = $user->id;
+                $dek = array_values(explode(',', $value[2]));
+                $des = array_values(explode(',', $value[4]));
+                if($dek) {
+                    foreach ($dek as $m=> $deal) {
+                        $dearr = explode('-', $deal);
+                        if($dearr) {
+                            $dids = 0;
+                            foreach ($dearr as $k=> $de) {
+                                if(!($dep = DepartmentExt::model()->find("name='$de'"))) {
+                                    $dep = new DepartmentExt;
+                                    $dep->name = $de;
+                                    $dep->parent = $dids;
+                                    $dep->status = 1;
+                                    $dep->save();
+                                }
+                                $dids = $dep->id;
+                                // 最底层存入关系表
+                                if($k+1==count($dearr)) {
+                                    $staffdep = new StaffDepartmentExt;
+                                    $staffdep->uid = $uid;
+                                    $staffdep->did = $dep->id;
+                                    $staffdep->is_major = $des[$m]=='是'?1:0;
+                                    $staffdep->phone = $user->phone;
+                                    $staffdep->save();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
