@@ -93,9 +93,7 @@ class SubExt extends Sub{
         }
         if($this->getIsNewRecord()) {
             // 如果是员工的话 就is_zf=1
-            if($this->fx_phone && $staff = StaffExt::model()->find("phone='.$this->fx_phone.'")) {
-                Yii::log($this->fx_phone);
-                Yii::log($staff->name);
+            if($this->fx_phone && $staff = StaffExt::model()->find("phone='".$this->fx_phone."'")) {
                 $this->is_zf = 1;
             }
             // $res = Yii::app()->controller->sendNotice(($this->plot?$this->plot->title:'').'有新的报备，请登陆后台审核','',1);
