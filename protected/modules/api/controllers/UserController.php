@@ -414,7 +414,7 @@ class UserController extends ApiController{
 						'firstR'=>$value->name.' '.$value->phone,
 						'secondL'=>'市场',
 						'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
-						'thirdL'=>'分销',
+						'thirdL'=>$value->is_zf?'自访':'分销',
 						'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
 						'fouthL'=>'公司',
 						'fouthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
@@ -493,7 +493,7 @@ class UserController extends ApiController{
 						'firstR'=>$value->name.' '.$value->phone,
 						'secondL'=>'案场',
 						'secondR'=>$an_user?($an_user->name.' '.$an_user->phone):'暂无',
-						'thirdL'=>'分销',
+						'thirdL'=>$value->is_zf?'自访':'分销',
 						'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
 						'fouthL'=>'公司',
 						'fouthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
@@ -559,7 +559,7 @@ class UserController extends ApiController{
 						'firstR'=>$value->name.' '.$value->phone,
 						'secondL'=>'市场',
 						'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
-						'thirdL'=>'分销',
+						'thirdL'=>$value->is_zf?'自访':'分销',
 						'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
 						'fouthL'=>'公司',
 						'fouthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
@@ -693,7 +693,7 @@ class UserController extends ApiController{
 				$secondArr = [
 					'name'=>$u->name,
 					'phone'=>$u->phone,
-					'tag'=>'分销资料',
+					'tag'=>$sub->is_zf?'自访客':'分销资料',
 					'company'=>$sub->company?$sub->company->name:'',
 				];
 			}
