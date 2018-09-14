@@ -70,7 +70,7 @@ class PlotController extends AdminController{
         }
         if(Yii::app()->user->id>1 && Yii::app()->user->user_type==1) {
         	$hids = [];
-        	$ress = PlotAnExt::model()->findAll("type=1 and uid=".Yii::app()->user->id);
+        	$ress = PlotAnExt::model()->findAll("uid=".Yii::app()->user->id);
         	if($ress) {
         		foreach ($ress as $res) {
         			$hids[] = $res->hid;
