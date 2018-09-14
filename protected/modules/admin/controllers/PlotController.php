@@ -68,9 +68,16 @@ class PlotController extends AdminController{
             $criteria->params[':endTime'] = TimeTools::getDayEndTime($endTime);
 
         }
-        // if(Yii::app()->user->id>1) {
-        // 	$company=Yii::app()->user->cid;
-        // }
+        if(Yii::app()->user->id>1 && Yii::app()->user->user_type==1) {
+        	$hids = [];
+        	$ress = PlotAnExt::model()->findAll("type=1 and uid=".Yii::app()->user->id);
+        	if($ress) {
+        		foreach ($ress as $res) {
+        			$hids[] = $res->hid;
+        		}
+        	}
+        	$criteria->addInCondition('id',$hids);
+        }
         if($company) {
         	$criteria->addCondition('company_id=:comid');
         	$criteria->params[':comid'] = $company;

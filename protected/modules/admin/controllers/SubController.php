@@ -53,6 +53,16 @@ class SubController extends AdminController{
             $criteria->params[':endTime'] = TimeTools::getDayEndTime($endTime);
 
         }
+        if(Yii::app()->user->id>1 && Yii::app()->user->user_type==1) {
+            $hids = [];
+            $ress = PlotAnExt::model()->findAll("type=1 and uid=".Yii::app()->user->id);
+            if($ress) {
+                foreach ($ress as $res) {
+                    $hids[] = $res->hid;
+                }
+            }
+            $criteria->addInCondition('hid',$hids);
+        }
 		if($cate) {
 			$criteria->addCondition('status=:cid');
 			$criteria->params[':cid'] = $cate;
