@@ -1092,8 +1092,9 @@ class ToolCommand extends CConsoleCommand
         $sitename1 = Yii::app()->file->sitename1;
         $arr = ['22','41'];
         foreach ($arr as $key => $a) {
-            $dids = [$a];
-            $childs = $this->getChild($value->did);
+            $dids = [];
+            $dids[] = $a; 
+            $childs = $this->getChild($a);
                 $dids = array_merge($dids,$childs);
                 $cre = new CDbCriteria;
                 $cre->addInCondition("did",$dids);
