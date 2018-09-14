@@ -1111,7 +1111,7 @@ class ToolCommand extends CConsoleCommand
                 if($users) {
                     foreach ($users as $key => $value) {
                         if($value->name && $value->phone && $value->password)
-                        SmsExt::sendMsg('后台新增员工',$this->phone,['name'=>$value->name,'phone'=>$value->phone,'pwd'=>$value->password."。请在微信小程序内搜索“".$sitename1."”登陆！"]);
+                        SmsExt::sendMsg('后台新增员工',$value->phone,['name'=>$value->name,'phone'=>$value->phone,'pwd'=>$value->password."。请在微信小程序内搜索“".$sitename1."”登陆！"]);
                     }
                 }
 
