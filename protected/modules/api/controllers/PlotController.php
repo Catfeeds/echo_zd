@@ -172,7 +172,7 @@ class PlotController extends ApiController{
 			} elseif ($user_type==2) {
 				$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_makert_user where uid=".$staffuid)->queryAll();
 			} else {
-				$idrr = Yii::app()->db->createCommand("select distinct(hid) from sub where an_uid=".$staffuid)->queryAll();
+				$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where type=2 and uid=".$staffuid)->queryAll();
 			}
 			
 			if($idrr) {
