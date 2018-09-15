@@ -1086,4 +1086,35 @@ class ToolCommand extends CConsoleCommand
         }
         return $ids;
     }
+
+    public function actionSendDeMsg()
+    {
+        $sitename1 = Yii::app()->file->sitename1;
+        $arr = ['22','41'];
+        foreach ($arr as $key => $a) {
+            $dids = [];
+            $dids[] = $a; 
+            $childs = $this->getChild($a);
+                $dids = array_merge($dids,$childs);
+                $cre = new CDbCriteria;
+                $cre->addInCondition("did",$dids);
+                $users = StaffDepartmentExt::model()->findAll($cre);
+                $uids = [];
+                if($users) {
+                    foreach ($users as $user) {
+                        !in_array($user->id,$uids) && $uids[] = $user->uid;
+                    }
+                }
+                $criteria = new CDbCriteria;
+                $criteria->addInCondition('id',$uids);
+                $users = StaffExt::model()->findAll($criteria);
+                if($users) {
+                    foreach ($users as $key => $value) {
+                        if($value->name && $value->phone && $value->password)
+                        SmsExt::sendMsg('后台新增员工',$value->phone,['name'=>$value->name,'phone'=>$value->phone,'pwd'=>$value->password."。请在微信小程序内搜索“".$sitename1."”登陆！"]);
+                    }
+                }
+
+        }
+    }
 }
