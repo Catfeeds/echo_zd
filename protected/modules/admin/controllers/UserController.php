@@ -61,6 +61,7 @@ class UserController extends AdminController{
                 $criteria->addCondition('vip_expire>0 and vip_expire<='.time());
             }
         }
+        
         if(is_numeric($status)) {
             $criteria->addCondition('status=:status');
             $criteria->params[':status'] = $status;
@@ -192,6 +193,20 @@ class UserController extends AdminController{
             ExcelHelper::cvs_write_browser(date("YmdHis",time()),['id','姓名','用户类型','电话','公司','到期时间/年','到期时间/月日','创建时间'],$data); 
         }
 
+    }
+
+    public function getChild($obj)
+    {
+        $ids = [];
+        if($dds = DepartmentExt::model()->findAll("parent=".$obj)) {
+            foreach ($dds as $key => $value) {
+                $ids[] = $value->id;
+                if($res = $this->getChild($value->id)) {
+                    $ids = array_merge($res,$ids);
+                }
+            }
+        }
+        return $ids;
     }
 
 }

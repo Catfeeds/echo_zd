@@ -76,20 +76,26 @@ class PlotMarketUserController extends AdminController{
 		$modelName = $this->modelName;
 		$info = $id ? $modelName::model()->findByPk($id) : new $modelName;
 		if(Yii::app()->request->getIsPostRequest()) {
-			// $userphone = Yii::app()->request->getPost('userphone');
-			// $uid = '';
-			// if($userphone) {
-			// 	$user = UserExt::model()->find("phone='$userphone'");
-			// 	$uid = $user->id;
-			// }
-			
-			$info->attributes = Yii::app()->request->getPost($modelName,[]);
-			// $info->uid = $uid;
-			// $info->time =  is_numeric($info->time)?$info->time : strtotime($info->time);
-			if($info->save()) {
+			if($did = Yii::app()->request->getPost('did',[])) {
+				$uidtmp = StaffDepartmentExt::model()->findAll("did=$did");
+				if($uidtmp) {
+					foreach ($uidtmp as $up) {
+						$obj = new $modelName;
+						$obj->attributes = Yii::app()->request->getPost($modelName,[]);
+						$obj->uid = $up->uid;
+						$obj->save();
+					}
+				}
 				$this->setMessage('操作成功','success',['list']);
 			} else {
-				$this->setMessage(array_values($info->errors)[0][0],'error');
+				$info->attributes = Yii::app()->request->getPost($modelName,[]);
+				// $info->uid = $uid;
+				// $info->time =  is_numeric($info->time)?$info->time : strtotime($info->time);
+				if($info->save()) {
+					$this->setMessage('操作成功','success',['list']);
+				} else {
+					$this->setMessage(array_values($info->errors)[0][0],'error');
+				}
 			}
 		} 
 		$this->render('edit',['cates'=>$this->cates,'article'=>$info,'cates1'=>$this->cates1,'userphone'=>isset($info->user->phone)?$info->user->phone:'','hid'=>$hid]);

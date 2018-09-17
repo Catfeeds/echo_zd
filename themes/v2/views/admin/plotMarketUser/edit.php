@@ -21,6 +21,13 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
     </div>
 </div>
 <div class="form-group">
+    <label class="col-md-2 control-label">选择部门</label>
+    <div class="col-md-4">
+        <?php echo CHtml::dropDownList('did',[],CHtml::listData(Tools::menuMake(DepartmentExt::model()->findAll(),-1,'id'),'id','name'),array('class' => 'form-control select2 ','encode'=>false,'prompt'=>'--请选择部门--')); ?> 
+    </div>
+    <div class="help-block">如果选择部门，请勿选择市场</div>
+</div>
+<div class="form-group">
     <label class="col-md-2 control-label">楼盘</label>
     <div class="col-md-4">
 <?php if($hid):?>

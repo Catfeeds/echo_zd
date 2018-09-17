@@ -56,6 +56,31 @@ class StaffController extends AdminController{
 			$criteria->params[':cid'] = $cate;
 		}
         $criteria->order = 'updated desc';
+        // 权限管理 主管看到当前和子部门 员工看到当前部门
+        if(Yii::app()->user->id>1) {
+            $uids = [];
+            $uids[] = Yii::app()->user->id;
+            $sds = StaffDepartmentExt::model()->findAll("uid=".Yii::app()->user->id);
+            if($sds) {
+                foreach ($sds as $sd) {
+                    $dids = [];
+                    $dids[] = $sd->did;
+                    if($sd->is_major) {
+                        // 找到所有子部门
+                        $dids = array_merge($dids,$this->getChild($sd->did));
+                    }
+                    $cres = new CDbCriteria;
+                    $cres->addInCondition('did',$dids);
+                    $stus = StaffDepartmentExt::model()->findAll($cres);
+                    if($stus) {
+                        foreach ($stus as $stu) {
+                            $uids[] = $stu['uid'];
+                        }
+                    }
+                }
+            }
+            $criteria->addInCondition('t.id',$uids);
+        }
 		$infos = $modelName::model()->with('departments')->getList($criteria,20);
         $scjls = [];
         $acjls = [];
@@ -68,6 +93,7 @@ class StaffController extends AdminController{
                 }
             }
         }
+
         array_unshift($scjls, ['id'=>'0','name'=>'暂无']);
         array_unshift($acjls, ['id'=>'0','name'=>'暂无']);
 		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'scjls'=>$scjls,'acjls'=>$acjls]);
@@ -167,7 +193,7 @@ class StaffController extends AdminController{
             $info = StaffExt::model()->findByPk($id);
             if(Yii::app()->request->getIsPostRequest()) {
                 $info->attributes = Yii::app()->request->getPost('StaffExt',[]);
-                $info->password && $info->password = md5($info->password);
+                $info->password && $info->password = $info->password;
                 // $info->cid = Yii::app()->user->cid;
                 // $info->getIsNewRecord() && $info->status = 1;
                 // $info->pwd = md5($info->pwd);
@@ -235,5 +261,19 @@ class StaffController extends AdminController{
         $dep->is_major = $dep->is_major?0:1;
         $dep->save();
         $this->setMessage('操作成功','success');
+    }
+
+    public function getChild($obj)
+    {
+        $ids = [];
+        if($dds = DepartmentExt::model()->findAll("parent=".$obj)) {
+            foreach ($dds as $key => $value) {
+                $ids[] = $value->id;
+                if($res = $this->getChild($value->id)) {
+                    $ids = array_merge($res,$ids);
+                }
+            }
+        }
+        return $ids;
     }
 }

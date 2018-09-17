@@ -49,8 +49,8 @@ $this->breadcrumbs = array($this->pageTitle);
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td class="text-center"><?=$v->name?></td>
             <td class="text-center"><?php
-                if($v->is_manage) {
-                    echo "店长";
+                if(Yii::app()->user->id>=1) {
+                    echo StaffExt::$is_jls[$v->is_jl];
                 } else {
                     ?><div class="btn-group">
                     <button id="btnGroupVerticalDrop1" type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
@@ -77,15 +77,19 @@ $this->breadcrumbs = array($this->pageTitle);
             <td class="text-center"><?=$v->phone?></td>
             <td class="text-center"><?=date('Y-m-d',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>
-            <td class="text-center"><?php echo CHtml::ajaxLink(UserExt::$status[$v->status],$this->createUrl('changeStatus'), array('type'=>'get', 'data'=>array('id'=>$v->id,'class'=>get_class($v)),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$v->status])); ?></td>
+            <td class="text-center">
+
+                <?php if(Yii::app()->user->id==1) echo CHtml::ajaxLink(UserExt::$status[$v->status],$this->createUrl('changeStatus'), array('type'=>'get', 'data'=>array('id'=>$v->id,'class'=>get_class($v)),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$v->status])); else echo UserExt::$status[$v->status]; ?>
+                    
+                </td>
 
 
             <td style="text-align:center;vertical-align: middle">
+                <?php if(Yii::app()->user->id==$v->id || Yii::app()->user->id==1): ?>
             <a href="<?php echo $this->createUrl('dlist',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs blue"> 部门管理 </a> 
-                <?php if(Yii::app()->user->id==$v->id):?><a href="<?php echo $this->createUrl('editpwd',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs blue"><i class="fa fa-edit"></i> 修改密码 </a><?php endif; ?>
-                <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 编辑 </a> 
-
-
+            <a href="<?php echo $this->createUrl('editpwd',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs blue"><i class="fa fa-edit"></i> 修改密码 </a>
+            <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 编辑 </a> 
+        <?php endif;?>
             </td>
         </tr>
     <?php endforeach; ?>

@@ -17,8 +17,15 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
 <div class="form-group">
     <label class="col-md-2 control-label">选择案场</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'uid', CHtml::listData(StaffExt::model()->findAll(),'id','name_phone'), array('value'=>$hid?$hid:'','class' => 'form-control select2','empty'=>'')); ?>     
+        <?php echo $form->dropDownList($article, 'uid', CHtml::listData(StaffExt::model()->findAll(),'id','name_phone'), array('value'=>$hid?$hid:'','class' => 'form-control select2 ','empty'=>'')); ?>     
     </div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">选择部门</label>
+    <div class="col-md-4">
+        <?php echo CHtml::dropDownList('did',[],CHtml::listData(Tools::menuMake(DepartmentExt::model()->findAll(),-1,'id'),'id','name'),array('class' => 'form-control select2 ','encode'=>false,'prompt'=>'--请选择部门--')); ?> 
+    </div>
+    <div class="help-block">如果选择部门，请勿选择案场</div>
 </div>
 <div class="form-group">
     <label class="col-md-2 control-label">楼盘</label>
