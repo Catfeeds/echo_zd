@@ -992,6 +992,7 @@ class PlotController extends ApiController{
 			// 	}
 			// }
 			$obj = new CompanyExt;
+			!is_numeric($values['adduid']) && $values['adduid'] = 0;
 			$obj->attributes = $values;
 			// $obj->area = $area;
 			// $obj->street = $street;
@@ -1000,6 +1001,9 @@ class PlotController extends ApiController{
 			$user = UserExt::model()->findByPk($obj->adduid);
 			if($user)
 				SmsExt::sendMsg('申请门店码',$user->phone,['name'=>$user->name,'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
+			elseif($values['phone']&&$values['manager']) {
+				SmsExt::sendMsg('申请门店码',$values['phone'],['name'=>$values['manager'],'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
+			}
 
 			$this->frame['data'] = SiteExt::getAttr('qjpz','confirmNote');
 		}
