@@ -1154,7 +1154,7 @@ class UserController extends ApiController{
         	$todayList[] = ['num'=>$value,'text'=>$key];
         }
 		$data = [
-			'topArr'=>['name'=>$user->name,'tag'=>StaffExt::$is_jls[$user_type],'company'=>Yii::app()->file->sitename],
+			'topArr'=>['name'=>$user->name,'tag'=>$user->zw?$user->zw:StaffExt::$is_jls[$user_type],'company'=>SiteExt::getAttr('qjpz','companyname')?SiteExt::getAttr('qjpz','companyname'):Yii::app()->file->sitename1],
 			'topNewsList'=>explode(' ', SiteExt::getAttr('qjpz','indexmarquee')),
 			'todayList'=>$todayList,
 			'tags'=>$tags,

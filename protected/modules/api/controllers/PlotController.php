@@ -477,11 +477,10 @@ class PlotController extends ApiController{
 				$hxarr[] = $tmp;
 			}
 		}
-		if($sfs = $info->sfMarkets) {
+		if($sfs = $info->subtz) {
 			foreach ($sfs as $key => $value) {
-				$thisstaff = StaffExt::model()->findByPk($value->uid);
-
-				$thisstaff && $phones[] = ['name'=>$thisstaff->name,'phone'=>$thisstaff->phone,'company'=>Yii::app()->file->sitename];
+				$thisstaff = StaffExt::model()->findByPk($value);
+				$thisstaff && $phones[] = ['name'=>$thisstaff->name,'phone'=>$thisstaff->phone,'company'=>$thisstaff->zw];
 			}
 			// array_unique($phones);
 		}
@@ -903,9 +902,13 @@ class PlotController extends ApiController{
 					}
 					$obj->code = $code;
 					if($obj->save()) {
-						if($plot->subtz && $staff = StaffExt::model()->findByPk($plot->subtz)) {
-
-							SmsExt::sendMsg('添加报备通知',$staff->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'name'=>$obj->name.$obj->phone,'pro'=>$plot->title]);
+						if($subs = $plot->subtz) {
+							if(!is_array($subs))
+								$subs = [$subs];
+							foreach ($subs as $s) {
+								$staff = StaffExt::model()->findByPk($s);
+								SmsExt::sendMsg('添加报备通知',$staff->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'name'=>$obj->name.$obj->phone,'pro'=>$plot->title]);
+							}
 						}
 						$pro = new SubProExt;
 						$pro->sid = $obj->id;
