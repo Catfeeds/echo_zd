@@ -477,7 +477,7 @@ class PlotController extends ApiController{
 				$hxarr[] = $tmp;
 			}
 		}
-		if($sfs = $info->subtz) {
+		if($sfs = $info->djrlist) {
 			foreach ($sfs as $key => $value) {
 				$thisstaff = StaffExt::model()->findByPk($value);
 				$thisstaff && $phones[] = ['name'=>$thisstaff->name,'phone'=>$thisstaff->phone,'company'=>$thisstaff->zw];

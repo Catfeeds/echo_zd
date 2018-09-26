@@ -85,6 +85,7 @@ class PlotExt extends Plot{
         'cotz'=>'',
         'subtz'=>'',
         'jbtz'=>'',
+        'djrlist'=>'',
         // ''
     ];
 

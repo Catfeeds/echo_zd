@@ -454,6 +454,13 @@ $childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->find
                 </div>
                 <div class="col-md-12"><?php echo $form->error($plot, 'jbtz'); ?></div>
             </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label text-nowrap">前台显示对接人列表</label>
+                <div class="col-md-10">
+                    <?php echo $form->dropDownList($plot, 'djrlist',  CHtml::listData($allstaffs,'id','name_phone'), array('class'=>'form-control select2','multiple'=>'multiple')); ?>
+                </div>
+                <div class="col-md-12"><?php echo $form->error($plot, 'djrlist'); ?></div>
+            </div>
 
             
             <div class="form-group">
