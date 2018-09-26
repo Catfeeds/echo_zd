@@ -23,11 +23,11 @@ $this->breadcrumbs = array($this->pageTitle);
     </tr>
     </thead>
     <tbody>
-    <?php foreach($infos as $k=>$v): ?>
+    <?php foreach($infos as $k=>$v): $staff = StaffExt::model()->findByPk($v->uid);$user = UserExt::model()->findByPk($v->uid); ?>
         <tr>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td style="text-align:center;vertical-align: middle" class="text-center"><?=strstr($v->url,'http')?$v->url:('<img width="100px" height="70px" src="'.ImageTools::fixImage($v->url).'">')?></td>   
-            <td class="text-center"><?=($v->user_type?StaffExt::model()->findByPk($v->uid)->name:UserExt::model()->findByPk($v->uid)->name).'/'.SubImgExt::$user_types[$v->user_type]?></td>       
+            <td class="text-center"><?=($v->user_type&&$staff?$staff->name:($user?$user->name:'')).'/'.SubImgExt::$user_types[$v->user_type]?></td>       
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>
             

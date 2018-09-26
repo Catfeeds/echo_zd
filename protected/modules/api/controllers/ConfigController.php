@@ -30,7 +30,9 @@ class ConfigController extends ApiController{
 	// 		$is_jy = 0;
 	// 	}
 		$sitename = SiteExt::getAttr('qjpz','sitename');
+		$sitename1 = SiteExt::getAttr('qjpz','sitename1');
 		$data = [
+			'sitename1'=>$sitename1?$sitename1:Yii::app()->file->sitename1,
 			'sitename'=>$sitename?$sitename:Yii::app()->file->sitename,
 			'tel'=>SiteExt::getAttr('qjpz','site_phone')
 		];

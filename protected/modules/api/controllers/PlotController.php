@@ -992,7 +992,8 @@ class PlotController extends ApiController{
 			// 	}
 			// }
 			$obj = new CompanyExt;
-			!is_numeric($values['adduid']) && $values['adduid'] = 0;
+			if(isset($values['adduid']))
+				!is_numeric($values['adduid']) && $values['adduid'] = 0;
 			$obj->attributes = $values;
 			// $obj->area = $area;
 			// $obj->street = $street;
