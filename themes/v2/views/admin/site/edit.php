@@ -32,7 +32,11 @@ $this->breadcrumbs = array('站点配置', $this->pageTitle);
         <label class="col-md-2 control-label text-nowrap"><?=$value['name']?></label>
         <div class="col-md-8">
         <?php if($value['type'] == 'image'):?>
+            <?php if(isset($value['notedit'])&&$value['notedit']&&$model->$key): ?>
+                <img src="<?=ImageTools::fixImage($model->$key)?>">
+            <?php else: ?>
             <?php $this->widget('FileUpload',array('model'=>$model,'attribute'=>$key,'inputName'=>'img','width'=>400,'height'=>300)); ?>
+        <?php endif;?>
         <?php elseif($value['type'] == 'multiImage'):?>
                     <?php $this->widget('FileUpload',array('inputName'=>'img','multi'=>true,'callback'=>'function(data){callback(data);}')); ?>
                     <div class="form-group images-place" style="margin-left: 220px">
@@ -41,7 +45,7 @@ $this->breadcrumbs = array('站点配置', $this->pageTitle);
                   <?php }?>
                 </div>
         <?php elseif($value['type'] == 'text'):?>
-            <?php echo $form->textField($model, $key, array('class' => 'form-control fi','onfocus'=>'setFocus(this)')); ?>
+            <?php echo $form->textField($model, $key, array('class' => 'form-control fi','onfocus'=>'setFocus(this)','readonly'=>$model->$key&&isset($value['notedit'])&&$value['notedit']?'readonly':'')); ?>
         <?php elseif($value['type'] == 'textarea'):?>
             <?php echo $form->textarea($model, $key, array('class' => 'form-control fi','onfocus'=>'setFocus(this)')); ?>
         <?php elseif($value['type'] == 'pwd'):?>

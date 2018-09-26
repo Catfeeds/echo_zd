@@ -282,6 +282,9 @@ class PlotController extends ApiController{
 		// 	}
 		// 	$this->frame['data'] = $dats;
 		// } else {
+			if($infoid) {
+				$criteria->addCondition('id<>'.$infoid);
+			}
 			$plots = PlotExt::model()->undeleted()->getList($criteria,$limit);
 			$lists = [];
 			$topids = [];

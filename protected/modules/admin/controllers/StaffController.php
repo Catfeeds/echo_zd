@@ -36,7 +36,7 @@ class StaffController extends AdminController{
 		if($value = trim($value))
             if ($type=='title') {
                 $criteria->addSearchCondition('t.name', $value);
-            } elseif ($type=='title') {
+            } elseif ($type=='phone') {
                 $criteria->addSearchCondition('t.phone', $value);
             }
         //添加时间、刷新时间筛选
