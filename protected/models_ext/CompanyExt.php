@@ -62,7 +62,7 @@ class CompanyExt extends Company{
             if($user)
                 SmsExt::sendMsg('下发门店码',$user->phone,['name'=>$user->name,'com'=>$this->name,'code'=>$code,'sitename'=>Yii::app()->file->sitename,'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
             elseif ($this->phone && $this->manager) {
-                SmsExt::sendMsg('下发门店码',$this->phone,['name'=>$this->manager->name,'com'=>$this->name,'code'=>$code,'sitename'=>Yii::app()->file->sitename,'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
+                SmsExt::sendMsg('下发门店码',$this->phone,['name'=>$this->manager,'com'=>$this->name,'code'=>$code,'sitename'=>Yii::app()->file->sitename,'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
             }
         }
         // if(($this->getIsNewRecord() && $this->status==1) || ($this->status==1 && Yii::app()->db->createCommand("select status from company where id=".$this->id)->queryScalar()==0)) {
