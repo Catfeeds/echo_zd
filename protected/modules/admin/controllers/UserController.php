@@ -67,7 +67,61 @@ class UserController extends AdminController{
             $criteria->params[':status'] = $status;
         }        $criteria->order = 'sort desc,created desc,updated desc';
         $infos = $modelName::model()->undeleted()->getList($criteria,20);
-        $this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'status'=>$status,'viptime'=>$viptime]);
+        $this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'status'=>$status,'viptime'=>$viptime,'u'=>0]);
+    }
+    public function actionUlist($type='title',$value='',$time_type='created',$time='',$cate='',$status='',$viptime='')
+    {
+        $modelName = $this->modelName;
+        $criteria = new CDbCriteria;
+        if($value = trim($value))
+            if ($type=='title') {
+                $criteria->addSearchCondition('name', $value);
+            } elseif($type=='phone') {
+                $criteria->addSearchCondition('phone', $value);
+            } elseif($type=='com') {
+                $cre = new CDbCriteria;
+                $cre->addSearchCondition('name', $value);
+                $coms = CompanyExt::model()->undeleted()->findAll($cre);
+                $ids = [];
+                if($coms) {
+                    foreach ($coms as $c) {
+                        $ids[] = $c->id;
+                    }
+                    $criteria->addInCondition('cid', $ids);
+                }
+                
+            }
+        //添加时间、刷新时间筛选
+        if($time_type!='' && $time!='')
+        {
+            list($beginTime, $endTime) = explode('-', $time);
+            $beginTime = (int)strtotime(trim($beginTime));
+            $endTime = (int)strtotime(trim($endTime));
+            $criteria->addCondition("{$time_type}>=:beginTime");
+            $criteria->addCondition("{$time_type}<:endTime");
+            $criteria->params[':beginTime'] = TimeTools::getDayBeginTime($beginTime);
+            $criteria->params[':endTime'] = TimeTools::getDayEndTime($endTime);
+
+        }
+        if(is_numeric($cate)) {
+            $criteria->addCondition('type=:cid');
+            $criteria->params[':cid'] = $cate;
+        }
+        if(is_numeric($viptime)) {
+            if($viptime==0) {
+                $criteria->addCondition('vip_expire>='.time());
+            } else {
+                $criteria->addCondition('vip_expire>0 and vip_expire<='.time());
+            }
+        }
+        
+        if(is_numeric($status)) {
+            $criteria->addCondition('status=:status');
+            $criteria->params[':status'] = $status;
+        }        $criteria->order = 'sort desc,created desc,updated desc';
+        $criteria->addCondition('status=0');
+        $infos = $modelName::model()->undeleted()->getList($criteria,20);
+        $this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'status'=>$status,'viptime'=>$viptime,'u'=>1]);
     }
 
     public function actionEdit($id='',$type='')

@@ -24,7 +24,7 @@ $this->breadcrumbs = array($this->pageTitle);
     <?php foreach($infos as $k=>$v): $ds = StaffDepartmentExt::model()->find("uid=".$staff->id." and did=".$v->id); $type = $ds->is_major; ?>
         <tr>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
-            <td class="text-center"><?=$v->name?></td>
+            <td class="text-center"><?=$v->getTree()?></td>
             <td class="text-center"><?php echo CHtml::ajaxLink(StaffExt::$types[$type],$this->createUrl('changeType'), array('type'=>'get', 'data'=>array('id'=>$ds->id),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$type])); ?></td>
             <td class="text-center"><?=date('Y-m-d',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>

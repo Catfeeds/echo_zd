@@ -23,6 +23,7 @@ class AdminIdentity extends CUserIdentity
 			$this->setState('username','管理员');
 			$this->setState('user_type',1);
 			$this->setState('avatar','');
+			$this->setState('is_m',1);
 			return $this->errorCode;
 		} else{
 			if(is_numeric($this->username)) {
@@ -39,6 +40,7 @@ class AdminIdentity extends CUserIdentity
 					$this->setState('username',$user->name);
 					$this->setState('user_type',$user->is_jl);
 					$this->setState('avatar','');
+					$this->setState('is_m',0);
 					return $this->errorCode;
 				}
 			}

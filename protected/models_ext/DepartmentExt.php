@@ -85,4 +85,16 @@ class DepartmentExt extends Department{
         );
     }
 
+    public function getTree()
+    {
+        $trees = [];
+        $parent = $this->parent;
+        while ($res = DepartmentExt::model()->findByPk($parent)) {
+            $parent = $res->parent;
+            $trees[] = $res->name;
+        }
+        $trees[] = $this->name;
+        return implode('->', $trees);
+    }
+
 }

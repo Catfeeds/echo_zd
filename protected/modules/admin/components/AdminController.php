@@ -78,6 +78,8 @@ class AdminController extends Controller
                 ['label' => '分销用户管理', 'url' => ['/admin/user/list'],'active'=>$this->route=='admin/user/edit'],
                 // ['label' => '合作公司', 'url' => ['/admin/companyPackage/list'],'active'=>$this->route=='admin/companyPackage/edit'],
             ]],
+            ['label'=>'分销公司审核','icon'=>'icon-speedometer','url'=>['/admin/company/ulist'],'active'=>$this->route=='admin/company/edit'],
+            ['label'=>'分销员工审核','icon'=>'icon-speedometer','url'=>['/admin/user/ulist'],'active'=>$this->route=='admin/user/edit'],
             ['label'=>'收藏管理','icon'=>'icon-speedometer','url'=>['/admin/save/list'],'active'=>$this->route=='admin/save/edit'],
             ['label'=>'区域管理','icon'=>'icon-speedometer','url'=>['/admin/area/arealist'],'active'=>$this->route=='admin/area/areaedit'],
             ['label'=>'推荐管理','icon'=>'icon-speedometer','url'=>['/admin/recom/list'],'active'=>$this->route=='admin/recom/edit'],

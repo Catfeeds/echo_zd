@@ -47,7 +47,43 @@ class CompanyController extends AdminController{
 		}
 		$criteria->order = 'sort desc,updated desc';
 		$infos = $modelName::model()->undeleted()->getList($criteria,20);
-		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'status'=>$status]);
+		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'status'=>$status,'u'=>0]);
+	}
+	public function actionUlist($type='title',$value='',$time_type='created',$time='',$cate='',$status='')
+	{
+		$modelName = $this->modelName;
+		$criteria = new CDbCriteria;
+		if($value = trim($value))
+            if ($type=='title') {
+                $criteria->addSearchCondition('name', $value);
+            } elseif($type=='code') {
+            	$criteria->addCondition('code=:code');
+				$criteria->params[':code'] = $value;
+            }
+        //添加时间、刷新时间筛选
+        if($time_type!='' && $time!='')
+        {
+            list($beginTime, $endTime) = explode('-', $time);
+            $beginTime = (int)strtotime(trim($beginTime));
+            $endTime = (int)strtotime(trim($endTime));
+            $criteria->addCondition("{$time_type}>=:beginTime");
+            $criteria->addCondition("{$time_type}<:endTime");
+            $criteria->params[':beginTime'] = TimeTools::getDayBeginTime($beginTime);
+            $criteria->params[':endTime'] = TimeTools::getDayEndTime($endTime);
+
+        }
+        $criteria->addCondition('status=0');
+		if($cate) {
+			$criteria->addCondition('type=:cid');
+			$criteria->params[':cid'] = $cate;
+		}
+		if(is_numeric($status)) {
+			$criteria->addCondition('status=:status');
+			$criteria->params[':status'] = $status;
+		}
+		$criteria->order = 'sort desc,updated desc';
+		$infos = $modelName::model()->undeleted()->getList($criteria,20);
+		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'status'=>$status,'u'=>1]);
 	}
 
 	public function actionEdit($id='',$type='')
@@ -61,6 +97,7 @@ class CompanyController extends AdminController{
 				if(Yii::app()->db->createCommand("select id from company where name='".$info->name."'")->queryScalar()) {
 					$this->setMessage('公司名已存在','error');
 				} else {
+					$info->adduid = Yii::app()->user->id;
 					if($info->save()) {
 						$this->setMessage('操作成功','success',[$type=='admin'?'/admin/plot/list':'list']);
 					} else {
