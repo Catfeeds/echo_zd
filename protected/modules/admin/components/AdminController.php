@@ -86,6 +86,7 @@ class AdminController extends Controller
             ['label'=>'标签管理','icon'=>'icon-speedometer','url'=>['/admin/tag/list'],'active'=>$this->route=='admin/tag/edit'],
             ['label' => '员工管理', 'icon' => 'icon-speedometer','url'=>['/admin/staff/list'],'active'=>$this->route=='admin/staff/edit'],
             ['label' => '部门管理', 'icon' => 'icon-speedometer','url'=>['/admin/department/areaList'],'active'=>$this->route=='admin/department/areaEdit'],
+            ['label'=>'短信管理','icon'=>'icon-speedometer','url'=>['/admin/msg/list'],'active'=>$this->route=='admin/msg/edit'],
             ['label'=>'站点配置','icon'=>'icon-speedometer','url'=>['/admin/site/list'],'active'=>$this->route=='admin/site/edit'||$this->route=='admin/site/list'],
             ['label'=>'分销公司审核','icon'=>'icon-speedometer','url'=>['/admin/company/ulist'],'active'=>$this->route=='admin/company/edit'],
             ['label'=>'分销员工审核','icon'=>'icon-speedometer','url'=>['/admin/user/ulist'],'active'=>$this->route=='admin/user/edit'],

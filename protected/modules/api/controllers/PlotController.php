@@ -1001,15 +1001,20 @@ class PlotController extends ApiController{
 			// $obj->area = $area;
 			// $obj->street = $street;
 			$obj->status = 0;
-			$obj->save();
-			$user = UserExt::model()->findByPk($obj->adduid);
-			if($user)
-				SmsExt::sendMsg('申请门店码',$user->phone,['name'=>$user->name,'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
-			elseif($values['phone']&&$values['manager']) {
-				SmsExt::sendMsg('申请门店码',$values['phone'],['name'=>$values['manager'],'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
+			if($obj->save()){
+				// 告诉后台
+				if($tel = SiteExt::getAttr('qjpz','companynotice'))
+					SmsExt::sendMsg('门店码通知后台',$tel,['com'=>$obj->name]);
+				$user = UserExt::model()->findByPk($obj->adduid);
+				if($user)
+					SmsExt::sendMsg('申请门店码',$user->phone,['name'=>$user->name,'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
+				elseif($values['phone']&&$values['manager']) {
+					SmsExt::sendMsg('申请门店码',$values['phone'],['name'=>$values['manager'],'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
+				}
+				$this->frame['data'] = SiteExt::getAttr('qjpz','confirmNote');
+			} else {
+				$this->returnError('参数错误');
 			}
-
-			$this->frame['data'] = SiteExt::getAttr('qjpz','confirmNote');
 		}
     }
     public function actionGetPhones($hid='')
