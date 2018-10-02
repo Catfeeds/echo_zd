@@ -5,6 +5,7 @@
  *
  * The followings are the available columns in table 'msg':
  * @property integer $id
+ * @property string $name
  * @property string $phone
  * @property string $note
  * @property integer $created
@@ -30,11 +31,11 @@ class Msg extends CActiveRecord
 		return array(
 			array('created', 'required'),
 			array('created, updated', 'numerical', 'integerOnly'=>true),
+			array('name, note', 'length', 'max'=>100),
 			array('phone', 'length', 'max'=>20),
-			array('note', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, phone, note, created, updated', 'safe', 'on'=>'search'),
+			array('id, name, phone, note, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,6 +57,7 @@ class Msg extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'name' => 'Name',
 			'phone' => 'Phone',
 			'note' => 'Note',
 			'created' => 'Created',
@@ -82,6 +84,7 @@ class Msg extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('name',$this->name,true);
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('note',$this->note,true);
 		$criteria->compare('created',$this->created);

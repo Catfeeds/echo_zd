@@ -152,6 +152,7 @@ class SmsExt extends Sms{
             $obj = new MsgExt;
             $obj->phone = $phone;
             $obj->note = $res->Code;
+            $obj->name = $type;
             $obj->save();
             return $res;
             } else {

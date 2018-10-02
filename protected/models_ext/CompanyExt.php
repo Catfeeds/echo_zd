@@ -85,10 +85,6 @@ class CompanyExt extends Company{
         // }
         if($this->getIsNewRecord()) {
             
-            if($this->status==0) {
-                
-                $res = Yii::app()->controller->sendNotice('有新的公司提交合作申请，请登陆后台审核','',1);
-            }
             if(!$this->created && !$this->updated)
                 $this->created = $this->updated = time();
         }

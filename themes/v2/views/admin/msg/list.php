@@ -15,6 +15,9 @@ $this->breadcrumbs = array($this->pageTitle);
                 <?php echo CHtml::dropDownList('time_type',$time_type,array('created'=>'添加时间','updated'=>'修改时间'),array('class'=>'form-control','encode'=>false)); ?>
             </div>
             <?php Yii::app()->controller->widget("DaterangepickerWidget",['time'=>$time,'params'=>['class'=>'form-control chose_text']]);?>
+             <div class="form-group">
+                <?php echo CHtml::dropDownList('cate',$cate,array_combine(array_keys(Yii::app()->params['msgArr']),array_keys(Yii::app()->params['msgArr'])),array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择模板名--')); ?>
+            </div>
             <button type="submit" class="btn blue">搜索</button>
             <a class="btn yellow" onclick="removeOptions()"><i class="fa fa-trash"></i>&nbsp;清空</a>
         </form>
@@ -24,6 +27,7 @@ $this->breadcrumbs = array($this->pageTitle);
     <thead class="flip-content">
     <tr>
         <th class="text-center">ID</th>
+        <th class="text-center">模板名</th>
         <th class="text-center">手机号</th>
         <th class="text-center">发送备注</th>
         <!-- <th class="text-center">举报理由</th> -->
@@ -38,6 +42,7 @@ $this->breadcrumbs = array($this->pageTitle);
     <?php foreach($infos as $k=>$v): ?>
         <tr>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
+            <td class="text-center"><?=$v->name?></td>
             <td class="text-center"><?=$v->phone?></td>
             <td class="text-center"><?=$v->note=="OK"?'发送成功':'发送失败'?></td>
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
