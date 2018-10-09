@@ -2677,6 +2677,13 @@ class PlotController extends ApiController{
     		$this->frame['data'] = $data;
     	}
     }
+    public function actionGetPlotAllPhoneById($hid='')
+    {
+    	if($hid) {
+    		$plot = PlotExt::model()->findByPk($hid);
+    		$this->frame['data'] = $plot->isallphone;
+    	}
+    }
 
     public function actionGetSaleList($sid='')
     {

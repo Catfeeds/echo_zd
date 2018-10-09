@@ -34,6 +34,7 @@ $this->breadcrumbs = array('站点配置', $this->pageTitle);
         <?php if($value['type'] == 'image'):?>
             <?php if(isset($value['notedit'])&&$value['notedit']&&$model->$key): ?>
                 <img src="<?=ImageTools::fixImage($model->$key)?>">
+                <input type="hidden" name="SiteExt[bottomLogo]" value="<?=$model->$key?>">
             <?php else: ?>
             <?php $this->widget('FileUpload',array('model'=>$model,'attribute'=>$key,'inputName'=>'img','width'=>400,'height'=>300)); ?>
         <?php endif;?>
