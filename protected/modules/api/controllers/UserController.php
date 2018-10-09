@@ -306,7 +306,7 @@ class UserController extends ApiController{
 			$tmp = [];
 			$is_major = 0;
 			$company = $user->companyinfo;
-			if($company && $user->phone==$company->phone) {
+			if($company && $user->is_manage) {
 				$is_major = 1;
 				$uidss = $company->users;
 				foreach ($uidss as $us) {
@@ -343,11 +343,11 @@ class UserController extends ApiController{
 					];
 					if($is_major) {
 						$user = $value->user;
-						$tmpp['fouthL'] = '分销';
-						$tmpp['fouthR'] = $user?($user->name.' '.$user->phone):'暂无';
+						$tmpp['forthL'] = '分销';
+						$tmpp['forthR'] = $user?($user->name.' '.$user->phone):'暂无';
 						// array_merge($all,[
-						// 	'fouthL'=>'分销',
-						// 	'fouthR'=>$user?($user->name.' '.$user->phone):'暂无',
+						// 	'forthL'=>'分销',
+						// 	'forthR'=>$user?($user->name.' '.$user->phone):'暂无',
 						// ]);
 					}
 					$all[] = $tmpp;
@@ -416,8 +416,8 @@ class UserController extends ApiController{
 						'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
 						'thirdL'=>$value->is_zf?'自访':'分销',
 						'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
-						'fouthL'=>'公司',
-						'fouthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
+						'forthL'=>'公司',
+						'forthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
 						'isShowCode'=>1,
 						'type'=>$value->status,
 						'typeWords'=>SubExt::$status[$value->status],
@@ -495,8 +495,8 @@ class UserController extends ApiController{
 						'secondR'=>$an_user?($an_user->name.' '.$an_user->phone):'暂无',
 						'thirdL'=>$value->is_zf?'自访':'分销',
 						'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
-						'fouthL'=>'公司',
-						'fouthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
+						'forthL'=>'公司',
+						'forthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
 						'isShowCode'=>1,
 						'type'=>$value->status,
 						'typeWords'=>SubExt::$status[$value->status],
@@ -561,8 +561,8 @@ class UserController extends ApiController{
 						'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
 						'thirdL'=>$value->is_zf?'自访':'分销',
 						'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
-						'fouthL'=>'公司',
-						'fouthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
+						'forthL'=>'公司',
+						'forthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
 						'isShowCode'=>1,
 						'type'=>$value->status,
 						'typeWords'=>SubExt::$status[$value->status],

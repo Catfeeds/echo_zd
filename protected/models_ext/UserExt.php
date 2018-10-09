@@ -26,6 +26,9 @@ class UserExt extends User{
         '2'=>'分销公司',
         '3'=>'独立中介',
     ];
+    public static $sfs = [
+        '员工','店长'
+    ];
     public static $is_jls = [
         0=>'暂无',
         1=>'市场部经理',

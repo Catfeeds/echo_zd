@@ -263,4 +263,12 @@ class UserController extends AdminController{
         return $ids;
     }
 
+    public function actionChangeSf($id='')
+    {
+        $obj = UserExt::model()->findByPk($id);
+        $obj->is_manage = $obj->is_manage?0:1;
+        $obj->save();
+        $this->setMessage('操作成功');
+    }
+
 }
