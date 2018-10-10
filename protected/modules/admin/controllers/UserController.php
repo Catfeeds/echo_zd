@@ -16,7 +16,7 @@ class UserController extends AdminController{
         $this->controllerName = '用户';
         // $this->cates = CHtml::listData(ArticleCateExt::model()->normal()->findAll(),'id','name');
     }
-    public function actionList($type='title',$value='',$time_type='created',$time='',$cate='',$status='',$viptime='')
+    public function actionList($type='title',$value='',$time_type='created',$time='',$cate='',$status='',$viptime='',$area='',$street='',$city='')
     {
         $modelName = $this->modelName;
         $criteria = new CDbCriteria;
@@ -61,13 +61,30 @@ class UserController extends AdminController{
                 $criteria->addCondition('vip_expire>0 and vip_expire<='.time());
             }
         }
+        // 找出所属区域的分销 根据分销公司来找
+        if($city || $area) {
+            $cids = [];
+            $cre = new CDbCriteria;
+            if($area) {
+                $cre->addCondition("area=$area");
+            } else {
+                $cre->addCondition("city=$city");
+            }
+            $coms = CompanyExt::model()->findAll($cre);
+            if($coms) {
+                foreach ($coms as $c) {
+                    $cids[] = $c->id;
+                }
+            }
+            $criteria->addInCondition('cid',$cids);
+        }
         
         if(is_numeric($status)) {
             $criteria->addCondition('status=:status');
             $criteria->params[':status'] = $status;
         }        $criteria->order = 'sort desc,created desc,updated desc';
         $infos = $modelName::model()->undeleted()->getList($criteria,20);
-        $this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'status'=>$status,'viptime'=>$viptime,'u'=>0]);
+        $this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'status'=>$status,'viptime'=>$viptime,'u'=>0,'city'=>$city,'area'=>$area,'street'=>$street]);
     }
     public function actionUlist($type='title',$value='',$time_type='created',$time='',$cate='',$status='',$viptime='')
     {

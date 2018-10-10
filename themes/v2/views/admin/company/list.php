@@ -65,8 +65,9 @@ $this->breadcrumbs = array($this->pageTitle);
                 <a href="<?php echo $this->createUrl('loglist',array('id'=>$v->id)); ?>" class="btn default btn-xs default"> 公司跟进 </a>
                 <?php echo CHtml::ajaxLink('生成门店码',$this->createUrl('setCode'), array('type'=>'get', 'data'=>array('id'=>$v->id),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm red'.UserExt::$statusStyle[$v->status])); ?>
                 <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id)); ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 修改 </a>
-               <!--  <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?> -->
-
+                <?php if(Yii::app()->user->is_m): ?>
+               <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?>
+           <?php endif;?>
 
             </td>
             

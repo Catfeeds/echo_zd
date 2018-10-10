@@ -1,6 +1,21 @@
 <?php
 $this->pageTitle = $this->controllerName.'列表';
 $this->breadcrumbs = array($this->pageTitle);
+$parentArea = AreaExt::model()->parent()->normal()->findAll();
+$paarr = [0=>'不限'];
+foreach ($parentArea as $pa) {
+    $paarr[$pa->id] = $pa->name;
+}
+// var_dump($paarr);exit;
+$parent = $city?$city:(isset($parentArea[0])?$parentArea[0]->id:0);
+$ppaarr = [0=>'不限'];
+if($parent) {
+    $paraa = AreaExt::model()->getByParent($parent)->normal()->findAll();
+    $ppaarr = [0=>'不限'];
+    foreach ($paraa as $pa) {
+        $ppaarr[$pa->id] = $pa->name;
+    }
+}
 ?>
 <div class="table-toolbar">
     <div class="btn-group pull-left">
@@ -21,6 +36,32 @@ $this->breadcrumbs = array($this->pageTitle);
             <?php if(!$u): ?>
             <div class="form-group">
                 <?php echo CHtml::dropDownList('status',$status,['未通过','已通过'],array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择状态--')); ?>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label text-nowrap">区域</label>
+                <div class="col-md-10">
+                    <?php
+                    echo CHtml::dropDownList('city' ,$city ,$paarr , array(
+                            'class'=>'form-control input-inline',
+                            'ajax' =>array(
+                                'url' => Yii::app()->createUrl('admin/area/ajaxGetArea'),
+                                'update' => '#area',
+                                'data'=>array('area'=>'js:this.value'),
+                            )
+                        )
+                    );
+                    ?>
+                    <?php
+                    echo CHtml::dropDownList('area' ,$area ,$ppaarr ? $ppaarr:array(0=>'--无子分类--') , array(
+                            'class'=>'form-control input-inline',
+                            'ajax' =>array(
+                                'url' => Yii::app()->createUrl('admin/area/ajaxGetArea'),
+                                'update' => '#street',
+                                'data'=>array('area'=>'js:this.value'),
+                            )
+                        ));
+                    ?>
+                </div>
             </div>
         <?php endif;?>
             <button type="button" onclick="exptt()" class="btn blue">搜索</button>
