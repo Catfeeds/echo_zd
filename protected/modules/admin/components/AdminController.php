@@ -90,6 +90,7 @@ class AdminController extends Controller
             ['label'=>'站点配置','icon'=>'icon-speedometer','url'=>['/admin/site/list'],'active'=>$this->route=='admin/site/edit'||$this->route=='admin/site/list'],
             ['label'=>'分销公司审核','icon'=>'icon-speedometer','url'=>['/admin/company/ulist'],'active'=>$this->route=='admin/company/edit'],
             ['label'=>'分销员工审核','icon'=>'icon-speedometer','url'=>['/admin/user/ulist'],'active'=>$this->route=='admin/user/edit'],
+            // ['label'=>'分销-业务员绑定管理','icon'=>'icon-speedometer','url'=>['/admin/cooperate/ulist'],'active'=>$this->route=='admin/cooperate/uedit'],
         ];
     }
 

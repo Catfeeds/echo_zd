@@ -7,7 +7,7 @@ foreach ($parentArea as $pa) {
     $paarr[$pa->id] = $pa->name;
 }
 // var_dump($paarr);exit;
-$parent = $city?$city:(isset($parentArea[0])?$parentArea[0]->id:0);
+$parent = isset($city)&&$city?$city:(isset($parentArea[0])?$parentArea[0]->id:0);
 $ppaarr = [0=>'不限'];
 if($parent) {
     $paraa = AreaExt::model()->getByParent($parent)->normal()->findAll();
