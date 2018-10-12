@@ -17,6 +17,10 @@ if($parent) {
     }
 }
 ?>
+<?php $weekbg = TimeTools::getWeekBeginTime();$weeked =  TimeTools::getWeekEndTime(); ?>
+<div class="alert alert-info">
+    <center><strong><?=Yii::app()->user->username?></strong>您好！分销公司总数为：<strong><?=CompanyExt::model()->count()?></strong>，本周新增分销公司数为：<strong><?=CompanyExt::model()->count("created>=$weekbg and created<=$weeked")?></strong></center>
+</div>
 <div class="table-toolbar">
     <div class="btn-group pull-left">
         <form class="form-inline">
