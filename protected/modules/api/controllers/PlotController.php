@@ -983,7 +983,7 @@ class PlotController extends ApiController{
     	if(Yii::app()->request->getIsPostRequest()) {
     		$values = $_POST;
 			// $values = Yii::app()->request->getPost('CompanyExt',[]);
-			if(CompanyExt::model()->undeleted()->find("name='".$values['name']."'")) {
+			if(CompanyExt::model()->find("name='".$values['name']."'")) {
 				return $this->returnError('公司名已存在');
 			}
 			// $area = $street = 0;
@@ -2694,9 +2694,16 @@ class PlotController extends ApiController{
     }
     public function actionGetPlotAllPhoneById($hid='')
     {
-    	if($hid) {
+    	if($hid && is_numeric($hid)) {
     		$plot = PlotExt::model()->findByPk($hid);
     		$this->frame['data'] = $plot->isallphone;
+    	}
+    }
+    public function actionGetNeedIdById($hid='')
+    {
+    	if($hid && is_numeric($hid)) {
+    		$plot = PlotExt::model()->findByPk($hid);
+    		$this->frame['data'] = $plot->isneedid;
     	}
     }
 

@@ -117,6 +117,15 @@ $childArea1 = $parent1 ? AreaExt::model()->getByParent($parent1)->normal()->find
                 <div class="col-md-12"><?php echo $form->error($plot, 'isallphone'); ?></div>
             </div>
             <div class="form-group">
+                <label class="col-md-2 control-label text-nowrap">是否需要身份证号码</label>
+                <div class="col-md-10">
+                    <div class="radio-list">
+                        <?php echo $form->radioButtonList($plot,'isneedid', [0=>'否',1=>'是'],array('class'=>'radio-inline', 'separator'=>'&nbsp;&nbsp;','template'=>'<label>{input} {label}</label>')) ?>
+                    </div>
+                </div>
+                <div class="col-md-12"><?php echo $form->error($plot, 'isneedid'); ?></div>
+            </div>
+            <div class="form-group">
                 <label class="col-md-2 control-label text-nowrap">楼盘封面</label>
                 <div class="col-md-10">
                     <div id="uploader" class="wu-example">
