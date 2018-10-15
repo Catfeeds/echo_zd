@@ -651,7 +651,7 @@ class UserController extends ApiController{
 					'id'=>$value->id,
 					'name'=>($value->user?$value->user->name:($value->staffObj?$value->staffObj->name:'')).'添加了'.$subArr[$value->status],
 					'time'=>date('m-d H:i',$value->created),
-					'note'=>$value->status?$value->note:('预计到访时间：'.date('Y-m-d H:i',$sub->time).'<br>到访人数：'.$sub->visit_num.'<br>备注：'.$sub->note),
+					'note'=>$value->status?$value->note:('预计到访时间：'.date('Y-m-d H:i',$sub->time).'<br>到访人数：'.$sub->visit_num.'<br>备注：'.$sub->note.($sub->id_no?('<br>身份证号码：'.$sub->id_no):'')),
 				];
 			}
 		}
