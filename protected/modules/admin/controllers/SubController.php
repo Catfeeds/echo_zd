@@ -78,9 +78,16 @@ class SubController extends AdminController{
         $pager = $infos->pagination;
         $criteria->order = '';
         $cretmp = new CDbCriteria;
+        $cretmp1 = new CDbCriteria;
+        $cretmp2 = new CDbCriteria;
         $cretmp->condition = $criteria->condition;
         $cretmp->params = $criteria->params;
-        $qynum = $ddnum = $notsalenum = 0;
+        $cretmp1->condition = $criteria->condition;
+        $cretmp1->params = $criteria->params;
+        $cretmp2->condition = $criteria->condition;
+        $cretmp2->params = $criteria->params;
+
+        $qynum = $ddnum = $notsalenum = $dfnum = $bbnum = 0;
         $criteria->addCondition("status>=4 and status<9");
         $qynum = $modelName::model()->undeleted()->count($criteria);
         // var_dump($criteria);exit;
@@ -88,8 +95,17 @@ class SubController extends AdminController{
         $cretmp->addCondition("status=3");
         // var_dump($cretmp);exit;
         $ddnum = $modelName::model()->undeleted()->count($cretmp);
+
+        $cretmp1->addCondition("status=1");
+        // var_dump($cretmp);exit;
+        $dfnum = $modelName::model()->undeleted()->count($cretmp1);
+
+        $cretmp2->addCondition("status=0");
+        // var_dump($cretmp);exit;
+        $bbnum = $modelName::model()->undeleted()->count($cretmp2);
+
         $notsalenum = $pager->itemCount-$qynum-$ddnum;
-		$this->render('list',['cate'=>$cate,'infos'=>$datas,'cates'=>$this->cates,'pager'=>$pager,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'is_zf'=>$is_zf,'notsalenum'=>$notsalenum,'qynum'=>$qynum,'ddnum'=>$ddnum,'sname'=>$sname]);
+		$this->render('list',['cate'=>$cate,'infos'=>$datas,'cates'=>$this->cates,'pager'=>$pager,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'is_zf'=>$is_zf,'notsalenum'=>$notsalenum,'qynum'=>$qynum,'ddnum'=>$ddnum,'dfnum'=>$dfnum,'bbnum'=>$bbnum,'sname'=>$sname]);
 	}
 
 	public function actionEdit($id='')
