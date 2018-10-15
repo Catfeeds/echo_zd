@@ -46,8 +46,12 @@ class AdminLoginForm extends CFormModel
 		{
             $this->_identity=new AdminIdentity($this->username,$this->password);
             $this->_identity->authenticate();
-            if($this->_identity->errorCode)
-				$this->addError('error','用户名或密码错误');
+            if($this->_identity->errorCode){
+            	if($this->_identity->errorCode=='phone')
+					$this->addError('error','用户名请填写手机号');
+				else
+					$this->addError('error','用户名或密码错误');
+            }
 		}
 	}
 

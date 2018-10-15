@@ -57,12 +57,20 @@ class SubProExt extends SubPro{
             $sub = $this->sub;
             $user = $sub->user;
             $scuser = $sub->market_user;
+            $sale_user = $sub->sale_user;
 
             $plotname = $sub->plot_title;
             // $salename = $user->name.$user->phone;
             // $cumsname = $sub->name.$sub->phone;
             if($this->status==9) {
-                SmsExt::sendMsg('跟进通知用户',$user->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'pro'=>$plotname,'name'=>$sub->name]);
+                // 分销添加跟进 通知案场 案场添加跟进 通知分销
+                if($this->uid) {
+                    // 分销添加跟进 通知案场
+                    $sale_user && SmsExt::sendMsg('跟进通知用户',$sale_user->phone,['comname'=>$sale_user->name,'pro'=>$plotname,'name'=>$sub->name]);
+                } else {
+                    $user && SmsExt::sendMsg('跟进通知用户',$user->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'pro'=>$plotname,'name'=>$sub->name]);
+                }
+                
             } else {
                 $staffObj = $this->staffObj;
                 if($staffObj && $staffObj->is_jl)

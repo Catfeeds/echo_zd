@@ -29,7 +29,8 @@ class AdminIdentity extends CUserIdentity
 			if(is_numeric($this->username)) {
 				$user = StaffExt::model()->normal()->find("phone='".$this->username."'");
 			} else {
-				$user = StaffExt::model()->normal()->find("name='".$this->username."'");
+				$this->errorCode = 'phone';
+				return $this->errorCode;
 			}
 			if($user){
 				// var_dump($user);exit;
