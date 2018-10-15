@@ -19,7 +19,7 @@ class SubController extends AdminController{
 		// $this->cates = CHtml::listData(LeagueExt::model()->normal()->findAll(),'id','name');
 		// $this->cates1 = CHtml::listData(TeamExt::model()->normal()->findAll(),'id','name');
 	}
-	public function actionList($type='title',$value='',$time_type='created',$time='',$cate='',$is_zf='')
+	public function actionList($type='title',$value='',$time_type='created',$time='',$cate='',$is_zf='',$sname='')
 	{
 		$modelName = $this->modelName;
 		$criteria = new CDbCriteria;
@@ -73,7 +73,23 @@ class SubController extends AdminController{
         }
         $criteria->order = 'sort desc,updated desc';
 		$infos = $modelName::model()->undeleted()->getList($criteria,20);
-		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'is_zf'=>$is_zf]);
+        // var_dump($infos);exit;
+        $datas = $infos->data;
+        $pager = $infos->pagination;
+        $criteria->order = '';
+        $cretmp = new CDbCriteria;
+        $cretmp->condition = $criteria->condition;
+        $cretmp->params = $criteria->params;
+        $qynum = $ddnum = $notsalenum = 0;
+        $criteria->addCondition("status>=4 and status<9");
+        $qynum = $modelName::model()->undeleted()->count($criteria);
+        // var_dump($criteria);exit;
+
+        $cretmp->addCondition("status=3");
+        // var_dump($cretmp);exit;
+        $ddnum = $modelName::model()->undeleted()->count($cretmp);
+        $notsalenum = $pager->itemCount-$qynum-$ddnum;
+		$this->render('list',['cate'=>$cate,'infos'=>$datas,'cates'=>$this->cates,'pager'=>$pager,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'is_zf'=>$is_zf,'notsalenum'=>$notsalenum,'qynum'=>$qynum,'ddnum'=>$ddnum,'sname'=>$sname]);
 	}
 
 	public function actionEdit($id='')

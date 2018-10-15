@@ -33,6 +33,9 @@ $statusArr = SubExt::$status;
         </a>
     </div>
 </div>
+<div class="alert alert-info">
+    <center><strong><?=Yii::app()->user->username?></strong>您好！<?=$sname?("当前所选员工为：$sname".'，'):''?>当前报备总数为：<strong><?=$pager->itemCount?></strong>，未售数为：<strong><?=$notsalenum?></strong>，大定数为：<strong><?=$ddnum?></strong>，签约数为：<strong><?=$qynum?></strong>。</center>
+</div>
    <table class="table table-bordered table-striped table-condensed flip-content table-hover">
     <thead class="flip-content">
     <tr>

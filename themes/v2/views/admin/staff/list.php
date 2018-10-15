@@ -47,7 +47,18 @@ $this->breadcrumbs = array($this->pageTitle);
     <?php foreach($infos as $k=>$v): ?>
         <tr>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
-            <td class="text-center"><?=$v->name?></td>
+            <td class="text-center"><?=$v->name?> <div class="btn-group">
+                    <button id="btnGroupVerticalDrop1" type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    查看数据 <i class="fa fa-angle-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                    <?php foreach(['an_phone'=>'案场助理数据','sc_phone'=>'市场数据','sale_phone'=>'案场销售数据'] as $key=>$v1){?>
+                        <li>
+                            <a href="<?=$this->createUrl('sub/list',['type'=>$key,'value'=>$v->phone,'sname'=>$v->name])?>"><?=$v1?></a>
+                        </li>
+                      <?php  }?>
+                    </ul>
+                </div></td>
             <td class="text-center"><?php
                 if(Yii::app()->user->id>=1) {
                     echo StaffExt::$is_jls[$v->is_jl];
