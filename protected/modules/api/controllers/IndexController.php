@@ -1035,7 +1035,7 @@ class IndexController extends ApiController
 
     public function actionGetPhoneType()
     {
-       $this->frame['data'] = SiteExt::getAttr('qjpz','isAllPhone');
+       $this->frame['data'] = ['data'=>SiteExt::getAttr('qjpz','isAllPhone')];
     }
 
     public function actionImportExl()

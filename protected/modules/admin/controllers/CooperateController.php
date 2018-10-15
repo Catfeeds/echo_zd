@@ -59,6 +59,50 @@ class CooperateController extends AdminController{
 		$infos = $modelName::model()->undeleted()->getList($criteria,20);
 		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,]);
 	}
+	public function actionUlist($type='title',$value='',$time_type='created',$time='',$cate='')
+	{
+		$modelName = $this->modelName;
+		$criteria = new CDbCriteria;
+		if($value = trim($value))
+            if ($type=='title') {
+                $criteria->addSearchCondition('user_company', $value);
+            } elseif ($type=='name') {
+            	$criteria->addSearchCondition('user_name', $value);
+            } elseif ($type=='plot') {
+            	$ids = [];
+            	$cre = new CDbCriteria;
+            	$cre->addSearchCondition('title',$value);
+            	if($ress = PlotExt::model()->findAll($cre)) {
+            		foreach ($ress as $res) {
+            			$ids[] = $res->id;
+            		}
+            	}
+            	$criteria->addInCondition('hid',$ids);
+            }
+        //添加时间、刷新时间筛选
+        if($time_type!='' && $time!='')
+        {
+            list($beginTime, $endTime) = explode('-', $time);
+            $beginTime = (int)strtotime(trim($beginTime));
+            $endTime = (int)strtotime(trim($endTime));
+            $criteria->addCondition("{$time_type}>=:beginTime");
+            $criteria->addCondition("{$time_type}<:endTime");
+            $criteria->params[':beginTime'] = TimeTools::getDayBeginTime($beginTime);
+            $criteria->params[':endTime'] = TimeTools::getDayEndTime($endTime);
+
+        }
+        // 找到当前主管的所有员工
+        // if(!Yii::app()->user->is_m) {
+        // 	$staffdes = 
+        // }
+		if($cate) {
+			$criteria->addCondition('status=:cid');
+			$criteria->params[':cid'] = $cate;
+		}
+		$criteria->order = 'sort desc,updated desc';
+		$infos = $modelName::model()->undeleted()->getList($criteria,20);
+		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,]);
+	}
 
 	public function actionEdit($id='')
 	{

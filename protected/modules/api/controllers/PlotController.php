@@ -983,7 +983,7 @@ class PlotController extends ApiController{
     	if(Yii::app()->request->getIsPostRequest()) {
     		$values = $_POST;
 			// $values = Yii::app()->request->getPost('CompanyExt',[]);
-			if(CompanyExt::model()->undeleted()->find("name='".$values['name']."'")) {
+			if(CompanyExt::model()->find("name='".$values['name']."'")) {
 				return $this->returnError('公司名已存在');
 			}
 			// $area = $street = 0;
@@ -1006,6 +1006,21 @@ class PlotController extends ApiController{
 				if($tel = SiteExt::getAttr('qjpz','companynotice'))
 					SmsExt::sendMsg('门店码通知后台',$tel,['com'=>$obj->name]);
 				$user = UserExt::model()->findByPk($obj->adduid);
+				// 填写的手机号是店长
+				if($values['phone']) {
+					if($man = UserExt::model()->find("phone='".$values['phone']."'")) {
+						$man->is_manage = 1;
+					} else {
+						$man = new UserExt;
+						$man->name = $values['manager'];
+						$man->phone = $values['phone'];
+						$man->cid = $obj->id;
+						$man->status = 1;
+						$man->type = 2;
+
+					}
+					$man->save();
+				}
 				if($user)
 					SmsExt::sendMsg('申请门店码',$user->phone,['name'=>$user->name,'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
 				elseif($values['phone']&&$values['manager']) {
@@ -2675,6 +2690,20 @@ class PlotController extends ApiController{
     			}
     		}
     		$this->frame['data'] = $data;
+    	}
+    }
+    public function actionGetPlotAllPhoneById($hid='')
+    {
+    	if($hid && is_numeric($hid)) {
+    		$plot = PlotExt::model()->findByPk($hid);
+    		$this->frame['data'] = $plot->isallphone;
+    	}
+    }
+    public function actionGetNeedIdById($hid='')
+    {
+    	if($hid && is_numeric($hid)) {
+    		$plot = PlotExt::model()->findByPk($hid);
+    		$this->frame['data'] = $plot->isneedid;
     	}
     }
 

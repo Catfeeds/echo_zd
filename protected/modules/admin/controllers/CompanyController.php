@@ -14,7 +14,7 @@ class CompanyController extends AdminController{
 		// $this->cates = CHtml::listData(LeagueExt::model()->normal()->findAll(),'id','name');
 		// $this->cates1 = CHtml::listData(TeamExt::model()->normal()->findAll(),'id','name');
 	}
-	public function actionList($type='title',$value='',$time_type='created',$time='',$cate='',$status='')
+	public function actionList($type='title',$value='',$time_type='created',$time='',$cate='',$status='',$area='',$street='',$city='')
 	{
 		$modelName = $this->modelName;
 		$criteria = new CDbCriteria;
@@ -41,13 +41,23 @@ class CompanyController extends AdminController{
 			$criteria->addCondition('type=:cid');
 			$criteria->params[':cid'] = $cate;
 		}
+		// 找出所属区域的分销 根据分销公司来找
+        if($city || $area) {
+            // $cids = [];
+            // $cre = new CDbCriteria;
+            if($area) {
+                $criteria->addCondition("area=$area");
+            } else {
+                $criteria->addCondition("city=$city");
+            }
+        }
 		if(is_numeric($status)) {
 			$criteria->addCondition('status=:status');
 			$criteria->params[':status'] = $status;
 		}
 		$criteria->order = 'sort desc,updated desc';
 		$infos = $modelName::model()->undeleted()->getList($criteria,20);
-		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'status'=>$status,'u'=>0]);
+		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'status'=>$status,'u'=>0,'city'=>$city,'area'=>$area,'street'=>$street]);
 	}
 	public function actionUlist($type='title',$value='',$time_type='created',$time='',$cate='',$status='')
 	{

@@ -1,7 +1,26 @@
 <?php
 $this->pageTitle = $this->controllerName.'列表';
 $this->breadcrumbs = array($this->pageTitle);
+$parentArea = AreaExt::model()->parent()->normal()->findAll();
+$paarr = [0=>'不限'];
+foreach ($parentArea as $pa) {
+    $paarr[$pa->id] = $pa->name;
+}
+// var_dump($paarr);exit;
+$parent = isset($city)&&$city?$city:(isset($parentArea[0])?$parentArea[0]->id:0);
+$ppaarr = [0=>'不限'];
+if($parent) {
+    $paraa = AreaExt::model()->getByParent($parent)->normal()->findAll();
+    $ppaarr = [0=>'不限'];
+    foreach ($paraa as $pa) {
+        $ppaarr[$pa->id] = $pa->name;
+    }
+}
 ?>
+<?php $weekbg = TimeTools::getWeekBeginTime();$weeked =  TimeTools::getWeekEndTime(); ?>
+<div class="alert alert-info">
+    <center><strong><?=Yii::app()->user->username?></strong>您好！分销公司总数为：<strong><?=CompanyExt::model()->count()?></strong>，本周新增分销公司数为：<strong><?=CompanyExt::model()->count("created>=$weekbg and created<=$weeked")?></strong></center>
+</div>
 <div class="table-toolbar">
     <div class="btn-group pull-left">
         <form class="form-inline">
@@ -18,6 +37,32 @@ $this->breadcrumbs = array($this->pageTitle);
            <?php if(!$u): ?>
             <div class="form-group">
                 <?php echo CHtml::dropDownList('status',$status,['未通过','已通过'],array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择状态--')); ?>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label text-nowrap">区域</label>
+                <div class="col-md-10">
+                    <?php
+                    echo CHtml::dropDownList('city' ,$city ,$paarr , array(
+                            'class'=>'form-control input-inline',
+                            'ajax' =>array(
+                                'url' => Yii::app()->createUrl('admin/area/ajaxGetArea'),
+                                'update' => '#area',
+                                'data'=>array('area'=>'js:this.value'),
+                            )
+                        )
+                    );
+                    ?>
+                    <?php
+                    echo CHtml::dropDownList('area' ,$area ,$ppaarr ? $ppaarr:array(0=>'--无子分类--') , array(
+                            'class'=>'form-control input-inline',
+                            'ajax' =>array(
+                                'url' => Yii::app()->createUrl('admin/area/ajaxGetArea'),
+                                'update' => '#street',
+                                'data'=>array('area'=>'js:this.value'),
+                            )
+                        ));
+                    ?>
+                </div>
             </div>
         <?php endif;?>
             <button type="submit" class="btn blue">搜索</button>
@@ -65,8 +110,9 @@ $this->breadcrumbs = array($this->pageTitle);
                 <a href="<?php echo $this->createUrl('loglist',array('id'=>$v->id)); ?>" class="btn default btn-xs default"> 公司跟进 </a>
                 <?php echo CHtml::ajaxLink('生成门店码',$this->createUrl('setCode'), array('type'=>'get', 'data'=>array('id'=>$v->id),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm red'.UserExt::$statusStyle[$v->status])); ?>
                 <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id)); ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 修改 </a>
-               <!--  <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?> -->
-
+                <?php if(Yii::app()->user->is_m): ?>
+               <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?>
+           <?php endif;?>
 
             </td>
             

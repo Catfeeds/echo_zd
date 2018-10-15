@@ -40,8 +40,8 @@ class MsgController extends AdminController{
 
         }
 		if($cate) {
-			$criteria->addCondition('status=:cid');
-			$criteria->params[':cid'] = $cate;
+			$criteria->addCondition('name=:name');
+			$criteria->params[':name'] = $cate;
 		}
         $criteria->order = 'updated desc';
 		$infos = $modelName::model()->getList($criteria,20);

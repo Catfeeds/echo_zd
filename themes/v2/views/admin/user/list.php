@@ -1,6 +1,21 @@
 <?php
 $this->pageTitle = $this->controllerName.'列表';
 $this->breadcrumbs = array($this->pageTitle);
+$parentArea = AreaExt::model()->parent()->normal()->findAll();
+$paarr = [0=>'不限'];
+foreach ($parentArea as $pa) {
+    $paarr[$pa->id] = $pa->name;
+}
+// var_dump($paarr);exit;
+$parent = isset($city)&&$city?$city:(isset($parentArea[0])?$parentArea[0]->id:0);
+$ppaarr = [0=>'不限'];
+if($parent) {
+    $paraa = AreaExt::model()->getByParent($parent)->normal()->findAll();
+    $ppaarr = [0=>'不限'];
+    foreach ($paraa as $pa) {
+        $ppaarr[$pa->id] = $pa->name;
+    }
+}
 ?>
 <div class="table-toolbar">
     <div class="btn-group pull-left">
@@ -21,6 +36,32 @@ $this->breadcrumbs = array($this->pageTitle);
             <?php if(!$u): ?>
             <div class="form-group">
                 <?php echo CHtml::dropDownList('status',$status,['未通过','已通过'],array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择状态--')); ?>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label text-nowrap">区域</label>
+                <div class="col-md-10">
+                    <?php
+                    echo CHtml::dropDownList('city' ,$city ,$paarr , array(
+                            'class'=>'form-control input-inline',
+                            'ajax' =>array(
+                                'url' => Yii::app()->createUrl('admin/area/ajaxGetArea'),
+                                'update' => '#area',
+                                'data'=>array('area'=>'js:this.value'),
+                            )
+                        )
+                    );
+                    ?>
+                    <?php
+                    echo CHtml::dropDownList('area' ,$area ,$ppaarr ? $ppaarr:array(0=>'--无子分类--') , array(
+                            'class'=>'form-control input-inline',
+                            'ajax' =>array(
+                                'url' => Yii::app()->createUrl('admin/area/ajaxGetArea'),
+                                'update' => '#street',
+                                'data'=>array('area'=>'js:this.value'),
+                            )
+                        ));
+                    ?>
+                </div>
             </div>
         <?php endif;?>
             <button type="button" onclick="exptt()" class="btn blue">搜索</button>
@@ -53,6 +94,7 @@ $this->breadcrumbs = array($this->pageTitle);
         <th class="text-center">添加时间</th>
         <th class="text-center">修改时间</th>
         <th class="text-center">状态</th>
+        <th class="text-center">身份</th>
         <th class="text-center">操作</th>
         <!-- <th class="text-center">驳回</th> -->
     </tr>
@@ -70,7 +112,7 @@ $this->breadcrumbs = array($this->pageTitle);
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->updated)?></td>
             <td class="text-center"><?php echo CHtml::ajaxLink(UserExt::$status[$v->status],$this->createUrl('changeStatus'), array('type'=>'get', 'data'=>array('id'=>$v->id,'class'=>get_class($v)),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$v->status])); ?></td>
-
+            <td class="text-center"><?php echo CHtml::ajaxLink(UserExt::$sfs[$v->is_manage],$this->createUrl('changeSf'), array('type'=>'get', 'data'=>array('id'=>$v->id,'class'=>get_class($v)),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$v->is_manage])); ?></td>
             <td style="text-align:center;vertical-align: middle">
                 <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 编辑 </a>
                 <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?>
