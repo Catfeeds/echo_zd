@@ -855,6 +855,7 @@ class PlotController extends ApiController{
 				$tmp['note'] = $this->cleanXss(Yii::app()->request->getPost('note',''));
 				$tmp['visit_way'] = $this->cleanXss(Yii::app()->request->getPost('visit_way',''));
 				$tmp['visit_num'] = $this->cleanXss(Yii::app()->request->getPost('visit_num',''));
+				$tmp['id_no'] = $this->cleanXss(Yii::app()->request->getPost('id_no',''));
 				$tmp['uid'] = $this->cleanXss(Yii::app()->request->getPost('uid',''));
 				!$tmp['time'] && $tmp['time'] = 0;
 				$hid = explode(',', $hid);
