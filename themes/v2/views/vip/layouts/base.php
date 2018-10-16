@@ -176,7 +176,7 @@
 <!-- BEGIN FOOTER -->
 <div class="page-footer">
 	<div class="page-footer-inner">
-		 2017 &copy; <?php echo '回音网络科技版权所有'; ?>
+		 2018 &copy; <?php echo '上海贺诺网络科技版权所有'; ?>
 	</div>
 	<div class="scroll-to-top">
 		<i class="icon-arrow-up"></i>

@@ -871,7 +871,7 @@ class UserController extends ApiController{
 		$data = [];
 		$kwsql = '';
 		$kw && $kwsql = " and c.name like '%$kw%'";
-		if($companys = Yii::app()->db->createCommand("select c.id,c.name,c.address,c.image,c.area,c.street from company c left join cooperate o on c.id=o.cid where o.staff=$uid".$kwsql)->queryAll()) {
+		if($companys = Yii::app()->db->createCommand("select c.id,c.name,c.address,c.image,c.area,c.street,c.code,c.manager,c.phone from company c left join cooperate o on c.id=o.cid where o.staff=$uid".$kwsql)->queryAll()) {
 			foreach ($companys as $key => $value) {
 				$areaInfo = AreaExt::model()->findByPk($value['area']);
 				$streetInfo =  AreaExt::model()->findByPk($value['street']);
@@ -881,6 +881,9 @@ class UserController extends ApiController{
 					'area'=>$areaInfo?$areaInfo->name:'',
 					'street'=>$streetInfo?$streetInfo->name:'',
 					'address'=>$value['address'],
+					'code'=>$value['code'],
+					'manager'=>$value['manager'],
+					'phone'=>$value['phone'],
 					'image'=>ImageTools::fixImage($value['image']?$value['image']:SiteExt::getAttr('qjpz','companynopic')),
 				];
 			}
