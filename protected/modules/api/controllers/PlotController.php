@@ -165,21 +165,30 @@ class PlotController extends ApiController{
 			$criteria->params[':maxprice'] = $maxprice;
 		}
 		if($staffuid&&$user_type) {
-			// 市场看对接人库 案场销售看分配的项目sub 案场助理看plot_an
 			$mkids = [];
-			if($user_type==1) {
-				$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where type=1 and uid=".$staffuid)->queryAll();
-			} elseif ($user_type==2) {
-				$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_makert_user where uid=".$staffuid)->queryAll();
+			// 如果是项目总 看项目总关联的数据
+			if($tmparrs = PlotAnExt::model()->findAll("type>2 and uid=$staffuid")) {
+				foreach ($tmparrs as $tmp) {
+					$mkids[] = $tmp->hid;
+				}
 			} else {
-				$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where type=2 and uid=".$staffuid)->queryAll();
-			}
-			
-			if($idrr) {
-				foreach ($idrr as $mkid) {
-					$mkids[] = $mkid['hid'];
+				// 市场看对接人库 案场销售看分配的项目sub 案场助理看plot_an
+				// $mkids = [];
+				if($user_type==1) {
+					$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where type=1 and uid=".$staffuid)->queryAll();
+				} elseif ($user_type==2) {
+					$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_makert_user where uid=".$staffuid)->queryAll();
+				} else {
+					$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where type=2 and uid=".$staffuid)->queryAll();
+				}
+				
+				if($idrr) {
+					foreach ($idrr as $mkid) {
+						$mkids[] = $mkid['hid'];
+					}
 				}
 			}
+				
 			$criteria->addInCondition('id',$mkids);
 		}
 
