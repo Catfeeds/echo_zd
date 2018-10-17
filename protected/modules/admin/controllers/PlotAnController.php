@@ -23,6 +23,7 @@ class PlotAnController extends AdminController{
 	{
 		$modelName = $this->modelName;
 		$criteria = new CDbCriteria;
+		$criteria->addCondition('type<3');
 		if($value = trim($value))
             if ($type=='title') {
             	$criter = new CDbCriteria;
@@ -73,10 +74,67 @@ class PlotAnController extends AdminController{
 		}
 		$criteria->order = 'updated desc';
 		$infos = $modelName::model()->getList($criteria,20);
-		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'expire'=>$expire]);
+		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'expire'=>$expire,'z'=>0]);
+	}
+	public function actionZlist($type='title',$value='',$time_type='created',$time='',$cate='',$expire='',$hid='')
+	{
+		$modelName = $this->modelName;
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('type>=3');
+		if($value = trim($value))
+            if ($type=='title') {
+            	$criter = new CDbCriteria;
+            	$criter->addSearchCondition('title',$value);
+            	$plotres = PlotExt::model()->findAll($criter);
+            	$ids  = [];
+            	if($plotres) {
+            		foreach ($plotres as $pr) {
+            			$ids[] = $pr->id;
+            		}
+            		$criteria->addInCondition('hid',$ids);
+            	}
+            } elseif ($type=='phone') {
+            	$criter = new CDbCriteria;
+            	$criter->addSearchCondition('phone',$value);
+            	$plotres = StaffExt::model()->findAll($criter);
+            	$ids  = [];
+            	if($plotres) {
+            		foreach ($plotres as $pr) {
+            			$ids[] = $pr->id;
+            		}
+            		$criteria->addInCondition('uid',$ids);
+            	}
+            }
+        //添加时间、刷新时间筛选
+        if($time_type!='' && $time!='')
+        {
+            list($beginTime, $endTime) = explode('-', $time);
+            $beginTime = (int)strtotime(trim($beginTime));
+            $endTime = (int)strtotime(trim($endTime));
+            $criteria->addCondition("{$time_type}>=:beginTime");
+            $criteria->addCondition("{$time_type}<:endTime");
+            $criteria->params[':beginTime'] = TimeTools::getDayBeginTime($beginTime);
+            $criteria->params[':endTime'] = TimeTools::getDayEndTime($endTime);
+
+        }
+		if($cate) {
+			$criteria->addCondition('status=:cid');
+			$criteria->params[':cid'] = $cate;
+		}
+		if($hid) {
+			$criteria->addCondition('hid=:hid');
+			$criteria->params[':hid'] = $hid;
+		}
+		if($expire) {
+			$criteria->addCondition('type=:expire');
+			$criteria->params[':expire'] = $expire;
+		}
+		$criteria->order = 'updated desc';
+		$infos = $modelName::model()->getList($criteria,20);
+		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'expire'=>$expire,'z'=>1]);
 	}
 
-	public function actionEdit($id='',$hid='')
+	public function actionEdit($id='',$hid='',$z='')
 	{
 		$modelName = $this->modelName;
 		$info = $id ? $modelName::model()->findByPk($id) : new $modelName;
@@ -91,7 +149,7 @@ class PlotAnController extends AdminController{
 						$obj->save();
 					}
 				}
-				$this->setMessage('操作成功','success',['list']);
+				$this->setMessage('操作成功','success',[$z?'zlist':'list']);
 			} else {
 				$info->attributes = Yii::app()->request->getPost($modelName,[]);
 				// $info->uid = $uid;
@@ -104,7 +162,7 @@ class PlotAnController extends AdminController{
 			}
 				
 		} 
-		$this->render('edit',['cates'=>$this->cates,'article'=>$info,'cates1'=>$this->cates1,'userphone'=>isset($info->staff->phone)?$info->staff->phone:'','hid'=>$hid]);
+		$this->render('edit',['cates'=>$this->cates,'article'=>$info,'cates1'=>$this->cates1,'userphone'=>isset($info->staff->phone)?$info->staff->phone:'','hid'=>$hid,'z'=>$z]);
 	}
 
 	public function actionAjaxStatus($kw='',$ids='')

@@ -1,6 +1,6 @@
 <?php
-$this->pageTitle = $this->controllerName.'新建/编辑';
-$this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
+$this->pageTitle = ($z?'项目总':'项目案场').'新建/编辑';
+$this->breadcrumbs = array(($z?'项目总':'项目案场').'管理', $this->pageTitle);
 ?>
 <?php $this->widget('ext.ueditor.UeditorWidget',array('id'=>'UserExt_content','options'=>"toolbars:[['fullscreen','source','undo','redo','|','customstyle','paragraph','fontfamily','fontsize'],
         ['bold','italic','underline','fontborder','strikethrough','superscript','subscript','removeformat',
@@ -15,7 +15,7 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
         'print','preview','searchreplace']]")); ?>
 <?php $form = $this->beginWidget('HouseForm', array('htmlOptions' => array('class' => 'form-horizontal'))) ?>
 <div class="form-group">
-    <label class="col-md-2 control-label">选择案场</label>
+    <label class="col-md-2 control-label">选择用户</label>
     <div class="col-md-4">
         <?php echo $form->dropDownList($article, 'uid', CHtml::listData(StaffExt::model()->findAll(),'id','name_phone'), array('value'=>$hid?$hid:'','class' => 'form-control select2 ','empty'=>'')); ?>     
     </div>
@@ -44,7 +44,7 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
 <div class="form-group">
     <label class="col-md-2 control-label">类型</label>
     <div class="col-md-4">
-        <?php echo $form->radioButtonList($article, 'type', PlotAnExt::$type, array('separator' => '')); ?>
+        <?php echo $form->radioButtonList($article, 'type', $z?PlotAnExt::$ztype:PlotAnExt::$type, array('separator' => '')); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'type') ?></div>
 </div>
@@ -52,7 +52,7 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
     <div class="row">
         <div class="col-md-offset-3 col-md-9">
             <button type="submit" class="btn green">保存</button>
-            <?php echo CHtml::link('返回',$this->createUrl('list'), array('class' => 'btn default')) ?>
+            <?php echo CHtml::link('返回',$this->createUrl($z?'zlist':'list'), array('class' => 'btn default')) ?>
         </div>
     </div>
 </div>

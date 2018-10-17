@@ -1,5 +1,5 @@
 <?php
-$this->pageTitle = $this->controllerName.'列表';
+$this->pageTitle = ($z?'项目总':'项目案场').'列表';
 $this->breadcrumbs = array($this->pageTitle);
 ?>
 <div class="table-toolbar">
@@ -16,15 +16,15 @@ $this->breadcrumbs = array($this->pageTitle);
             </div>
             <?php Yii::app()->controller->widget("DaterangepickerWidget",['time'=>$time,'params'=>['class'=>'form-control chose_text']]);?>
             <div class="form-group">
-                <?php echo CHtml::dropDownList('expire',$expire,PlotAnExt::$type,array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择类型--')); ?>
+                <?php echo CHtml::dropDownList('expire',$expire,$z?PlotAnExt::$ztype:PlotAnExt::$type,array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择类型--')); ?>
             </div>
             <button type="submit" class="btn blue">搜索</button>
             <a class="btn yellow" onclick="removeOptions()"><i class="fa fa-trash"></i>&nbsp;清空</a>
         </form>
     </div>
     <div class="pull-right">
-        <a href="<?php echo $this->createAbsoluteUrl('edit') ?>" class="btn blue">
-            添加<?=$this->controllerName?> <i class="fa fa-plus"></i>
+        <a href="<?php echo $this->createAbsoluteUrl('edit',['z'=>$z]) ?>" class="btn blue">
+            添加信息 <i class="fa fa-plus"></i>
         </a>
     </div>
 </div>
@@ -46,7 +46,7 @@ $this->breadcrumbs = array($this->pageTitle);
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td class="text-center"><?=$v->plot?$v->plot->title:''?></td>
             <td class="text-center"><?=($v->staff?($v->staff->name.'/'.$v->staff->phone):'暂无')?></td>
-            <td class="text-center"><?=$v->type?PlotAnExt::$type[$v->type]:'-'?></td>
+            <td class="text-center"><?=$v->type?PlotAnExt::$alltype[$v->type]:'-'?></td>
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>
             <td style="text-align:center;vertical-align: middle">

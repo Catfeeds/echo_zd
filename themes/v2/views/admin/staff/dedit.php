@@ -17,7 +17,7 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
 <div class="form-group">
     <label class="col-md-2 control-label">选择部门</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'did',  CHtml::listData(DepartmentExt::model()->normal()->findAll(),'id','name'), array('class'=>'form-control select2')); ?>
+        <?php echo $form->dropDownList($article, 'did',  CHtml::listData(Tools::menuMake(DepartmentExt::model()->findAll(),-1,'id'),'id','name'), array('class'=>'form-control select2','encode'=>false,)); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'did') ?></div>
 </div>

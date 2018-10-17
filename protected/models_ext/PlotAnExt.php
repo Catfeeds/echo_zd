@@ -5,10 +5,17 @@
  * @date(2017.2.12)
  */
 class PlotAnExt extends PlotAn{
+    public static $alltype = [
+        1=>'案场助理',2=>'案场销售',3=>'项目总',4=>'城市总'
+    ];
     public static $type = [
         1=>'案场助理',2=>'案场销售'
     ];
-	/**
+
+    public static $ztype = [
+        3=>'项目总',4=>'城市总'
+    ];	
+    /**
      * 定义关系
      */
     public function relations()
