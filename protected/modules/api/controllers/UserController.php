@@ -1235,7 +1235,7 @@ class UserController extends ApiController{
     	if($subs) {
     		foreach ($subs as $s) {
     			// var_dump($s->id);
-    			if($s->status==0) {
+    			if($s->created>$tobe) {
     				$todarr['报备'] += 1;
     			} elseif ($s->status==1) {
     				$todarr['到访'] += 1;
