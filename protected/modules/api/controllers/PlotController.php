@@ -2706,7 +2706,7 @@ class PlotController extends ApiController{
     {
     	if($hid && is_numeric($hid)) {
     		$plot = PlotExt::model()->findByPk($hid);
-    		$this->frame['data'] = $plot->isallphone;
+    		$this->frame['data'] = $plot->isallphone?true:false;
     	}
     }
     public function actionGetNeedIdById($hid='')
