@@ -274,7 +274,7 @@ class UserController extends ApiController{
 		
 	}
 
-	public function actionSubList($uid='',$user_type=0,$type='',$kw='',$hid='')
+	public function actionSubList($uid='',$user_type=0,$type='',$kw='',$hid='',$day='')
 	{
 		$data = $all =  [];
 		if(!$user_type) {
@@ -294,6 +294,29 @@ class UserController extends ApiController{
 			$criteria->addCondition("hid=$hid");
 		}
 		$criteria->order = 'updated desc';
+		if($day) {
+			switch ($day) {
+				// 今天
+				case '1':
+					$criteria->addCondition("updated>".TimeTools::getDayBeginTime());
+					break;
+				// 昨天
+				case '2':
+					$criteria->addCondition("updated>".TimeTools::getDayBeginTime(time()-86400).' and updated<'.TimeTools::getDayEndTime(time()-86400));
+					break;
+					// 本周
+				case '3':
+					$criteria->addCondition("updated>".TimeTools::getWeekBeginTime().' and updated<'.TimeTools::getWeekEndTime());
+					break;
+					// 本月
+				case '4':
+					$criteria->addCondition("updated>".TimeTools::getMonthBeginTime().' and updated<'.TimeTools::getMonthEndTime());
+					break;
+				default:
+					# code...
+					break;
+			}
+		}
 		// 项目总看项目数据
 		if($xmzs = PlotAnExt::model()->findAll("uid=$uid and type>2")) {
 			// 搜索条件
@@ -1071,7 +1094,7 @@ class UserController extends ApiController{
     	
 	}
 
-	public function actionAnIndex($uid='',$user_type='')
+	public function actionAnIndex($uid='',$user_type='',$day='1')
 	{
 		$user = StaffExt::model()->findByPk($uid);
 		$data = $tags = [];
@@ -1092,9 +1115,32 @@ class UserController extends ApiController{
         	'签约'=>0,
         ];
         $cres = new CDbCriteria;
-        $tobe = TimeTools::getDayBeginTime(time());
+        // $tobe = TimeTools::getDayBeginTime(time());
+        if($day) {
+			switch ($day) {
+				// 今天
+				case '1':
+					$criteria->addCondition("updated>".TimeTools::getDayBeginTime());
+					break;
+				// 昨天
+				case '2':
+					$criteria->addCondition("updated>".TimeTools::getDayBeginTime(time()-86400).' and updated<'.TimeTools::getDayEndTime(time()-86400));
+					break;
+					// 本周
+				case '3':
+					$criteria->addCondition("updated>".TimeTools::getWeekBeginTime().' and updated<'.TimeTools::getWeekEndTime());
+					break;
+					// 本月
+				case '4':
+					$criteria->addCondition("updated>".TimeTools::getMonthBeginTime().' and updated<'.TimeTools::getMonthEndTime());
+					break;
+				default:
+					# code...
+					break;
+			}
+		}
         // var_dump($tobe);
-        $cres->addCondition("updated>$tobe");
+        // $cres->addCondition("updated>$tobe");
         // 项目总看项目数据
         if($xmzs = PlotAnExt::model()->findAll("uid=$uid and type>2")) {
         	$tmparr = [];
