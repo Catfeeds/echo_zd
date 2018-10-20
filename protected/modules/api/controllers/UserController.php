@@ -1115,24 +1115,24 @@ class UserController extends ApiController{
         	'签约'=>0,
         ];
         $cres = new CDbCriteria;
-        // $tobe = TimeTools::getDayBeginTime(time());
+        $tobe = TimeTools::getDayBeginTime(time());
         if($day) {
 			switch ($day) {
 				// 今天
 				case '1':
-					$criteria->addCondition("updated>".TimeTools::getDayBeginTime());
+					$cres->addCondition("updated>".TimeTools::getDayBeginTime());
 					break;
 				// 昨天
 				case '2':
-					$criteria->addCondition("updated>".TimeTools::getDayBeginTime(time()-86400).' and updated<'.TimeTools::getDayEndTime(time()-86400));
+					$cres->addCondition("updated>".TimeTools::getDayBeginTime(time()-86400).' and updated<'.TimeTools::getDayEndTime(time()-86400));
 					break;
 					// 本周
 				case '3':
-					$criteria->addCondition("updated>".TimeTools::getWeekBeginTime().' and updated<'.TimeTools::getWeekEndTime());
+					$cres->addCondition("updated>".TimeTools::getWeekBeginTime().' and updated<'.TimeTools::getWeekEndTime());
 					break;
 					// 本月
 				case '4':
-					$criteria->addCondition("updated>".TimeTools::getMonthBeginTime().' and updated<'.TimeTools::getMonthEndTime());
+					$cres->addCondition("updated>".TimeTools::getMonthBeginTime().' and updated<'.TimeTools::getMonthEndTime());
 					break;
 				default:
 					# code...
