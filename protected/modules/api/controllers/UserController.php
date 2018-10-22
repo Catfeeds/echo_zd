@@ -1122,7 +1122,7 @@ class UserController extends ApiController{
 				// 今天
 				case '1':
 					$cres->addCondition("updated>".TimeTools::getDayBeginTime());
-					$cret->addCondition("updated>".TimeTools::getDayBeginTime());
+					$cret->addCondition("created>".TimeTools::getDayBeginTime());
 					break;
 				// 昨天
 				case '2':
