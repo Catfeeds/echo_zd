@@ -1280,9 +1280,9 @@ class UserController extends ApiController{
         // var_dump(count($subs));exit;
     	if($subs) {
     		foreach ($subs as $s) {
-    			if($s->created>$tobe) {
+    			// if($s->created>$tobe) {
     				$todarr['报备'] += 1;
-    			}
+    			// }
     			if ($s->status==1) {
     				$todarr['到访'] += 1;
     			} elseif ($s->status==3) {
