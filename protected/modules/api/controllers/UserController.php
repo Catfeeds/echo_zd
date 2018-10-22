@@ -1280,9 +1280,34 @@ class UserController extends ApiController{
         // var_dump(count($subs));exit;
     	if($subs) {
     		foreach ($subs as $s) {
-    			if($s->created>$tobe) {
-    				$todarr['报备'] += 1;
+    			switch ($day) {
+    				case '1':
+    					if($s->created>$tobe) {
+		    				$todarr['报备'] += 1;
+		    			}
+    					break;
+    				case '2':
+    					if($s->created>TimeTools::getDayBeginTime(time()-86400) && $s->created<TimeTools::getDayEndime(time()-86400)) {
+		    				$todarr['报备'] += 1;
+		    			}
+    					break;
+    				case '3':
+    					if($s->created>TimeTools::getWeekBeginTime() && $s->created<TimeTools::getWeekEndime()) {
+		    				$todarr['报备'] += 1;
+		    			}
+    					break;
+    				case '4':
+    					if($s->created>TimeTools::getMonthBeginTime() && $s->created<TimeTools::getMonthEndime()) {
+		    				$todarr['报备'] += 1;
+		    			}
+    					break;
+    				default:
+    					# code...
+    					break;
     			}
+    			// if($s->created>$tobe) {
+    			// 	$todarr['报备'] += 1;
+    			// }
     			if ($s->status==1) {
     				$todarr['到访'] += 1;
     			} elseif ($s->status==3) {
