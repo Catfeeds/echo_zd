@@ -1094,7 +1094,7 @@ class UserController extends ApiController{
     	
 	}
 
-	public function actionAnIndex($w='',$user_type='',$day='1')
+	public function actionAnIndex($uid='',$user_type='',$day='1')
 	{
 		$user = StaffExt::model()->findByPk($uid);
 		$data = $tags = [];
