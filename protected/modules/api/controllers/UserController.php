@@ -1115,24 +1115,29 @@ class UserController extends ApiController{
         	'签约'=>0,
         ];
         $cres = new CDbCriteria;
+        $cret = new CDbCriteria;
         $tobe = TimeTools::getDayBeginTime(time());
         if($day) {
 			switch ($day) {
 				// 今天
 				case '1':
 					$cres->addCondition("updated>".TimeTools::getDayBeginTime());
+					$cret->addCondition("updated>".TimeTools::getDayBeginTime());
 					break;
 				// 昨天
 				case '2':
 					$cres->addCondition("updated>".TimeTools::getDayBeginTime(time()-86400).' and updated<'.TimeTools::getDayEndTime(time()-86400));
+					$cret->addCondition("created>".TimeTools::getDayBeginTime(time()-86400).' and created<'.TimeTools::getDayEndTime(time()-86400));
 					break;
 					// 本周
 				case '3':
 					$cres->addCondition("updated>".TimeTools::getWeekBeginTime().' and updated<'.TimeTools::getWeekEndTime());
+					$cret->addCondition("created>".TimeTools::getWeekBeginTime().' and created<'.TimeTools::getWeekEndTime());
 					break;
 					// 本月
 				case '4':
 					$cres->addCondition("updated>".TimeTools::getMonthBeginTime().' and updated<'.TimeTools::getMonthEndTime());
+					$cret->addCondition("created>".TimeTools::getMonthBeginTime().' and created<'.TimeTools::getMonthEndTime());
 					break;
 				default:
 					# code...
@@ -1148,6 +1153,7 @@ class UserController extends ApiController{
         		$tmparr[] = $value->hid;
         	}
         	$cres->addInCondition('hid',$tmparr);
+        	$cret->addInCondition('hid',$tmparr);
         } else {
         	if($user_type==1) {
 	        	$ans = [$uid];
@@ -1185,9 +1191,11 @@ class UserController extends ApiController{
 	        		}
 	        		
 	        		$cres->addInCondition("an_uid",$ans);
+	        		$cret->addInCondition("an_uid",$ans);
 	        	} else {
 	        		// $cres = new CDbCriteria;
 	        		$cres->addCondition("an_uid=$uid");
+	        		$cret->addCondition("an_uid=$uid");
 	        	}
 	        	// $cres = new CDbCriteria;
 	        	// $cres->addInCondition("hid",$hids);
@@ -1230,9 +1238,11 @@ class UserController extends ApiController{
 	        		}
 	        		
 	        		$cres->addInCondition("market_uid",$ans);
+	        		$cret->addInCondition("market_uid",$ans);
 	        	} else {
 	        		// $cres = new CDbCriteria;
 	        		$cres->addCondition("market_uid=$uid");
+	        		$cret->addCondition("market_uid=$uid");
 	        	}
 	        } else {
 	        	$ans = [$uid];
@@ -1270,41 +1280,45 @@ class UserController extends ApiController{
 	        		}
 	        		
 	        		$cres->addInCondition("sale_uid",$ans);
+	        		$cret->addInCondition("sale_uid",$ans);
 	        	} else {
 	        		// $cres = new CDbCriteria;
 	        		$cres->addCondition("sale_uid=$uid");
+	        		$cret->addCondition("sale_uid=$uid");
 	        	}
 	        }
         }
         $subs = SubExt::model()->findAll($cres);
+        $allsubs = SubExt::model()->count($cret);
+        $todarr['报备'] = $allsubs;
         // var_dump(count($subs));exit;
     	if($subs) {
     		foreach ($subs as $s) {
-    			switch ($day) {
-    				case '1':
-    					if($s->created>$tobe) {
-		    				$todarr['报备'] += 1;
-		    			}
-    					break;
-    				case '2':
-    					if($s->created>TimeTools::getDayBeginTime(time()-86400) && $s->created<TimeTools::getDayEndime(time()-86400)) {
-		    				$todarr['报备'] += 1;
-		    			}
-    					break;
-    				case '3':
-    					if($s->created>TimeTools::getWeekBeginTime() && $s->created<TimeTools::getWeekEndime()) {
-		    				$todarr['报备'] += 1;
-		    			}
-    					break;
-    				case '4':
-    					if($s->created>TimeTools::getMonthBeginTime() && $s->created<TimeTools::getMonthEndime()) {
-		    				$todarr['报备'] += 1;
-		    			}
-    					break;
-    				default:
-    					# code...
-    					break;
-    			}
+    			// switch ($day) {
+    			// 	case '1':
+    			// 		if($s->created>$tobe) {
+		    	// 			$todarr['报备'] += 1;
+		    	// 		}
+    			// 		break;
+    			// 	case '2':
+    			// 		if($s->created>TimeTools::getDayBeginTime(time()-86400) && $s->created<TimeTools::getDayEndime(time()-86400)) {
+		    	// 			$todarr['报备'] += 1;
+		    	// 		}
+    			// 		break;
+    			// 	case '3':
+    			// 		if($s->created>TimeTools::getWeekBeginTime() && $s->created<TimeTools::getWeekEndime()) {
+		    	// 			$todarr['报备'] += 1;
+		    	// 		}
+    			// 		break;
+    			// 	case '4':
+    			// 		if($s->created>TimeTools::getMonthBeginTime() && $s->created<TimeTools::getMonthEndime()) {
+		    	// 			$todarr['报备'] += 1;
+		    	// 		}
+    			// 		break;
+    			// 	default:
+    			// 		# code...
+    			// 		break;
+    			// }
     			// if($s->created>$tobe) {
     			// 	$todarr['报备'] += 1;
     			// }
@@ -1317,6 +1331,7 @@ class UserController extends ApiController{
     			}
     		}
     	}
+
         $todayList = [];
         foreach ($todarr as $key => $value) {
         	$todayList[] = ['num'=>$value,'text'=>$key];
