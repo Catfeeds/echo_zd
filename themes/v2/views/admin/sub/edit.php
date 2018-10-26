@@ -64,10 +64,10 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
           <div class="col-md-2"><?php echo $form->error($article, 'id_no') ?></div>
       </div>
       <div class="form-group">
-    <label class="col-md-2 control-label">到期时间</label>
+    <label class="col-md-2 control-label">到访时间</label>
     <div class="col-md-4">
         <div class="input-group date form_datetime" >
-            <?php echo $form->textField($article,'time',array('class'=>'form-control','value'=>($article->time?date('Y-m-d',$article->time):''))); ?>
+            <?php echo $form->textField($article,'time',array('class'=>'form-control','value'=>($article->time?date('Y-m-d',$article->time):0))); ?>
             <span class="input-group-btn">
               <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
            </span>
@@ -124,6 +124,7 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
     </div>
     <?php } ?>
     </div>
+    <?php $staffs = StaffExt::model()->normal()->findAll();?>
     <div class="tab-pane col-md-12" id="tab_3">
       <div class="form-group">
         <label class="col-md-2 control-label">渠道经纪人</label>
@@ -135,24 +136,30 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
       <div class="form-group">
         <label class="col-md-2 control-label">市场对接人</label>
         <div class="col-md-4">
-            <?php echo $form->dropDownList($article, 'market_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name_phone'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
+            <?php echo $form->dropDownList($article, 'market_uid', CHtml::listData($staffs,'id','name_phone'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
         </div>
         <div class="col-md-2"><?php echo $form->error($article, 'market_uid') ?></div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">案场助理</label>
         <div class="col-md-4">
-            <?php echo $form->dropDownList($article, 'an_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name_phone'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
+            <?php echo $form->dropDownList($article, 'an_uid', CHtml::listData($staffs,'id','name_phone'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
         </div>
         <div class="col-md-2"><?php echo $form->error($article, 'an_uid') ?></div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">案场销售</label>
         <div class="col-md-4">
-            <?php echo $form->dropDownList($article, 'sale_uid', CHtml::listData(StaffExt::model()->normal()->findAll(),'id','name_phone'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
+            <?php echo $form->dropDownList($article, 'sale_uid', CHtml::listData($staffs,'id','name_phone'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
         </div>
         <div class="col-md-2"><?php echo $form->error($article, 'sale_uid') ?></div>
     </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">辅助报备人员</label>
+        <div class="col-md-4">
+            <?php echo $form->dropDownList($article, 'help_uid', CHtml::listData($staffs,'id','name_phone'), array('class' => 'form-control select2', 'empty'=>'请选择','encode' => false)); ?>
+        </div>
+        <div class="col-md-2"><?php echo $form->error($article, 'help_uid') ?></div>
     </div>
     </div>
     

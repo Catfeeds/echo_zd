@@ -46,6 +46,7 @@ $statusArr = SubExt::$status;
         <th class="text-center">市场人员</th>
         <th class="text-center">案场助理</th>
         <th class="text-center">案场销售</th>
+        <th class="text-center">辅助报备</th>
         <th class="text-center">销售额</th>
         <th class="text-center">添加时间</th>
         <th class="text-center">修改时间</th>
@@ -59,6 +60,7 @@ $statusArr = SubExt::$status;
         $market_user = $v->market_user;
         $an_user = $v->an_user;
         $sale_user = $v->sale_user;
+        $help_user = $v->help_user;
         $company = $v->company;
      ?>
         <tr>
@@ -69,6 +71,7 @@ $statusArr = SubExt::$status;
             <td class="text-center"><?=$market_user?$market_user->name:''?></td> 
             <td class="text-center"><?=$an_user?$an_user->name:''?></td> 
             <td class="text-center"><?=$sale_user?$sale_user->name:''?></td>
+            <td class="text-center"><?=$help_user?$help_user->name:''?></td>
             <td class="text-center"><?=$v->sale_price?$v->sale_price:'-'?></td> 
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>

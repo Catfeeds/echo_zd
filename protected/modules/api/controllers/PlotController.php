@@ -875,7 +875,7 @@ class PlotController extends ApiController{
 					$user = UserExt::model()->find("phone='$fxphone'");
 					$scuser = UserExt::model()->findByPk($tmp['uid']);
 					$staffUser = StaffExt::model()->find("phone='".$scuser->phone."'");
-					$tmp['market_uid'] = $staffUser->id;
+					$tmp['help_uid'] = $staffUser->id;
 					$tmp['uid'] = $user->id;
 				}
 				if(!$user) {
