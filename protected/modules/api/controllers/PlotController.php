@@ -866,9 +866,22 @@ class PlotController extends ApiController{
 				$tmp['visit_num'] = $this->cleanXss(Yii::app()->request->getPost('visit_num',''));
 				$tmp['id_no'] = $this->cleanXss(Yii::app()->request->getPost('id_no',''));
 				$tmp['uid'] = $this->cleanXss(Yii::app()->request->getPost('uid',''));
+				$fxphone = $this->cleanXss(Yii::app()->request->getPost('fxphone',''));
 				!$tmp['time'] && $tmp['time'] = 0;
 				$hid = explode(',', $hid);
-				if($user = UserExt::model()->findByPk($tmp['uid'])) {
+				$user = '';
+				// 有fxphone 当前报备者为市场 fxphone为分销
+				if($fxphone) {
+					$user = UserExt::model()->find("phone='$fxphone'");
+					$scuser = UserExt::model()->findByPk($tmp['uid']);
+					$staffUser = StaffExt::model()->find("phone='".$scuser->phone."'");
+					$tmp['market_uid'] = $staffUser->id;
+					$tmp['uid'] = $user->id;
+				}
+				if(!$user) {
+					$user = UserExt::model()->findByPk($tmp['uid']);
+				}
+				if($user) {
 					if($user->type==2&&!$user->cid) {
 						return $this->returnError('请认证后操作');
 					}
@@ -879,6 +892,8 @@ class PlotController extends ApiController{
 					if($com && $com->status==0) {
 						return $this->returnError('您所在的公司处于禁用状态，请联系客服处理');
 					}
+				} else {
+					return $this->returnError('用户信息错误');
 				}
 				// $tmp['uid'] = $this->staff->id;
 

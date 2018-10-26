@@ -58,6 +58,7 @@ class SiteExt extends Site{
         'sitename'=>'',
         'confirmNote'=>'',
         'isAllPhone'=>'',
+        'isHelpBaobei'=>'',
         'companynotice'=>'',
         'companyname'=>'',
     ];
@@ -79,6 +80,7 @@ class SiteExt extends Site{
             'openDl'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启独立经纪人'],
             'openSfz'=>['type'=>'radio','list'=>['否','是'],'name'=>'开启身份证验证'],
             'isAllPhone'=>['type'=>'radio','list'=>['否','是'],'name'=>'只支持全号报备'],
+            'isHelpBaobei'=>['type'=>'radio','list'=>['否','是'],'name'=>'是否开启辅助报备'],
             'codenote'=>['type'=>'text','name'=>'绑定门店码备注'],
             'bottomLogo'=>['type'=>'image','max'=>1,'name'=>'页面底部logo','notedit'=>"1"],
             'bottomWords'=>['type'=>'text','name'=>'页面底部文案','notedit'=>"1"],

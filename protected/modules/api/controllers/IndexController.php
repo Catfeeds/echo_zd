@@ -1038,6 +1038,18 @@ class IndexController extends ApiController
        $this->frame['data'] = ['data'=>SiteExt::getAttr('qjpz','isAllPhone')];
     }
 
+    public function actionIsHelpBaobei($phone='')
+    {
+        if(StaffExt::model()->find("phone='$phone'")) {
+            if(SiteExt::getAttr('qjpz','isHelpBaobei')) {
+                $this->frame['data'] = true;
+            } else {
+                $this->frame['data'] = false;
+            }
+        }else
+        $this->frame['data'] = false;
+    }
+
     public function actionImportExl()
     {
         $url = "xctxl.xlsx";
