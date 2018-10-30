@@ -51,7 +51,7 @@ class StaffController extends AdminController{
             $criteria->params[':endTime'] = TimeTools::getDayEndTime($endTime);
 
         }
-		if($cate) {
+		if(is_numeric($cate)) {
 			$criteria->addCondition('t.is_jl=:cid');
 			$criteria->params[':cid'] = $cate;
 		}
