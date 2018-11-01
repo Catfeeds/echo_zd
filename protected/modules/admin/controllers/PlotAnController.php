@@ -155,7 +155,7 @@ class PlotAnController extends AdminController{
 				// $info->uid = $uid;
 				// $info->time =  is_numeric($info->time)?$info->time : strtotime($info->time);
 				if($info->save()) {
-					$this->setMessage('操作成功','success',['list']);
+					$this->setMessage('操作成功','success',[$z?'zlist':'list']);
 				} else {
 					$this->setMessage(array_values($info->errors)[0][0],'error');
 				}
