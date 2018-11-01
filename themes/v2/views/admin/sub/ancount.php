@@ -15,7 +15,7 @@ $statusArr = SubExt::$status;
                 <?php echo CHtml::dropDownList('hid',$hid,CHtml::listData(PlotExt::model()->findAll(),'id','title'),array('class'=>'form-control chose_select select2','encode'=>false,'prompt'=>'--请选择楼盘--')); ?>
             </div>
             <div class="form-group">
-                <?php echo CHtml::dropDownList('aid',$aid,CHtml::listData(Tools::menuMake(DepartmentExt::model()->findAll(),-1,'id'),'id','name'),array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--请选择部门--')); ?>
+                <?php echo CHtml::dropDownList('aid',$aid,CHtml::listData(Tools::menuMake(DepartmentExt::model()->findAll(),-1,'id'),'id','name'),array('class'=>'form-control chose_select select2','encode'=>false,'prompt'=>'--请选择部门--')); ?>
             </div>
             <div class="form-group">
                 <?php echo CHtml::dropDownList('is_all',$is_all,['当前部门数据','所有子部门数据'],array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--请选择部门数据类型--')); ?>
