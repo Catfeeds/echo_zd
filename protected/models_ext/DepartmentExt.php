@@ -89,11 +89,12 @@ class DepartmentExt extends Department{
     {
         $trees = [];
         $parent = $this->parent;
+        $trees[] = $this->name;
         while ($res = DepartmentExt::model()->findByPk($parent)) {
             $parent = $res->parent;
-            $trees[] = $res->name;
+            !in_array($res->name, $trees) && $trees[] = $res->name;
         }
-        $trees[] = $this->name;
+        $trees = array_reverse($trees);
         return implode('->', $trees);
     }
 
