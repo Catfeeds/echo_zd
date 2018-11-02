@@ -44,6 +44,22 @@ $this->breadcrumbs = array($this->pageTitle);
     </tr>
     </thead>
     <tbody>
+    <?php $stdds = [];  $alldsres = StaffDepartmentExt::model()->findAll("is_major=1 and uid=".Yii::app()->user->id); $des = []; if($alldsres) {
+                    foreach ($alldsres as $der) {
+                        $des[] = $der->did;
+                    }
+                    } if($des) {
+                        $cre = new CDbCriteria;
+                        $cre->addInCondition('did',$des);
+                        $alldesres = StaffDepartmentExt::model()->findAll($cre);
+                        
+                        if($alldesres) {
+                            foreach ($alldesres as $de) {
+                                !in_array($de->uid, $stdds) && $stdds[] = $de->uid;
+                            }
+                        }
+                        
+                        } ?>
     <?php foreach($infos as $k=>$v): ?>
         <tr>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
@@ -96,7 +112,8 @@ $this->breadcrumbs = array($this->pageTitle);
 
 
             <td style="text-align:center;vertical-align: middle">
-                <?php if(Yii::app()->user->id==$v->id || Yii::app()->user->id==1): ?>
+            <!-- 部门主管可以改部门员工数据 -->
+                <?php $isde = 0; in_array($v->id, $stdds) && $isde = 1; if($isde || Yii::app()->user->id==$v->id || Yii::app()->user->id==1): ?>
             <a href="<?php echo $this->createUrl('dlist',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs blue"> 部门管理 </a> 
             <a href="<?php echo $this->createUrl('editpwd',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs blue"><i class="fa fa-edit"></i> 修改密码 </a>
             <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 编辑 </a> 
