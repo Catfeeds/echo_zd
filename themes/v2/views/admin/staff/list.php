@@ -121,6 +121,9 @@ $this->breadcrumbs = array($this->pageTitle);
             <a href="<?php echo $this->createUrl('editpwd',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs blue"><i class="fa fa-edit"></i> 修改密码 </a>
             <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 编辑 </a> 
         <?php endif;?>
+        <?php if(Yii::app()->user->is_m): ?>
+           <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?>
+        <?php endif; ?>
             </td>
         </tr>
     <?php endforeach; ?>
@@ -139,15 +142,6 @@ $js = "
                   placeholder: '请选择',
                   allowClear: true
                });
-
-                 $('.form_datetime').datetimepicker({
-                     autoclose: true,
-                     isRTL: Metronic.isRTL(),
-                     format: 'yyyy-mm-dd',
-                     minView: 'month',
-                     language: 'zh-CN',
-                     pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
-                 });
 
             });
 
