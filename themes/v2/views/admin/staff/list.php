@@ -18,6 +18,9 @@ $this->breadcrumbs = array($this->pageTitle);
             <div class="form-group">
                 <?php echo CHtml::dropDownList('cate',$cate,StaffExt::$is_jls,array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择身份--')); ?>
             </div>
+            <div class="form-group">
+                <?php echo CHtml::dropDownList('aid',$aid,CHtml::listData(Tools::menuMake(DepartmentExt::model()->findAll(),-1,'id'),'id','name'),array('class'=>'form-control chose_select select2','encode'=>false,'prompt'=>'--请选择部门--','style'=>'min-width:400px')); ?>
+            </div>
             <button type="submit" class="btn blue">搜索</button>
             <a class="btn yellow" onclick="removeOptions()"><i class="fa fa-trash"></i>&nbsp;清空</a>
         </form>
@@ -124,9 +127,35 @@ $this->breadcrumbs = array($this->pageTitle);
     </tbody>
 </table>
 <?php $this->widget('VipLinkPager', array('pages'=>$pager)); ?>
-
 <script>
-<?php Tools::startJs(); ?>
+<?php Tools::startJs(); 
+Yii::app()->clientScript->registerScriptFile('/static/global/plugins/select2/select2.min.js', CClientScript::POS_END);
+Yii::app()->clientScript->registerCssFile('/static/global/plugins/select2/select2.css');
+Yii::app()->clientScript->registerCssFile('/static/admin/pages/css/select2_custom.css');
+
+$js = "
+            $(function(){
+               $('.select2').select2({
+                  placeholder: '请选择',
+                  allowClear: true
+               });
+
+                 $('.form_datetime').datetimepicker({
+                     autoclose: true,
+                     isRTL: Metronic.isRTL(),
+                     format: 'yyyy-mm-dd',
+                     minView: 'month',
+                     language: 'zh-CN',
+                     pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
+                 });
+
+            });
+
+
+            ";
+
+Yii::app()->clientScript->registerScript('add',$js,CClientScript::POS_END);
+?>
     setInterval(function(){
         $('#AdminIframe').height($('#AdminIframe').contents().find('body').height());
         var $panel_title = $('#fade-title');
