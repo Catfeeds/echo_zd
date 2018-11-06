@@ -326,6 +326,11 @@ class UserController extends ApiController{
 				} else {
 					$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%' or company_name like '%$kw%'");
 				}
+				$hids = [];
+				foreach ($xmzs as $kxm) {
+					$hids[] = $kxm->hid;
+				}
+				$criteria->addInCondition('hid',$hids);
 				// $mkids = [];
 
 				// $idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where type=1 and uid=".$uid)->queryAll();
