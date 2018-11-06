@@ -935,7 +935,7 @@ class PlotController extends ApiController{
 								$subs = [$subs];
 							foreach ($subs as $s) {
 								$staff = StaffExt::model()->findByPk($s);
-								SmsExt::sendMsg('添加报备通知',$staff->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'name'=>$obj->name.$obj->phone,'pro'=>$plot->title]);
+								SmsExt::sendMsg('添加报备通知',$staff->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name.$user->phone,'name'=>$obj->name.$obj->phone,'pro'=>$plot->title]);
 							}
 						}
 						$pro = new SubProExt;
