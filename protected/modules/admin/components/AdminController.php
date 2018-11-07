@@ -72,13 +72,15 @@ class AdminController extends Controller
                 ['label' => '市场数据统计', 'url' => ['/admin/sub/sccount']],
                 // ['label' => '合作公司', 'url' => ['/admin/companyPackage/list'],'active'=>$this->route=='admin/companyPackage/edit'],
             ]],
-            ['label' => '分销管理', 'icon' => 'icon-speedometer', 'items' => [
-                ['label' => '公司管理', 'url' => ['/admin/company/list'],'active'=>$this->route=='admin/company/edit'],
-                ['label' => '签约管理', 'url' => ['/admin/cooperate/list'],'active'=>$this->route=='admin/cooperate/edit'],
-                ['label' => '分销用户管理', 'url' => ['/admin/user/list'],'active'=>$this->route=='admin/user/edit'],
-                // ['label' => '合作公司', 'url' => ['/admin/companyPackage/list'],'active'=>$this->route=='admin/companyPackage/edit'],
-            ]],
-            
+            // ['label' => '分销管理', 'icon' => 'icon-speedometer', 'items' => [
+            //     ['label' => '分销公司管理', 'url' => ['/admin/company/list'],'active'=>$this->route=='admin/company/edit'],
+            //     ['label' => '分销签约管理', 'url' => ['/admin/cooperate/list'],'active'=>$this->route=='admin/cooperate/edit'],
+            //     ['label' => '分销用户管理', 'url' => ['/admin/user/list'],'active'=>$this->route=='admin/user/edit'],
+            //     // ['label' => '合作公司', 'url' => ['/admin/companyPackage/list'],'active'=>$this->route=='admin/companyPackage/edit'],
+            // ]],
+            ['label'=>'分销公司管理','icon'=>'icon-speedometer','url'=>['/admin/company/list'],'active'=>$this->route=='admin/company/edit'],
+            ['label'=>'分销签约管理','icon'=>'icon-speedometer','url'=>['/admin/cooperate/list'],'active'=>$this->route=='admin/cooperate/edit'],
+            ['label'=>'分销用户管理','icon'=>'icon-speedometer','url'=>['/admin/user/list'],'active'=>$this->route=='admin/user/edit'],
             ['label'=>'收藏管理','icon'=>'icon-speedometer','url'=>['/admin/save/list'],'active'=>$this->route=='admin/save/edit'],
             ['label'=>'区域管理','icon'=>'icon-speedometer','url'=>['/admin/area/arealist'],'active'=>$this->route=='admin/area/areaedit'],
             ['label'=>'推荐管理','icon'=>'icon-speedometer','url'=>['/admin/recom/list'],'active'=>$this->route=='admin/recom/edit'],
@@ -88,8 +90,8 @@ class AdminController extends Controller
             ['label' => '部门管理', 'icon' => 'icon-speedometer','url'=>['/admin/department/areaList'],'active'=>$this->route=='admin/department/areaEdit'],
             ['label'=>'短信管理','icon'=>'icon-speedometer','url'=>['/admin/msg/list'],'active'=>$this->route=='admin/msg/edit'],
             ['label'=>'站点配置','icon'=>'icon-speedometer','url'=>['/admin/site/list'],'active'=>$this->route=='admin/site/edit'||$this->route=='admin/site/list'],
-            ['label'=>'分销公司审核','icon'=>'icon-speedometer','url'=>['/admin/company/ulist'],'active'=>$this->route=='admin/company/edit'],
-            ['label'=>'分销员工审核','icon'=>'icon-speedometer','url'=>['/admin/user/ulist'],'active'=>$this->route=='admin/user/edit'],
+            // ['label'=>'分销公司审核','icon'=>'icon-speedometer','url'=>['/admin/company/ulist'],'active'=>$this->route=='admin/company/edit'],
+            // ['label'=>'分销员工审核','icon'=>'icon-speedometer','url'=>['/admin/user/ulist'],'active'=>$this->route=='admin/user/edit'],
             // ['label'=>'分销-业务员绑定管理','icon'=>'icon-speedometer','url'=>['/admin/cooperate/ulist'],'active'=>$this->route=='admin/cooperate/uedit'],
         ];
     }
