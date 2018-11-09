@@ -982,9 +982,28 @@ class UserController extends ApiController{
 			return $this->returnError('用户不存在或禁用');
 		}
 		$data = [];
-		$kwsql = '';
-		$kw && $kwsql = " and c.name like '%$kw%'";
-		if($companys = Yii::app()->db->createCommand("select c.id,c.name,c.address,c.image,c.area,c.street,c.code,c.manager,c.phone from company c left join cooperate o on c.id=o.cid where o.staff=$uid".$kwsql)->queryAll()) {
+		$cids = [];
+		// 签约的cid
+		$cidsres = CooperateExt::model()->findAll("staff=$uid");
+		if($cidsres) {
+			foreach ($cidsres as $key => $value) {
+				!in_array($value->cid, $cids) && $cids[] = $value['cid'];
+			}
+		}
+		// 自己添加的cid
+		$cidsres = CompanyExt::model()->findAll("staff=$uid");
+		if($cidsres) {
+			foreach ($cidsres as $key => $value) {
+				!in_array($value->cid, $cids) && $cids[] = $value['cid'];
+			}
+		}
+		$criteria = new CDbCriteria;
+		$criteria->addInCondition('id',$cids);
+		$kw && $criteria->addSearchCondition('name',$kw);
+
+		// $kwsql = '';
+		// $kw && $kwsql = " and c.name like '%$kw%'";
+		if($companys = CompanyExt::model()->findAll($criteria)) {
 			foreach ($companys as $key => $value) {
 				$areaInfo = AreaExt::model()->findByPk($value['area']);
 				$streetInfo =  AreaExt::model()->findByPk($value['street']);
@@ -997,6 +1016,7 @@ class UserController extends ApiController{
 					'code'=>$value['code'],
 					'manager'=>$value['manager'],
 					'phone'=>$value['phone'],
+					'is_add'=>$value['staff']==$uid?true:false,
 					'image'=>ImageTools::fixImage($value['image']?$value['image']:SiteExt::getAttr('qjpz','companynopic')),
 				];
 			}
