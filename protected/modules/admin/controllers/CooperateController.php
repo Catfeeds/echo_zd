@@ -25,7 +25,15 @@ class CooperateController extends AdminController{
 		$criteria = new CDbCriteria;
 		if($value = trim($value))
             if ($type=='title') {
-                $criteria->addSearchCondition('user_company', $value);
+            	$ids = [];
+            	$cre = new CDbCriteria;
+            	$cre->addSearchCondition('name',$value);
+            	if($ress = CompanyExt::model()->findAll($cre)) {
+            		foreach ($ress as $res) {
+            			$ids[] = $res->id;
+            		}
+            	}
+            	$criteria->addInCondition('cid',$ids);
             } elseif ($type=='name') {
             	$criteria->addSearchCondition('user_name', $value);
             } elseif ($type=='plot') {

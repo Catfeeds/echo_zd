@@ -873,6 +873,9 @@ class PlotController extends ApiController{
 				// 有fxphone 当前报备者为市场 fxphone为分销
 				if($fxphone) {
 					$user = UserExt::model()->find("phone='$fxphone'");
+					if(!$user) {
+						return $this->returnError('该经纪人手机号码未注册，无法代为报备');
+					}
 					$scuser = UserExt::model()->findByPk($tmp['uid']);
 					$staffUser = StaffExt::model()->find("phone='".$scuser->phone."'");
 					$tmp['help_uid'] = $staffUser->id;
