@@ -146,10 +146,10 @@ $this->pageTitle = $cname.'后台欢迎您';
             <div class="portlet-body">
                 <div class="tab-content">
                     <div class="tab-pane active" id="portlet_tab1" style="display: flex;">
-                        <div id="statistics_1" class="chart" style="padding: 0px; position: relative;width: 30%">
+                        <div id="statistics_1" class="chart" style="padding: 0px; position: relative;width: 20%">
     
                         </div>
-                        <div id="statistics_12" class="chart" style="padding: 0px; position: relative;width: 70%">
+                        <div id="statistics_12" class="chart" style="padding: 0px; position: relative;width: 80%">
     
                         </div>
                     </div>
