@@ -12,6 +12,7 @@ class DepartmentController extends AdminController {
      */
     public function actionAreaList() {
         $list = DepartmentExt::model()->findAll();
+        // var_dump($list);exit;
         $tree = Tools::makeTree($list,1);
         // var_dump($tree);exit;
         $this->render('arealist', array('tree' => $tree));

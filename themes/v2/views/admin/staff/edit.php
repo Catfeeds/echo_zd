@@ -65,6 +65,13 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
     <div class="col-md-2"><?php echo $form->error($article, 'is_jl') ?></div>
 </div>
 <div class="form-group">
+    <label class="col-md-2 control-label">是否老板</label>
+    <div class="col-md-4">
+        <?php echo $form->radioButtonList($article, 'is_boss', ['否','是'], array('separator' => '')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'is_boss') ?></div>
+</div>
+<div class="form-group">
     <label class="col-md-2 control-label">状态</label>
     <div class="col-md-4">
         <?php echo $form->radioButtonList($article, 'status', UserExt::$status, array('separator' => '')); ?>

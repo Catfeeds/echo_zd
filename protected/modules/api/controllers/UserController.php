@@ -317,8 +317,62 @@ class UserController extends ApiController{
 					break;
 			}
 		}
+		// 老板看所有
+		if(isset($user->is_boss)&&$user->is_boss) {
+			if($kw)
+				if(is_numeric($kw)) {
+					$criteria->addSearchCondition('phone',$kw);
+				} else {
+					$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%' or company_name like '%$kw%'");
+				}
+				$subs = SubExt::model()->findAll($criteria);
+				// var_dump(count($subs));exit;
+				if($subs) {
+					foreach ($subs as $key => $value) {
+						$market_user = $value->market_user;
+						$dj_user = $value->user;
+						// if()
+						$all[] = [
+							'id'=>$value->id,
+							'plot_title'=>$value->plot_title,
+							'firstL'=>'客户',
+							'firstR'=>$value->name.' '.$value->phone,
+							'secondL'=>'市场',
+							'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
+							'thirdL'=>$value->is_zf?'自访':'分销',
+							'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
+							'forthL'=>'公司',
+							'forthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
+							'isShowCode'=>1,
+							'type'=>$value->status,
+							'typeWords'=>SubExt::$status[$value->status],
+							'time'=>date("Y-m-d H:i",$value->created),
+
+							// 'id'=>$value->id,
+							// 'userName'=>$value->name,
+							// 'userPhone'=>$value->phone,
+							// 'isShowCode'=>1,
+							// 'type'=>$value->status,
+							// 'staffName'=>$market_user?$market_user->name:'暂无',
+							// 'staffPhone'=>$market_user?$market_user->phone:'暂无',
+							// 'time'=>date("m-d H:i",$value->created),
+							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
+						];
+					}
+					$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
+					if($all) {
+						foreach (SubExt::$status as $key => $value) {
+							$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
+						}
+						foreach ($all as $key => $value) {
+							$data[$value['type']+1]['num']++;
+							$data[$value['type']+1]['list'][] = $value;
+						}
+					}
+				} 
+		}
 		// 项目总看项目数据
-		if($xmzs = PlotAnExt::model()->findAll("uid=$uid and type>2")) {
+		elseif($xmzs = PlotAnExt::model()->findAll("uid=$uid and type>2")) {
 			// 搜索条件
 				if($kw)
 				if(is_numeric($kw)) {
@@ -1172,7 +1226,10 @@ class UserController extends ApiController{
         // var_dump($tobe);
         // $cres->addCondition("updated>$tobe");
         // 项目总看项目数据
-        if($xmzs = PlotAnExt::model()->findAll("uid=$uid and type>2")) {
+		if($user->is_boss) {
+			
+		}
+        elseif($xmzs = PlotAnExt::model()->findAll("uid=$uid and type>2")) {
         	$tmparr = [];
         	foreach ($xmzs as $key => $value) {
         		$tmparr[] = $value->hid;
