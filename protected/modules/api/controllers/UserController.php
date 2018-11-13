@@ -41,6 +41,9 @@ class UserController extends ApiController{
 			if(!$obj['phone']) {
 				return $this->returnError('请绑定手机号再进行提交');
 			}
+			if(mb_strlen($obj['name'])>4) {
+				return $this->returnError('名字长度不能超过四位');
+			}
 			if($obj) {
 				if($user = UserExt::model()->find("phone='".$obj['phone']."'")){
 					;
