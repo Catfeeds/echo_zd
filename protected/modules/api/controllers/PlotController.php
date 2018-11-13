@@ -22,7 +22,7 @@ class PlotController extends ApiController{
 	{
 
 		$info_no_pic = SiteExt::getAttr('qjpz','info_no_pic');
-		$areaslist = AreaExt::getALl();
+		$areaslist = AreaExt::getAll();
 		$area = (int)Yii::app()->request->getQuery('area',0);
 		$city = (int)Yii::app()->request->getQuery('city',0);
 		$street = (int)Yii::app()->request->getQuery('street',0);
@@ -166,11 +166,18 @@ class PlotController extends ApiController{
 		}
 		if($staffuid&&$user_type) {
 			$mkids = [];
+			$staff = StaffExt::model()->findByPk($staffuid);
+			// 如果是老板看所有
+			if($staff->is_boss) {
+				// $criteria->limit = 10
+			}
 			// 如果是项目总 看项目总关联的数据
-			if($tmparrs = PlotAnExt::model()->findAll("type>2 and uid=$staffuid")) {
+			elseif($tmparrs = PlotAnExt::model()->findAll("type>2 and uid=$staffuid")) {
 				foreach ($tmparrs as $tmp) {
 					$mkids[] = $tmp->hid;
 				}
+				$criteria->addInCondition('id',$mkids);
+
 			} else {
 				// 市场看对接人库 案场销售看分配的项目sub 案场助理看plot_an
 				// $mkids = [];
@@ -187,9 +194,10 @@ class PlotController extends ApiController{
 						$mkids[] = $mkid['hid'];
 					}
 				}
+				$criteria->addInCondition('id',$mkids);
 			}
 				
-			$criteria->addInCondition('id',$mkids);
+			
 		}
 
 		// var_dump($toptag,$sfprice,$wylx);exit;

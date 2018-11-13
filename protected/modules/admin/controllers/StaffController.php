@@ -19,7 +19,7 @@ class StaffController extends AdminController{
 		// $this->cates = CHtml::listData(LeagueExt::model()->normal()->findAll(),'id','name');
 		// $this->cates1 = CHtml::listData(TeamExt::model()->normal()->findAll(),'id','name');
 	}
-	public function actionList($type='title',$value='',$time_type='created',$time='',$cate='',$did='',$aid='')
+	public function actionList($type='title',$value='',$time_type='created',$time='',$cate='',$did='',$aid='',$is_boss='')
 	{
 		$modelName = $this->modelName;
 		$criteria = new CDbCriteria;
@@ -55,6 +55,10 @@ class StaffController extends AdminController{
 			$criteria->addCondition('t.is_jl=:cid');
 			$criteria->params[':cid'] = $cate;
 		}
+        if(is_numeric($is_boss)) {
+            $criteria->addCondition('t.is_boss=:is_boss');
+            $criteria->params[':is_boss'] = $is_boss;
+        }
         // 选出当前部门所有员工
         if($aid) {
             $sids = [];
@@ -107,7 +111,7 @@ class StaffController extends AdminController{
 
         array_unshift($scjls, ['id'=>'0','name'=>'暂无']);
         array_unshift($acjls, ['id'=>'0','name'=>'暂无']);
-		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'scjls'=>$scjls,'acjls'=>$acjls,'aid'=>$aid]);
+		$this->render('list',['cate'=>$cate,'infos'=>$infos->data,'cates'=>$this->cates,'pager'=>$infos->pagination,'type' => $type,'value' => $value,'time' => $time,'time_type' => $time_type,'scjls'=>$scjls,'acjls'=>$acjls,'aid'=>$aid,'is_boss'=>$is_boss]);
 	}
 
 	public function actionEdit($id='')

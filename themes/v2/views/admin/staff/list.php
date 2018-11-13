@@ -19,6 +19,9 @@ $this->breadcrumbs = array($this->pageTitle);
                 <?php echo CHtml::dropDownList('cate',$cate,StaffExt::$is_jls,array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择身份--')); ?>
             </div>
             <div class="form-group">
+                <?php echo CHtml::dropDownList('is_boss',$is_boss,['否','是'],array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--是否老板--')); ?>
+            </div>
+            <div class="form-group">
                 <?php echo CHtml::dropDownList('aid',$aid,CHtml::listData(Tools::menuMake(DepartmentExt::model()->findAll(),-1,'id'),'id','name'),array('class'=>'form-control chose_select select2','encode'=>false,'prompt'=>'--请选择部门--','style'=>'min-width:400px')); ?>
             </div>
             <button type="submit" class="btn blue">搜索</button>
