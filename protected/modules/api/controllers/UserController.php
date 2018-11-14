@@ -1644,6 +1644,22 @@ class UserController extends ApiController{
 					}
 				}
 			}
+			$this->frame['data'] = [
+                'id'=>$userobj->id,
+                'phone'=>$userobj->phone,
+                'is_true'=>$userobj->type==2&&!$userobj->cid?0:1,
+                'name'=>$userobj->name,
+                'type'=>$userobj->type,
+                'typename'=>$userobj->type==2?'分销':($userobj->type==3?'独立经纪人':'总代'),
+                'status'=>$userobj->status,
+                'openid'=>$userobj->openid,
+                'avatarUrl'=>ImageTools::fixImage($userobj->ava?$userobj->ava:SiteExt::getAttr('qjpz','usernopic'),200,200),
+                'image'=>ImageTools::fixImage($userobj->image),
+                'wx_word'=>$comp?($comp->name):'独立经纪人',
+                'image'=>$userobj->image?['key'=>$userobj->image,'imageURL'=>ImageTools::fixImage($userobj->image)]:'',
+                // 'is_true'=>$user->is_true,
+                'company_name'=>$comp?$comp->name:'独立经纪人',
+            ];
 			// var_dump($pregusers);exit;
 			foreach ($pregusers as $user) {
 				$sub = new SubExt;
@@ -1700,6 +1716,7 @@ class UserController extends ApiController{
 					} else {
 						$this->returnError(current(current($sub->getErrors())));
 					}
+
 			}
 		}
 
