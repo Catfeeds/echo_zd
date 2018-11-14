@@ -1507,11 +1507,201 @@ class UserController extends ApiController{
 		$user->save();
 	}
 
+	// 报备项目：龙湖滟澜山
+	// 客户信息：刘先生186****9892 李先生187****2924 王小姐136****7341 
+	// 带看人姓名：刘涛 
+	// 带看人电话：18621657355 
+	// 分销公司全称：上海贺诺网络科技有限公司 
+	// 自驾车牌号码：沪A88888
 	public function actionMultiSub()
 	{
 		$subs = Yii::app()->request->getPost('note','');
 		$uid = Yii::app()->request->getPost('uid','');
+		$openid = Yii::app()->request->getPost('openid','');
 		$staff = Yii::app()->request->getPost('staff','');
+		if(!$subs) {
+			return $this->returnError('参数错误');
+		}
+		if($subs) {
+			$arr = explode('tt', $subs);
+			if(!$arr) {
+				return $this->returnError('请按照模板格式报备');
+			}
+			$msgarr = [
+				'plotname'=>'请按格式输入项目名',
+				'users'=>'请按格式输入客户信息',
+				'fxname'=>'请按格式输入带看人姓名',
+				'fxphone'=>'请按格式输入带看人电话',
+				'com'=>'请按格式输入分销公司全称，如果是独立经纪人，请填写“独立经纪人”',
+			];
+			$plotname = $fxname = $fxphone = $com = $note = $users = '';
+			foreach ($arr as $key => $value) {
+				if(strstr($value,"报备项目：")) {
+					$plotname = str_replace("报备项目：", "", $value);
+					// var_dump($plotname);exit;
+				}
+
+				elseif(strstr($value,"客户信息：")) {
+					$usernames = str_replace("客户信息：", "", $value);
+					// 可能是多个
+					if(strstr($usernames,' ')) {
+						$users = explode(' ', $usernames);
+					} else {
+						$users = [$usernames];
+					}
+					
+					// var_dump($plotname);exit;
+				}
+				elseif(strstr($value,"带看人姓名：")) {
+					$fxname = str_replace("带看人姓名：", "", $value);
+					// var_dump($plotname);exit;
+				}
+				elseif(strstr($value,"带看人电话：")) {
+					$fxphone = str_replace("带看人电话：", "", $value);
+					if(strlen($fxphone)!=11) {
+						return $this->returnError('请输入正确的带看人电话');
+					}
+					// var_dump($plotname);exit;
+				}
+				elseif(strstr($value,"分销公司全称：")) {
+					$com = str_replace("分销公司全称：", "", $value);
+					// var_dump($plotname);exit;
+				}
+				elseif(strstr($value,"自驾车牌号码：")) {
+					$note = $value;
+					// var_dump($plotname);exit;
+				}
+			}
+			foreach ($msgarr as $k=>$v) {
+				if(!($$k)) {
+					return $this->returnError($v);
+				}
+			}
+			// 如果项目不在系统，报错
+			if(!($plot = PlotExt::model()->find("title='$plotname'"))) {
+				return $this->returnError('系统未找到该项目，请联系您的对接人');
+			}
+			$pregusers = [];
+			// 处理客户信息
+			foreach ($users as $user) {
+				preg_match_all('/[0-9|*]+/', $user,$matchs);
+				if(isset($matchs[0][0])) {
+					$userphone = $matchs[0][0];
+					if(strlen($userphone)!=11) {
+						return $this->returnError('请输入正确的手机号码');
+					}
+					$usernamee = str_replace($userphone, '', $user);
+					$tmp = [
+						'name'=>$usernamee,'phone'=>$userphone
+					];
+					$pregusers[] = $tmp;
+				}
+			}
+			if(!$pregusers) {
+				return $this->returnError('请按照模板格式填写客户信息');
+			}
+			$comp = '';
+			if($com != '独立经纪人') {
+				// 如果是新的公司，注册新的公司
+				if(is_numeric($com)) {
+					$sql = "code='$com'";
+				} else {
+					$sql = "name='$com'";
+				}
+				if(!($comp = CompanyExt::model()->find($sql))) {
+					// 如果门店码不存在
+					// if(is_numeric($com)) {
+					// 	return $this->returnError('该门店码不存在');
+					// } else {
+					// 	$comp = new CompanyExt;
+					// 	$comp->name = $com;
+					// 	$comp->type = 2;
+					// 	$comp->status = 1;
+					// 	$comp->save();
+					// }
+					return $this->returnError('系统未找到该公司，请联系对接人');
+				}
+			}
+			$sql = "phone='$fxphone'";
+			// 经纪人如果不存在 新建经纪人
+			if(!($userobj = UserExt::model()->find($sql))) {
+				// 如果门店码不存在
+				$userobj = new UserExt;
+				$userobj->name = $fxname;
+				$userobj->phone = $fxphone;
+				$userobj->cid = $comp?$comp->id:'';
+				$userobj->type = $comp?2:3;
+				$userobj->openid = $openid;
+				$userobj->status = 1;
+				if($userobj->save()) {
+					if($comp&&$comp->phone) {
+						SmsExt::sendMsg('绑定门店码成功通知店长',$comp->phone,['comname'=>$comp->manager,'com'=>$comp->name,'code'=>$comp->code,'name'=>$userobj->name]);
+					}
+					if($comp) {
+						SmsExt::sendMsg('绑定门店码成功通知用户',$userobj->phone,['com'=>$comp->name,'name'=>$userobj->name]);
+					} else {
+						SmsExt::sendMsg('独立经纪人注册',$userobj->phone,['name'=>$userobj->name,'tel'=>SiteExt::getAttr('qjpz','site_phone')]);
+					}
+				}
+			}
+			// var_dump($pregusers);exit;
+			foreach ($pregusers as $user) {
+				$sub = new SubExt;
+				$market_uid = 0;
+				if(Yii::app()->db->createCommand("select id from sub where uid=".$userobj['id']." and hid=".$plot['id']." and deleted=0 and phone='".$user['phone']."' and created<=".TimeTools::getDayEndTime()." and created>=".TimeTools::getDayBeginTime())->queryScalar()) {
+						return $this->returnError("同一组客户每天最多报备一次，请勿重复操作");
+					}
+					// $obj = new SubExt;
+					// 如果市场绑定了分销公司则自动分配
+					// 找到分销用户的cid
+					$cid = Yii::app()->db->createCommand("select cid from user where id=".$userobj['id'])->queryScalar();
+					if($cid) {
+						$sql = "select staff from cooperate where hid=".$plot['id']." and cid=$cid";
+						if($stid = Yii::app()->db->createCommand($sql)->queryScalar())
+							$market_uid = $stid;
+					}
+						
+					$sub->name = $user['name'];
+					$sub->phone = $user['phone'];
+					// var_dump($staff);exit;
+					$staff && $sub->help_uid = $staff;
+					$sub->uid = $userobj->id;
+					$comp && $sub->cid = $comp->id;
+					$sub->note = $note;
+					$sub->status = 0;
+					$sub->market_uid = $market_uid;
+					$sub->hid = $plot->id;
+
+					if($userobj['id']) {
+						$companyname = Yii::app()->db->createCommand("select c.name from company c left join user u on u.cid=c.id where u.id=".$userobj['id'])->queryScalar();
+						$sub->company_name = $companyname;
+					}
+					// 新增6位客户码 不重复
+					$code = 700000+rand(0,99999);
+					// var_dump($code);exit;
+					while (SubExt::model()->find('code='.$code)) {
+						$code = 700000+rand(0,99999);
+					}
+					$sub->code = $code;
+					if($sub->save()) {
+						if($subs = $plot->subtz) {
+							if(!is_array($subs))
+								$subs = [$subs];
+							foreach ($subs as $s) {
+								$staffs = StaffExt::model()->findByPk($s);
+								SmsExt::sendMsg('添加报备通知',$staffs->phone,['comname'=>($userobj->companyinfo?$userobj->companyinfo->name:'').$userobj->name.$userobj->phone,'name'=>$sub->name.$sub->phone,'pro'=>$plot->title]);
+							}
+						}
+						$pro = new SubProExt;
+						$pro->sid = $sub->id;
+						$pro->uid = $userobj['id'];
+						$pro->note = '新增客户报备';
+						$pro->save();
+					} else {
+						$this->returnError(current(current($sub->getErrors())));
+					}
+			}
+		}
 
 	}
 
