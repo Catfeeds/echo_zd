@@ -807,7 +807,7 @@ class UserController extends ApiController{
 
 	}
 
-	public function actionSubInfo($id='',$user_type='')
+	public function actionSubInfo($id='',$type='')
 	{
 		$data = $pros = $imgs = $firstArr = $secondArr = $thirdArr = $imgpros = [];
 		$sub = SubExt::model()->findByPk($id);
@@ -817,11 +817,16 @@ class UserController extends ApiController{
 		}
 		if($pross = $sub->pros) {
 			foreach ($pross as $key => $value) {
+				if($value->status==3) {
+					$note = "房号：".($sub->house_no?$sub->house_no:'暂无')."<br>面积：".($sub->size?$sub->size:'暂无')."<br>合同金额：".($sub->sale_price?$sub->sale_price:'暂无');
+				} else {
+					$note = $value->status?$value->note:(($sub->id_no?('身份证号码：'.$sub->id_no.'<br>'):'').'预计到访时间：'.($sub->time?date('Y-m-d H:i',$sub->time):'暂无').'<br>到访人数：'.$sub->visit_num.'<br>备注：'.$sub->note);
+				}
 				$pros[] = [
 					'id'=>$value->id,
 					'name'=>($value->user?$value->user->name:($value->staffObj?$value->staffObj->name:'')).'添加了'.$subArr[$value->status],
 					'time'=>date('m-d H:i',$value->created),
-					'note'=>$value->status?$value->note:(($sub->id_no?('身份证号码：'.$sub->id_no.'<br>'):'').'预计到访时间：'.($sub->time?date('Y-m-d H:i',$sub->time):'暂无').'<br>到访人数：'.$sub->visit_num.'<br>备注：'.$sub->note),
+					'note'=>$note,
 				];
 			}
 		}
@@ -839,7 +844,7 @@ class UserController extends ApiController{
 			'company'=>'',
 		];
 		// 项目展示系统用0 案场传1 市场传2
-		if(!$user_type) {
+		if(!$type) {
 			// 市场消息
 			if($u = $sub->market_user) {
 				$secondArr = [
@@ -858,22 +863,38 @@ class UserController extends ApiController{
 				];
 			}
 				
-		} elseif($user_type==1) {
-			if($u = $sub->user) {
+		} elseif($type==1) {
+			if($u = $sub->market_user) {
 				$secondArr = [
 					'name'=>$u->name,
 					'phone'=>$u->phone,
-					'tag'=>$sub->is_zf?'自访客':'分销资料',
+					'tag'=>'市场对接',
+					'company'=>'',
+				];
+			}
+			if($u = $sub->user) {
+				$thirdArr = [
+					'name'=>$u->name,
+					'phone'=>$u->phone,
+					'tag'=>$sub->is_zf?'自访客':'分销信息',
 					'company'=>$sub->company?$sub->company->name:'',
 				];
 			}
 		} else {
-			if($u = $sub->an_user) {
+			if($u = $sub->sale_user) {
 				$secondArr = [
 					'name'=>$u->name,
 					'phone'=>$u->phone,
-					'tag'=>'案场资料',
+					'tag'=>'案场销售',
 					'company'=>'',
+				];
+			}
+			if($u = $sub->user) {
+				$thirdArr = [
+					'name'=>$u->name,
+					'phone'=>$u->phone,
+					'tag'=>$sub->is_zf?'自访客':'分销信息',
+					'company'=>$sub->company?$sub->company->name:'',
 				];
 			}
 		}
@@ -917,6 +938,31 @@ class UserController extends ApiController{
 			$tmp['hk_price'] = Yii::app()->request->getPost('hk_price','');
 			$tmp['qy_time'] = Yii::app()->request->getPost('qy_time','');
 			$tmp['fk_type'] = Yii::app()->request->getPost('fk_type','');
+			$areaarr = Yii::app()->request->getPost('area','');
+			if($areaarr){
+				if(strstr($areaarr, ',')) {
+					$areaarr = explode(',', $areaarr);
+					$tmp['area'] = $areaarr[2];
+					$tmp['city'] = $areaarr[1];
+					$tmp['province'] = $areaarr[0];
+				}
+			}
+			// 成交时 房号面积合同金额定金必填
+			if($data['status']==3) {
+				if(!$tmp['house_no']) {
+					return $this->returnError('请填写房号');
+				}
+				if(!$tmp['size']) {
+					return $this->returnError('请填写面积');
+				}
+				if(!$tmp['sale_price']) {
+					return $this->returnError('请填写合同总价');
+				}
+				if(!$tmp['ding_price']) {
+					return $this->returnError('请填写定金');
+				}
+
+			}
 			if($data['sid']) {
 				$obj = new SubProExt;
 				$obj->attributes = $data;
@@ -944,7 +990,9 @@ class UserController extends ApiController{
 		if(!$sub) {
 			return $this->returnError('参数错误');
 		}
-		$this->frame['data'] = ['tagArr'=>SubExt::$status,'textArr'=>['2'=>[['text'=>'认筹金','value'=>$sub->rcj,'placeholder'=>'请输入认筹金','param'=>'rcj','type'=>1,'typeArr'=>[]]],'3'=>[['text'=>'房号','value'=>$sub->house_no,'placeholder'=>'请输入房号','param'=>'house_no','type'=>1,'typeArr'=>[]],['text'=>'面积','value'=>$sub->size,'placeholder'=>'请输入面积','param'=>'size','type'=>1,'typeArr'=>[]],['text'=>'合同总价','value'=>$sub->sale_price,'placeholder'=>'请输入合同总价','param'=>'sale_price','type'=>1,'typeArr'=>[]],['text'=>'定金','value'=>$sub->ding_price,'placeholder'=>'请输入定金','param'=>'ding_price','type'=>1,'typeArr'=>[]],['text'=>'折佣金额','value'=>$sub->zy_price,'placeholder'=>'请输入折佣金额','param'=>'zy_price','type'=>1,'typeArr'=>[]],['text'=>'渠道佣金','value'=>$sub->yj_price,'placeholder'=>'请输入渠道佣金','param'=>'yj_price','type'=>1,'typeArr'=>[]],['text'=>'回款金额','value'=>$sub->hk_price,'placeholder'=>'请输入回款金额','param'=>'hk_price','type'=>1,'typeArr'=>[]],['text'=>'签约时间','value'=>date('Y-m-d H:i:s',$sub->qy_time),'placeholder'=>'请输入签约时间','param'=>'qy_time','type'=>2,'typeArr'=>[]]],'4'=>[['text'=>'付款方式','value'=>$sub->fk_type,'placeholder'=>'请选择付款方式','param'=>'fk_type','type'=>3,'typeArr'=>CHtml::listData(TagExt::model()->findAll("cate='pricetype'"),'id','name')]]]];
+		$this->frame['data'] = 
+		['tagArr'=>SubExt::$status,
+		'textArr'=>['2'=>[['text'=>'认筹金','value'=>$sub->rcj,'require'=>false,'placeholder'=>'请输入认筹金','param'=>'rcj','type'=>1,'typeArr'=>[]]],'3'=>[['text'=>'房号','value'=>$sub->house_no,'require'=>true,'placeholder'=>'请输入房号','param'=>'house_no','type'=>1,'typeArr'=>[]],['text'=>'面积','value'=>$sub->size,'require'=>true,'placeholder'=>'请输入面积','param'=>'size','type'=>1,'typeArr'=>[]],['text'=>'合同总价','value'=>$sub->sale_price,'require'=>true,'placeholder'=>'请输入合同总价','param'=>'sale_price','type'=>1,'typeArr'=>[]],['text'=>'定金','value'=>$sub->ding_price,'require'=>true,'placeholder'=>'请输入定金','param'=>'ding_price','type'=>1,'typeArr'=>[]],['text'=>'折佣金额','value'=>$sub->zy_price,'require'=>false,'placeholder'=>'请输入折佣金额','param'=>'zy_price','type'=>1,'typeArr'=>[]],['text'=>'渠道佣金','value'=>$sub->yj_price,'require'=>false,'placeholder'=>'请输入渠道佣金','param'=>'yj_price','type'=>1,'typeArr'=>[]],['text'=>'回款金额','value'=>$sub->hk_price,'require'=>false,'placeholder'=>'请输入回款金额','param'=>'hk_price','type'=>1,'typeArr'=>[]],['text'=>'签约时间','value'=>date('Y-m-d H:i',$sub->qy_time?$sub->qy_time:time()),'require'=>false,'placeholder'=>'请输入签约时间','param'=>'qy_time','type'=>2,'typeArr'=>[]]],'4'=>[['text'=>'付款方式','value'=>$sub->fk_type,'require'=>false,'placeholder'=>'请选择付款方式','param'=>'fk_type','type'=>3,'typeArr'=>CHtml::listData(TagExt::model()->findAll("cate='pricetype'"),'id','name')]]]];
 	}
 
 	public function actionGetSubPrice($sid='')
@@ -1442,5 +1490,36 @@ class UserController extends ApiController{
 			}
 		}
 		return $ids;
+	}
+
+	public function actionEditName($uid='',$name='',$type='')
+	{
+		$model = $type?'StaffExt':'UserExt';
+		$user = $model::model()->findByPk($uid);
+		if(!$user) {
+			return $this->returnError('用户不存在');
+		}
+		if(!$name || $name>4) {
+			return $this->returnError('请输入正确的姓名');
+		}
+		$user->name = $name;
+
+		$user->save();
+	}
+
+	public function actionMultiSub()
+	{
+		$subs = Yii::app()->request->getPost('note','');
+		$uid = Yii::app()->request->getPost('uid','');
+		$staff = Yii::app()->request->getPost('staff','');
+
+	}
+
+	public function actionGetMultiTitle($type='')
+	{
+		if($type==1)
+			$this->frame['data'] = Yii::app()->file->sitename.'快速报备';
+		else
+			$this->frame['data'] = Yii::app()->file->sitename1.'快速报备';
 	}
 }

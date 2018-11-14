@@ -1117,4 +1117,52 @@ class ToolCommand extends CConsoleCommand
 
         }
     }
+
+    // 若分销跑的渠道未成交且X天没有到访，解绑渠道
+    public function actionUnlockCompany()
+    {
+        $day = SiteExt::getAttr('qjpz','qdbhq');
+        if($day) {
+            // 所有绑定的渠道
+            $allcoos = CooperateExt::model()->findAll();
+            if($allcoos) {
+                foreach ($allcoos as $key => $value) {
+                    $bdtime = $value->created;
+                    $dis = time() - $day*86400;
+                    if($bdtime>$dis) {
+
+                        // 说明添加绑定的时间在期限内 则忽略
+                        continue;
+                    } else {
+                        $hid = $value->hid;
+                        $staff = $value->staff;
+                        $cid = $value->cid;
+                        $ct = Yii::app()->db->createCommand("select id from sub where market_uid=$staff and cid=$cid and hid=$hid and (status>2 or (status>0 and updated>$dis))")->queryAll();
+                        if(!$ct) {
+                            CooperateExt::model()->deleteAllByAttributes(['id'=>$value->id]);
+                        }
+                    }
+                        
+                }
+            }
+            // 所有没有成交的渠道
+
+            // 成交的渠道 或者 x天有到访
+            // $cids = [];
+            // $time = TimeTools::getDayBeginTime()-$day*86400;
+            // $cidsres = Yii::app()->db->createCommand("select distinct(cid) from sub where status>2 or updated>$time")->queryAll();
+            // if($cidsres) {
+            //     foreach ($cidsres as $key => $value) {
+            //         $cids[] = $value['cid'];
+            //     }
+            // }
+
+            // $criteria = new CDbCriteria;
+            // $criteria->addNotInCondition('cid',$cid);
+            // // 所有需要解绑的渠道关系
+            // $companys = CooperateExt::model()->findAll($criteria);
+
+
+        }
+    }
 }

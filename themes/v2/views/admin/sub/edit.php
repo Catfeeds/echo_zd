@@ -95,7 +95,15 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
           </div>
           <div class="col-md-2"><?php echo $form->error($article, 'visit_num') ?></div>
       </div>
-      
+      <?php foreach (['省份'=>'province','城市'=>'city','区域'=>'area'] as $key => $value) {?>
+      <div class="form-group">
+        <label class="col-md-2 control-label"><?=$key?></label>
+        <div class="col-md-4">
+            <?php echo $form->textField($article, $value, array('class' => 'form-control')); ?>
+        </div>
+        <div class="col-md-2"><?php echo $form->error($article, $value) ?></div>
+    </div>
+    <?php } ?>
     </div>
     <div class="tab-pane col-md-12" id="tab_2">
 
@@ -114,7 +122,7 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
           <div class="col-md-2"><?php echo $form->error($article, 'status') ?></div>
       </div>
     
-    <?php foreach (['认筹金'=>'rcj','房号'=>'house_no','面积'=>'size','合同总价'=>'sale_price','定金'=>'ding_price','折佣金额'=>'zy_price','渠道佣金'=>'yj_price','回款金额'=>'hk_price',] as $key => $value) {?>
+    <?php foreach (['认筹金'=>'rcj','房号'=>'house_no','面积'=>'size','合同总价'=>'sale_price','定金'=>'ding_price','折佣金额'=>'zy_price','渠道佣金'=>'yj_price','回款金额'=>'hk_price'] as $key => $value) {?>
       <div class="form-group">
         <label class="col-md-2 control-label"><?=$key?></label>
         <div class="col-md-4">

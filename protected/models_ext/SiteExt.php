@@ -61,6 +61,7 @@ class SiteExt extends Site{
         'isHelpBaobei'=>'',
         'companynotice'=>'',
         'companyname'=>'',
+        'qdbhq'=>'',
     ];
     public static $cateName = [
         'qjpz' => '全局配置',
@@ -85,6 +86,7 @@ class SiteExt extends Site{
             'bottomLogo'=>['type'=>'image','max'=>1,'name'=>'页面底部logo','notedit'=>"1"],
             'bottomWords'=>['type'=>'text','name'=>'页面底部文案','notedit'=>"1"],
             'confirmNote'=>['type'=>'text','name'=>'审核通知文案'],
+            'qdbhq'=>['type'=>'text','name'=>'渠道保护期'],
             // 'add_subscribe_words'=>['type'=>'text','name'=>'订阅申请备注'],
             // 'add_vip_words'=>['type'=>'text','name'=>'成为vip备注'],
             // 'ouruids'=>['type'=>'text','name'=>'业务部uid'],
