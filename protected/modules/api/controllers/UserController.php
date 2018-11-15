@@ -1729,4 +1729,9 @@ class UserController extends ApiController{
 		else
 			$this->frame['data'] = Yii::app()->file->sitename1.'快速报备';
 	}
+
+	public function actionGetSharePic()
+	{
+		$this->frame['data'] = ImageTools::fixImage(SiteExt::getAttr('qjpz','share_pic'));
+	}
 }
