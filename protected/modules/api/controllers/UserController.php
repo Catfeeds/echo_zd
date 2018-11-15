@@ -840,6 +840,570 @@ class UserController extends ApiController{
 
 	}
 
+	public function actionSubListNew($uid='',$user_type=0,$type='',$kw='',$hid='',$day='',$limit='3',$page=1,$cid='')
+	{
+		$data = $all = $groups = [];
+		$statusarr = SubExt::$status;
+		$groups[] = ['name'=>'所有客户','num'=>0,'cid'=>''];
+
+		if(!$user_type) {
+			$user = UserExt::model()->normal()->findByPk($uid);
+		} else {
+			$user = StaffExt::model()->normal()->findByPk($uid);
+		}
+		if(!$user) {
+			return $this->returnError('用户不存在或禁用');
+		}
+		$criteria = new CDbCriteria;
+		// 都是搜索手机+客户姓名+楼盘名
+		// 案场助理看关联的所有项目的报备
+		// 案场销售看分配给自己的报备
+		
+		if($hid) {
+			$criteria->addCondition("hid=$hid");
+		}
+		if(is_numeric($cid)) {
+			$criteria->addCondition("status=$cid");
+		}
+		$criteria->order = 'updated desc';
+		if($day) {
+			switch ($day) {
+				// 今天
+				case '1':
+					$criteria->addCondition("updated>".TimeTools::getDayBeginTime());
+					break;
+				// 昨天
+				case '2':
+					$criteria->addCondition("updated>".TimeTools::getDayBeginTime(time()-86400).' and updated<'.TimeTools::getDayEndTime(time()-86400));
+					break;
+					// 本周
+				case '3':
+					$criteria->addCondition("updated>".TimeTools::getWeekBeginTime().' and updated<'.TimeTools::getWeekEndTime());
+					break;
+					// 本月
+				case '4':
+					$criteria->addCondition("updated>".TimeTools::getMonthBeginTime().' and updated<'.TimeTools::getMonthEndTime());
+					break;
+				default:
+					# code...
+					break;
+			}
+		}
+		// 老板看所有
+		if(isset($user->is_boss)&&$user->is_boss) {
+			if($kw)
+				if(is_numeric($kw)) {
+					$criteria->addSearchCondition('phone',$kw);
+				} else {
+					$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%' or company_name like '%$kw%'");
+				}
+
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
+				// var_dump(count($subs));exit;
+				if($subs) {
+					foreach ($subs as $key => $value) {
+						$market_user = $value->market_user;
+						$dj_user = $value->user;
+						// if()
+						$all[] = [
+							'id'=>$value->id,
+							'plot_title'=>$value->plot_title,
+							'firstL'=>'客户',
+							'firstR'=>$value->name.' '.$value->phone,
+							'secondL'=>'市场',
+							'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
+							'thirdL'=>$value->is_zf?'自访':'分销',
+							'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
+							'forthL'=>'公司',
+							'forthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
+							'isShowCode'=>1,
+							'type'=>$value->status,
+							'typeWords'=>SubExt::$status[$value->status],
+							'time'=>date("Y-m-d H:i",$value->created),
+
+							// 'id'=>$value->id,
+							// 'userName'=>$value->name,
+							// 'userPhone'=>$value->phone,
+							// 'isShowCode'=>1,
+							// 'type'=>$value->status,
+							// 'staffName'=>$market_user?$market_user->name:'暂无',
+							// 'staffPhone'=>$market_user?$market_user->phone:'暂无',
+							// 'time'=>date("m-d H:i",$value->created),
+							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
+						];
+					}
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					// if($all) {
+					// 	foreach (SubExt::$status as $key => $value) {
+					// 		$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
+					// 	}
+					// 	foreach ($all as $key => $value) {
+					// 		$data[$value['type']+1]['num']++;
+					// 		$data[$value['type']+1]['list'][] = $value;
+					// 	}
+					// }
+				} 
+		}
+		// 项目总看项目数据
+		elseif($xmzs = PlotAnExt::model()->findAll("uid=$uid and type>2")) {
+			// 搜索条件
+				if($kw)
+				if(is_numeric($kw)) {
+					$criteria->addSearchCondition('phone',$kw);
+				} else {
+					$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%' or company_name like '%$kw%'");
+				}
+				$hids = [];
+				foreach ($xmzs as $kxm) {
+					$hids[] = $kxm->hid;
+				}
+				$criteria->addInCondition('hid',$hids);
+				// $mkids = [];
+
+				// $idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where type=1 and uid=".$uid)->queryAll();
+				// if($idrr) {
+				// 	foreach ($idrr as $mkid) {
+				// 		$mkids[] = $mkid['hid'];
+				// 	}
+				// }
+				// $criteria->addInCondition("hid",$mkids);
+				// 搜项目和客户电话
+				// $criteria = new CDbCriteria;
+				// $criteria->addCondition("uid=$uid");
+				// $criteria->order = 'updated desc';
+				// if(is_numeric($kw)) {
+				// 	$criteria->addSearchCondition('phone',$kw);
+				// } elseif($kw) {
+				// 	$ids = [];
+				// 	$cre = new CDbCriteria;
+				// 	$cre->addSearchCondition('title',$kw);
+				// 	$ress = PlotExt::model()->findAll($cre);
+				// 	if($ress) {
+				// 		foreach ($ress as $key => $value) {
+				// 			$ids[] = $value->id;
+				// 		}
+				// 	}
+				// 	$criteria->addInCondition('hid',$ids);
+				// }
+				// var_dump($criteria);exit;
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
+				// var_dump(count($subs));exit;
+				if($subs) {
+					foreach ($subs as $key => $value) {
+						$market_user = $value->market_user;
+						$dj_user = $value->user;
+						// if()
+						$all[] = [
+							'id'=>$value->id,
+							'plot_title'=>$value->plot_title,
+							'firstL'=>'客户',
+							'firstR'=>$value->name.' '.$value->phone,
+							'secondL'=>'市场',
+							'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
+							'thirdL'=>$value->is_zf?'自访':'分销',
+							'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
+							'forthL'=>'公司',
+							'forthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
+							'isShowCode'=>1,
+							'type'=>$value->status,
+							'typeWords'=>SubExt::$status[$value->status],
+							'time'=>date("Y-m-d H:i",$value->created),
+
+							// 'id'=>$value->id,
+							// 'userName'=>$value->name,
+							// 'userPhone'=>$value->phone,
+							// 'isShowCode'=>1,
+							// 'type'=>$value->status,
+							// 'staffName'=>$market_user?$market_user->name:'暂无',
+							// 'staffPhone'=>$market_user?$market_user->phone:'暂无',
+							// 'time'=>date("m-d H:i",$value->created),
+							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
+						];
+					}
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
+				} 
+		} else {
+			if($user_type==0) {
+				// 搜索条件
+				if($kw)
+				if(is_numeric($kw)) {
+					$criteria->addSearchCondition('phone',$kw);
+				} else {
+					$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%'");
+				}
+
+				$tmp = [];
+				$is_major = 0;
+				$company = $user->companyinfo;
+				if($company && $user->is_manage) {
+					$is_major = 1;
+					$uidss = $company->users;
+					foreach ($uidss as $us) {
+						$tmp[] = $us['id'];
+					}
+					$criteria->addInCondition("uid",$tmp);
+				} else {
+					$criteria->addCondition("uid=$uid");
+				}
+				
+				// 搜项目和客户电话
+				// $criteria = new CDbCriteria;
+				// $criteria->addCondition("uid=$uid");
+				// $criteria->order = 'updated desc';
+				
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
+				if($subs) {
+					foreach ($subs as $key => $value) {
+						$market_user = $value->market_user;
+						$an_user = $value->sale_user;
+						$tmpp = [
+							'id'=>$value->id,
+							'plot_title'=>$value->plot_title,
+							'firstL'=>'客户',
+							'firstR'=>$value->name.' '.$value->phone,
+							'secondL'=>'市场',
+							'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
+							'thirdL'=>'案场',
+							'thirdR'=>$an_user?($an_user->name.' '.$an_user->phone):'暂无',
+							'isShowCode'=>1,
+							'type'=>$value->status,
+							'typeWords'=>SubExt::$status[$value->status],
+							'time'=>date("Y-m-d H:i",$value->created),
+						];
+						if($is_major) {
+							$user = $value->user;
+							$tmpp['forthL'] = '分销';
+							$tmpp['forthR'] = $user?($user->name.' '.$user->phone):'暂无';
+							// array_merge($all,[
+							// 	'forthL'=>'分销',
+							// 	'forthR'=>$user?($user->name.' '.$user->phone):'暂无',
+							// ]);
+						}
+						$all[] = $tmpp;
+					}
+					// var_dump($all);exit;
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
+				}
+			} elseif ($user_type==1) {
+				// 搜索条件
+				if($kw)
+				if(is_numeric($kw)) {
+					$criteria->addSearchCondition('phone',$kw);
+				} else {
+					$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%' or company_name like '%$kw%'");
+				}
+				$mkids = [];
+
+				$idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_an where type=1 and uid=".$uid)->queryAll();
+				if($idrr) {
+					foreach ($idrr as $mkid) {
+						$mkids[] = $mkid['hid'];
+					}
+				}
+				$criteria->addInCondition("hid",$mkids);
+				// 搜项目和客户电话
+				// $criteria = new CDbCriteria;
+				// $criteria->addCondition("uid=$uid");
+				// $criteria->order = 'updated desc';
+				// if(is_numeric($kw)) {
+				// 	$criteria->addSearchCondition('phone',$kw);
+				// } elseif($kw) {
+				// 	$ids = [];
+				// 	$cre = new CDbCriteria;
+				// 	$cre->addSearchCondition('title',$kw);
+				// 	$ress = PlotExt::model()->findAll($cre);
+				// 	if($ress) {
+				// 		foreach ($ress as $key => $value) {
+				// 			$ids[] = $value->id;
+				// 		}
+				// 	}
+				// 	$criteria->addInCondition('hid',$ids);
+				// }
+				// var_dump($criteria);exit;
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
+				// var_dump(count($subs));exit;
+				if($subs) {
+					foreach ($subs as $key => $value) {
+						$market_user = $value->market_user;
+						$dj_user = $value->user;
+						// if()
+						$all[] = [
+							'id'=>$value->id,
+							'plot_title'=>$value->plot_title,
+							'firstL'=>'客户',
+							'firstR'=>$value->name.' '.$value->phone,
+							'secondL'=>'市场',
+							'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
+							'thirdL'=>$value->is_zf?'自访':'分销',
+							'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
+							'forthL'=>'公司',
+							'forthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
+							'isShowCode'=>1,
+							'type'=>$value->status,
+							'typeWords'=>SubExt::$status[$value->status],
+							'time'=>date("Y-m-d H:i",$value->created),
+
+							// 'id'=>$value->id,
+							// 'userName'=>$value->name,
+							// 'userPhone'=>$value->phone,
+							// 'isShowCode'=>1,
+							// 'type'=>$value->status,
+							// 'staffName'=>$market_user?$market_user->name:'暂无',
+							// 'staffPhone'=>$market_user?$market_user->phone:'暂无',
+							// 'time'=>date("m-d H:i",$value->created),
+							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
+						];
+					}
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
+				} 
+			} elseif($user_type==2) {
+				// 搜索条件
+				if($kw)
+				if(is_numeric($kw)) {
+					$criteria->addSearchCondition('phone',$kw);
+				} else {
+					$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%' or company_name like '%$kw%'");
+				}
+				$mkids = [];
+
+				// $idrr = Yii::app()->db->createCommand("select distinct(hid) from plot_makert_user where uid=".$uid)->queryAll();
+				// if($idrr) {
+				// 	foreach ($idrr as $mkid) {
+				// 		$mkids[] = $mkid['hid'];
+				// 	}
+				// }
+				$criteria->addCondition("market_uid=$uid");
+				// 搜项目、分销公司
+				// $criteria = new CDbCriteria;
+				// $kw && $criteria->addCondition("company_name like '%$kw%'",'OR');
+				// $criteria->order = 'updated desc';
+				// if(is_numeric($kw)) {
+				// 	$criteria->addSearchCondition('phone',$kw);
+				// } else {
+				// 	$ids = [];
+				// 	$cre = new CDbCriteria;
+				// 	$cre->addSearchCondition('title',$kw);
+				// 	$ress = PlotExt::model()->findAll($cre);
+				// 	if($ress) {
+				// 		foreach ($ress as $key => $value) {
+				// 			$ids[] = $value->id;
+				// 		}
+				// 	}
+				// 	$criteria->addInCondition('hid',$ids);
+				// }
+
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
+				if($subs) {
+					foreach ($subs as $key => $value) {
+						$dj_user = $value->user;
+						$an_user = $value->an_user;
+						$all[] = [
+							'id'=>$value->id,
+							'plot_title'=>$value->plot_title,
+							'firstL'=>'客户',
+							'firstR'=>$value->name.' '.$value->phone,
+							'secondL'=>'案场',
+							'secondR'=>$an_user?($an_user->name.' '.$an_user->phone):'暂无',
+							'thirdL'=>$value->is_zf?'自访':'分销',
+							'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
+							'forthL'=>'公司',
+							'forthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
+							'isShowCode'=>1,
+							'type'=>$value->status,
+							'typeWords'=>SubExt::$status[$value->status],
+							'time'=>date("Y-m-d H:i",$value->created),
+
+							// 'id'=>$value->id,
+							// 'userName'=>$value->name,
+							// 'userPhone'=>$value->phone,
+							// 'isShowCode'=>1,
+							// 'type'=>$value->status,
+							// 'staffName'=>$market_user?$market_user->name:'暂无',
+							// 'staffPhone'=>$market_user?$market_user->phone:'暂无',
+							// 'time'=>date("m-d H:i",$value->created),
+							// 'thirdLine'=>$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
+						];
+					}
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
+				}
+			} else {
+				$criteria->addCondition("sale_uid=$uid");
+				// 搜项目和客户电话
+				// $criteria = new CDbCriteria;
+				// $criteria->addCondition("uid=$uid");
+				// $criteria->order = 'updated desc';
+				if(is_numeric($kw)) {
+					$criteria->addSearchCondition('phone',$kw);
+				} elseif($kw) {
+					$ids = [];
+					$cre = new CDbCriteria;
+					$cre->addSearchCondition('title',$kw);
+					$ress = PlotExt::model()->findAll($cre);
+					if($ress) {
+						foreach ($ress as $key => $value) {
+							$ids[] = $value->id;
+						}
+					}
+					$criteria->addInCondition('hid',$ids);
+				}
+				// var_dump($criteria);exit;
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
+				// var_dump(count($subs));exit;
+				if($subs) {
+					foreach ($subs as $key => $value) {
+						$market_user = $value->market_user;
+						$dj_user = $value->user;
+						// if()
+						$all[] = [
+							'id'=>$value->id,
+							'plot_title'=>$value->plot_title,
+							'firstL'=>'客户',
+							'firstR'=>$value->name.' '.$value->phone,
+							'secondL'=>'市场',
+							'secondR'=>$market_user?($market_user->name.' '.$market_user->phone):'暂无',
+							'thirdL'=>$value->is_zf?'自访':'分销',
+							'thirdR'=>$dj_user?($dj_user->name.' '.$dj_user->phone):'暂无',
+							'forthL'=>'公司',
+							'forthR'=>isset($dj_user->companyinfo->name)?($dj_user->companyinfo->name):'暂无',
+							'isShowCode'=>1,
+							'type'=>$value->status,
+							'typeWords'=>SubExt::$status[$value->status],
+							'time'=>date("Y-m-d H:i",$value->created),
+
+							// 'id'=>$value->id,
+							// 'userName'=>$value->name,
+							// 'userPhone'=>$value->phone,
+							// 'isShowCode'=>1,
+							// 'type'=>$value->status,
+							// 'staffName'=>$market_user?$market_user->name:'暂无',
+							// 'staffPhone'=>$market_user?$market_user->phone:'暂无',
+							// 'time'=>date("m-d H:i",$value->created),
+							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
+						];
+					}
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
+				} 
+			}
+		}
+			
+		$this->frame['data'] = $data;
+
+	}
+
+
 	public function actionShowCode($id='')
 	{
 		$data = $imgs = [];
