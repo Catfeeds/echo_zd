@@ -2311,12 +2311,17 @@ class UserController extends ApiController{
 
 	}
 
-	public function actionGetMultiTitle($type='')
+	public function actionGetMultiTitle($type='',$staff='')
 	{
-		if($type==1)
+		if($staff) {
+			$staff = StaffExt::model()->findByPk($staff);
+		}
+		if($type==1){
 			$this->frame['data'] = Yii::app()->file->sitename.'快速报备';
-		else
-			$this->frame['data'] = Yii::app()->file->sitename1.'快速报备';
+		}
+		else{
+			$this->frame['data'] = ['title'=>Yii::app()->file->sitename1.'快速报备','name'=>$staff?($staff->name.$staff->phone):'','sitename'=>Yii::app()->file->sitename];
+		}
 	}
 
 	public function actionGetSharePic()
