@@ -813,10 +813,12 @@ class UserController extends ApiController{
 				$criteria->select = "count(id) as id,status";
 				$criteria->group = "status";
 				$groupdata = SubExt::model()->findAll($criteria);
-				
+
 				if(is_numeric($cid)) {
 					$criteria->addCondition("status=$cid");
 				}
+				$criteria->select = "*";
+				$criteria->group = '';
 				$subsres = SubExt::model()->getList($criteria,$limit);
 				$subs = $subsres->data;
 				
@@ -928,6 +930,8 @@ class UserController extends ApiController{
 				if(is_numeric($cid)) {
 					$criteria->addCondition("status=$cid");
 				}
+				$criteria->select = "*";
+				$criteria->group = '';
 				$subsres = SubExt::model()->getList($criteria,$limit);
 				$subs = $subsres->data;
 				foreach ($statusarr as $key => $value) {
@@ -1016,8 +1020,11 @@ class UserController extends ApiController{
 				if(is_numeric($cid)) {
 					$criteria->addCondition("status=$cid");
 				}
+				$criteria->select = "*";
+				$criteria->group = '';
 				$subsres = SubExt::model()->getList($criteria,$limit);
 				$subs = $subsres->data;
+
 				foreach ($statusarr as $key => $value) {
 					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
 				}
@@ -1108,6 +1115,8 @@ class UserController extends ApiController{
 				if(is_numeric($cid)) {
 					$criteria->addCondition("status=$cid");
 				}
+				$criteria->select = "*";
+				$criteria->group = '';
 				$subsres = SubExt::model()->getList($criteria,$limit);
 				$subs = $subsres->data;
 				foreach ($statusarr as $key => $value) {
@@ -1203,6 +1212,8 @@ class UserController extends ApiController{
 				if(is_numeric($cid)) {
 					$criteria->addCondition("status=$cid");
 				}
+				$criteria->select = "*";
+				$criteria->group = '';
 				$subsres = SubExt::model()->getList($criteria,$limit);
 				$subs = $subsres->data;
 				foreach ($statusarr as $key => $value) {
@@ -1281,6 +1292,8 @@ class UserController extends ApiController{
 				if(is_numeric($cid)) {
 					$criteria->addCondition("status=$cid");
 				}
+				$criteria->select = "*";
+				$criteria->group = '';
 				$subsres = SubExt::model()->getList($criteria,$limit);
 				$subs = $subsres->data;
 				foreach ($statusarr as $key => $value) {
