@@ -755,7 +755,7 @@ class UserController extends ApiController{
 
 	}
 
-	public function actionSubListNew($uid='',$user_type=0,$type='',$kw='',$hid='',$day='',$limit='3',$page=1,$cid='')
+	public function actionSubListNew($uid='',$user_type=0,$type='',$kw='',$hid='',$day='',$limit='10',$page=1,$cid='')
 	{
 		$data = $all = $groups = [];
 		$statusarr = SubExt::$status;
@@ -868,8 +868,8 @@ class UserController extends ApiController{
 							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 						];
 					}
-					$pager = $subsres->pagination;
-					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
+					
 					// if($all) {
 					// 	foreach (SubExt::$status as $key => $value) {
 					// 		$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
@@ -880,6 +880,8 @@ class UserController extends ApiController{
 					// 	}
 					// }
 				} 
+				$pager = $subsres->pagination;
+				$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
 		}
 		// 项目总看项目数据
 		elseif($xmzs = PlotAnExt::model()->findAll("uid=$uid and type>2")) {
@@ -980,10 +982,11 @@ class UserController extends ApiController{
 							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 						];
 					}
-					$pager = $subsres->pagination;
-					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
 					
 				} 
+				$pager = $subsres->pagination;
+				$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
 		} else {
 			if($user_type==0) {
 				// 搜索条件
@@ -1067,11 +1070,9 @@ class UserController extends ApiController{
 						}
 						$all[] = $tmpp;
 					}
-					// var_dump($all);exit;
-					$pager = $subsres->pagination;
-					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
-					
 				}
+				$pager = $subsres->pagination;
+				$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
 			} elseif ($user_type==1) {
 				// 搜索条件
 				if($kw)
@@ -1165,10 +1166,11 @@ class UserController extends ApiController{
 							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 						];
 					}
-					$pager = $subsres->pagination;
-					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
 					
 				} 
+				$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
 			} elseif($user_type==2) {
 				// 搜索条件
 				if($kw)
@@ -1260,10 +1262,11 @@ class UserController extends ApiController{
 							// 'thirdLine'=>$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 						];
 					}
-					$pager = $subsres->pagination;
-					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
 					
 				}
+				$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
 			} else {
 				$criteria->addCondition("sale_uid=$uid");
 				// 搜项目和客户电话
@@ -1342,10 +1345,11 @@ class UserController extends ApiController{
 							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 						];
 					}
-					$pager = $subsres->pagination;
-					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
 					
 				} 
+				$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
 			}
 		}
 			
