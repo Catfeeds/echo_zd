@@ -777,9 +777,7 @@ class UserController extends ApiController{
 		if($hid) {
 			$criteria->addCondition("hid=$hid");
 		}
-		if(is_numeric($cid)) {
-			$criteria->addCondition("status=$cid");
-		}
+		
 		$criteria->order = 'updated desc';
 		if($day) {
 			switch ($day) {
@@ -812,12 +810,16 @@ class UserController extends ApiController{
 				} else {
 					$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%' or company_name like '%$kw%'");
 				}
-
-				$subsres = SubExt::model()->getList($criteria,$limit);
-				$subs = $subsres->data;
 				$criteria->select = "count(id) as id,status";
 				$criteria->group = "status";
 				$groupdata = SubExt::model()->findAll($criteria);
+				
+				if(is_numeric($cid)) {
+					$criteria->addCondition("status=$cid");
+				}
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				
 				foreach ($statusarr as $key => $value) {
 					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
 				}
@@ -919,11 +921,15 @@ class UserController extends ApiController{
 				// 	$criteria->addInCondition('hid',$ids);
 				// }
 				// var_dump($criteria);exit;
-				$subsres = SubExt::model()->getList($criteria,$limit);
-				$subs = $subsres->data;
 				$criteria->select = "count(id) as id,status";
 				$criteria->group = "status";
 				$groupdata = SubExt::model()->findAll($criteria);
+				
+				if(is_numeric($cid)) {
+					$criteria->addCondition("status=$cid");
+				}
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
 				foreach ($statusarr as $key => $value) {
 					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
 				}
@@ -1003,11 +1009,15 @@ class UserController extends ApiController{
 				// $criteria->addCondition("uid=$uid");
 				// $criteria->order = 'updated desc';
 				
-				$subsres = SubExt::model()->getList($criteria,$limit);
-				$subs = $subsres->data;
 				$criteria->select = "count(id) as id,status";
 				$criteria->group = "status";
 				$groupdata = SubExt::model()->findAll($criteria);
+				
+				if(is_numeric($cid)) {
+					$criteria->addCondition("status=$cid");
+				}
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
 				foreach ($statusarr as $key => $value) {
 					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
 				}
@@ -1091,11 +1101,15 @@ class UserController extends ApiController{
 				// 	$criteria->addInCondition('hid',$ids);
 				// }
 				// var_dump($criteria);exit;
-				$subsres = SubExt::model()->getList($criteria,$limit);
-				$subs = $subsres->data;
 				$criteria->select = "count(id) as id,status";
 				$criteria->group = "status";
 				$groupdata = SubExt::model()->findAll($criteria);
+				
+				if(is_numeric($cid)) {
+					$criteria->addCondition("status=$cid");
+				}
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
 				foreach ($statusarr as $key => $value) {
 					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
 				}
@@ -1182,11 +1196,15 @@ class UserController extends ApiController{
 				// 	$criteria->addInCondition('hid',$ids);
 				// }
 
-				$subsres = SubExt::model()->getList($criteria,$limit);
-				$subs = $subsres->data;
 				$criteria->select = "count(id) as id,status";
 				$criteria->group = "status";
 				$groupdata = SubExt::model()->findAll($criteria);
+				
+				if(is_numeric($cid)) {
+					$criteria->addCondition("status=$cid");
+				}
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
 				foreach ($statusarr as $key => $value) {
 					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
 				}
@@ -1256,11 +1274,15 @@ class UserController extends ApiController{
 					$criteria->addInCondition('hid',$ids);
 				}
 				// var_dump($criteria);exit;
-				$subsres = SubExt::model()->getList($criteria,$limit);
-				$subs = $subsres->data;
 				$criteria->select = "count(id) as id,status";
 				$criteria->group = "status";
 				$groupdata = SubExt::model()->findAll($criteria);
+				
+				if(is_numeric($cid)) {
+					$criteria->addCondition("status=$cid");
+				}
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
 				foreach ($statusarr as $key => $value) {
 					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
 				}
