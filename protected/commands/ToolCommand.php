@@ -1124,7 +1124,7 @@ class ToolCommand extends CConsoleCommand
         $day = SiteExt::getAttr('qjpz','qdbhq');
         if($day) {
             // 所有绑定的渠道
-            $allcoos = CooperateExt::model()->findAll();
+            $allcoos = CooperateExt::model()->findAll("status=1");
             if($allcoos) {
                 foreach ($allcoos as $key => $value) {
                     $bdtime = $value->created;
@@ -1139,7 +1139,9 @@ class ToolCommand extends CConsoleCommand
                         $cid = $value->cid;
                         $ct = Yii::app()->db->createCommand("select id from sub where market_uid=$staff and cid=$cid and hid=$hid and (status>2 or (status>0 and updated>$dis))")->queryAll();
                         if(!$ct) {
-                            CooperateExt::model()->deleteAllByAttributes(['id'=>$value->id]);
+                            $value->status = 0;
+                            $value->save();
+                            // CooperateExt::model()->deleteAllByAttributes(['id'=>$value->id]);
                         }
                     }
                         

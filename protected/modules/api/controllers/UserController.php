@@ -277,9 +277,12 @@ class UserController extends ApiController{
 		
 	}
 
-	public function actionSubList($uid='',$user_type=0,$type='',$kw='',$hid='',$day='')
+	public function actionSubList($uid='',$user_type=0,$type='',$kw='',$hid='',$day='',$limit='3',$page=1,$cid='')
 	{
-		$data = $all =  [];
+		$data = $all = $groups = [];
+		$statusarr = SubExt::$status;
+		$groups[] = ['name'=>'所有客户','num'=>0,'cid'=>''];
+
 		if(!$user_type) {
 			$user = UserExt::model()->normal()->findByPk($uid);
 		} else {
@@ -295,6 +298,9 @@ class UserController extends ApiController{
 		
 		if($hid) {
 			$criteria->addCondition("hid=$hid");
+		}
+		if(is_numeric($cid)) {
+			$criteria->addCondition("status=$cid");
 		}
 		$criteria->order = 'updated desc';
 		if($day) {
@@ -328,7 +334,25 @@ class UserController extends ApiController{
 				} else {
 					$criteria->addCondition("plot_title like '%$kw%' or name like '%$kw%' or company_name like '%$kw%'");
 				}
-				$subs = SubExt::model()->findAll($criteria);
+
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
 				// var_dump(count($subs));exit;
 				if($subs) {
 					foreach ($subs as $key => $value) {
@@ -362,16 +386,17 @@ class UserController extends ApiController{
 							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 						];
 					}
-					$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
-					if($all) {
-						foreach (SubExt::$status as $key => $value) {
-							$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
-						}
-						foreach ($all as $key => $value) {
-							$data[$value['type']+1]['num']++;
-							$data[$value['type']+1]['list'][] = $value;
-						}
-					}
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					// if($all) {
+					// 	foreach (SubExt::$status as $key => $value) {
+					// 		$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
+					// 	}
+					// 	foreach ($all as $key => $value) {
+					// 		$data[$value['type']+1]['num']++;
+					// 		$data[$value['type']+1]['list'][] = $value;
+					// 	}
+					// }
 				} 
 		}
 		// 项目总看项目数据
@@ -416,7 +441,24 @@ class UserController extends ApiController{
 				// 	$criteria->addInCondition('hid',$ids);
 				// }
 				// var_dump($criteria);exit;
-				$subs = SubExt::model()->findAll($criteria);
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
 				// var_dump(count($subs));exit;
 				if($subs) {
 					foreach ($subs as $key => $value) {
@@ -450,16 +492,9 @@ class UserController extends ApiController{
 							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 						];
 					}
-					$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
-					if($all) {
-						foreach (SubExt::$status as $key => $value) {
-							$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
-						}
-						foreach ($all as $key => $value) {
-							$data[$value['type']+1]['num']++;
-							$data[$value['type']+1]['list'][] = $value;
-						}
-					}
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
 				} 
 		} else {
 			if($user_type==0) {
@@ -490,7 +525,24 @@ class UserController extends ApiController{
 				// $criteria->addCondition("uid=$uid");
 				// $criteria->order = 'updated desc';
 				
-				$subs = SubExt::model()->findAll($criteria);
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
 				if($subs) {
 					foreach ($subs as $key => $value) {
 						$market_user = $value->market_user;
@@ -521,16 +573,9 @@ class UserController extends ApiController{
 						$all[] = $tmpp;
 					}
 					// var_dump($all);exit;
-					$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
-					if($all) {
-						foreach (SubExt::$status as $key => $value) {
-							$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
-						}
-						foreach ($all as $key => $value) {
-							$data[$value['type']+1]['num']++;
-							$data[$value['type']+1]['list'][] = $value;
-						}
-					}
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
 				}
 			} elseif ($user_type==1) {
 				// 搜索条件
@@ -568,7 +613,24 @@ class UserController extends ApiController{
 				// 	$criteria->addInCondition('hid',$ids);
 				// }
 				// var_dump($criteria);exit;
-				$subs = SubExt::model()->findAll($criteria);
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
 				// var_dump(count($subs));exit;
 				if($subs) {
 					foreach ($subs as $key => $value) {
@@ -602,16 +664,9 @@ class UserController extends ApiController{
 							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 						];
 					}
-					$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
-					if($all) {
-						foreach (SubExt::$status as $key => $value) {
-							$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
-						}
-						foreach ($all as $key => $value) {
-							$data[$value['type']+1]['num']++;
-							$data[$value['type']+1]['list'][] = $value;
-						}
-					}
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
 				} 
 			} elseif($user_type==2) {
 				// 搜索条件
@@ -649,7 +704,24 @@ class UserController extends ApiController{
 				// 	$criteria->addInCondition('hid',$ids);
 				// }
 
-				$subs = SubExt::model()->findAll($criteria);
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
 				if($subs) {
 					foreach ($subs as $key => $value) {
 						$dj_user = $value->user;
@@ -681,16 +753,9 @@ class UserController extends ApiController{
 							// 'thirdLine'=>$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 						];
 					}
-					$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
-					if($all) {
-						foreach (SubExt::$status as $key => $value) {
-							$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
-						}
-						foreach ($all as $key => $value) {
-							$data[$value['type']+1]['num']++;
-							$data[$value['type']+1]['list'][] = $value;
-						}
-					}
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
 				}
 			} else {
 				$criteria->addCondition("sale_uid=$uid");
@@ -713,7 +778,24 @@ class UserController extends ApiController{
 					$criteria->addInCondition('hid',$ids);
 				}
 				// var_dump($criteria);exit;
-				$subs = SubExt::model()->findAll($criteria);
+				$subsres = SubExt::model()->getList($criteria,$limit);
+				$subs = $subsres->data;
+				$criteria->select = "count(id) as id,status";
+				$criteria->group = "status";
+				$groupdata = SubExt::model()->findAll($criteria);
+				foreach ($statusarr as $key => $value) {
+					$groups[] = ['name'=>$value,'cid'=>$key,'num'=>0];
+				}
+				if($groupdata) {
+					foreach ($groupdata as $key => $value) {
+						foreach ($groups as $k=> $g) {
+							if($g['cid']==$value['status']) {
+								$groups[$k]['num'] = $value['id'];
+								$groups[0]['num']+=$value['id'];
+							}
+						}
+					}
+				}
 				// var_dump(count($subs));exit;
 				if($subs) {
 					foreach ($subs as $key => $value) {
@@ -747,16 +829,9 @@ class UserController extends ApiController{
 							// 'thirdLine'=>$market_user&&$market_user->companyinfo?$market_user->companyinfo->name:'暂无',
 						];
 					}
-					$data[] = ['num'=>count($all),'name'=>'所有客户','list'=>$all];
-					if($all) {
-						foreach (SubExt::$status as $key => $value) {
-							$data[$key+1] = ['num'=>0,'name'=>$value,'list'=>[]];
-						}
-						foreach ($all as $key => $value) {
-							$data[$value['type']+1]['num']++;
-							$data[$value['type']+1]['list'][] = $value;
-						}
-					}
+					$pager = $subsres->pagination;
+					$data = ['list'=>$all,'groups'=>$groups,'page'=>$page,'num'=>$pager->itemCount,'page_count'=>$pager->pageCount];
+					
 				} 
 			}
 		}
