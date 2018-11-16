@@ -1747,6 +1747,8 @@ class UserController extends ApiController{
 		// $kw && $kwsql = " and c.name like '%$kw%'";
 		if($companys = CompanyExt::model()->findAll($criteria)) {
 			foreach ($companys as $key => $value) {
+				$parent = '暂无';
+				$value->parent && $parent = Yii::app()->db->createCommand("select name from company where id=".$value->parent)->queryScalar();
 				$areaInfo = AreaExt::model()->findByPk($value['area']);
 				$streetInfo =  AreaExt::model()->findByPk($value['street']);
 				$data[] = [
@@ -1758,6 +1760,7 @@ class UserController extends ApiController{
 					'code'=>$value['code'],
 					'manager'=>$value['manager'],
 					'phone'=>$value['phone'],
+					'parent'=>$parent,
 					// 'is_add'=>$value['staff']==$uid?true:false,
 					'image'=>ImageTools::fixImage($value['image']?$value['image']:SiteExt::getAttr('qjpz','companynopic')),
 				];
