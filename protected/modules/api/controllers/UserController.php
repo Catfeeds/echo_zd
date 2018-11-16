@@ -1676,7 +1676,7 @@ class UserController extends ApiController{
 		$data = [];
 		$cids = [];
 		// 签约的cid
-		$cidsres = CooperateExt::model()->findAll("staff=$uid");
+		$cidsres = CooperateExt::model()->findAll("staff=$uid and status=1");
 		if($cidsres) {
 			foreach ($cidsres as $key => $value) {
 				!in_array($value->cid, $cids) && $cids[] = $value['cid'];
@@ -1709,6 +1709,56 @@ class UserController extends ApiController{
 					'manager'=>$value['manager'],
 					'phone'=>$value['phone'],
 					'is_add'=>$value['staff']==$uid?true:false,
+					'image'=>ImageTools::fixImage($value['image']?$value['image']:SiteExt::getAttr('qjpz','companynopic')),
+				];
+			}
+		}
+		$this->frame['data'] = $data;
+	}
+
+	public function actionGetPublicCompany($hid='',$kw='',$area='',$street='',$city='')
+	{
+		// if(!($user = StaffExt::model()->findByPk($uid))) {
+		// 	return $this->returnError('用户不存在或禁用');
+		// }
+		$data = [];
+		$cids = [];
+		// 签约的cid
+		$cidsres = CooperateExt::model()->findAll("status=0 and hid=$hid");
+		if($cidsres) {
+			foreach ($cidsres as $key => $value) {
+				!in_array($value->cid, $cids) && $cids[] = $value['cid'];
+			}
+		}
+		$criteria = new CDbCriteria;
+		$criteria->addInCondition('id',$cids);
+		if($area) {
+			$criteria->addCondition('area',$area);
+		}
+		if($street) {
+			$criteria->addCondition('street',$street);
+		}
+		if($city) {
+			$criteria->addCondition('city',$city);
+		}
+		$kw && $criteria->addSearchCondition('name',$kw);
+
+		// $kwsql = '';
+		// $kw && $kwsql = " and c.name like '%$kw%'";
+		if($companys = CompanyExt::model()->findAll($criteria)) {
+			foreach ($companys as $key => $value) {
+				$areaInfo = AreaExt::model()->findByPk($value['area']);
+				$streetInfo =  AreaExt::model()->findByPk($value['street']);
+				$data[] = [
+					'id'=>$value['id'],
+					'name'=>$value['name'],
+					'area'=>$areaInfo?$areaInfo->name:'',
+					'street'=>$streetInfo?$streetInfo->name:'',
+					'address'=>$value['address'],
+					'code'=>$value['code'],
+					'manager'=>$value['manager'],
+					'phone'=>$value['phone'],
+					// 'is_add'=>$value['staff']==$uid?true:false,
 					'image'=>ImageTools::fixImage($value['image']?$value['image']:SiteExt::getAttr('qjpz','companynopic')),
 				];
 			}

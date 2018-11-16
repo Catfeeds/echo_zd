@@ -56,6 +56,10 @@ class CooperateExt extends Cooperate{
         }
 
         if($this->getIsNewRecord()){
+            // 分销签约禁止重复添加
+            if(CooperateExt::model()->find("hid=".$this->hid." and cid=".$this->cid." and staff=".$this->staff)) {
+                $this->addError('staff','请勿重复绑定');
+            }
             if($staffObj = $this->staffObj) {
                 if($company = $this->company)
                     SmsExt::sendMsg('渠道绑定公司项目成功',$staffObj->phone,['scname'=>$staffObj->name,'com'=>$company->name,'pro'=>$this->plot->title,'code'=>$company->code]);
@@ -63,12 +67,13 @@ class CooperateExt extends Cooperate{
             $this->created = $this->updated = time();
         }
         else {
+            // 分销签约禁止重复添加
+            if(CooperateExt::model()->find("hid=".$this->hid." and cid=".$this->cid." and staff=".$this->staff." and id!=".$this->id)) {
+                $this->addError('staff','请勿重复绑定');
+            }
             $this->updated = time();
         }
-        // 分销签约禁止重复添加
-        if(CooperateExt::model()->find("hid=".$this->hid." and cid=".$this->cid." and staff=".$this->staff)) {
-            $this->addError('staff','请勿重复绑定');
-        }
+        
         return parent::beforeValidate();
     }
 
