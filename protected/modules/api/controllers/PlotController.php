@@ -50,6 +50,7 @@ class PlotController extends ApiController{
 		$page = (int)Yii::app()->request->getQuery('page',1);
 		$save = (int)Yii::app()->request->getQuery('save',0);
 		$isxcx = (int)Yii::app()->request->getQuery('isxcx',0);
+		$isShowCompanyNum = (int)Yii::app()->request->getQuery('isShowCompanyNum',0);
 		$kw = $this->cleanXss(Yii::app()->request->getQuery('kw',''));
 		$this->frame['data'] = ['list'=>[],'page'=>$page,'num'=>0,'page_count'=>0,];
 		!$is_login && $showPay = 0;
@@ -277,28 +278,6 @@ class PlotController extends ApiController{
 			} else
 				$criteria->order = 'is_unshow asc,sort desc,refresh_time desc';
 		}
-		// if($areainit) {
-		// 	$dats = PlotExt::getFirstListFromArea();
-		// 	if(isset($dats[$area])&& isset($dats[$area]['list']) && $dats[$area]['list']) {
-		// 		foreach ($dats[$area]['list'] as $key => $value) {
-		// 			// var_dump($value);exit;
-		// 			$dats[$area]['list'][$key]['distance'] = round($this->getDistance($value['distance']),2);
-		// 		}
-		// 	}
-		// 	$this->frame['data'] = $dats[$area];
-		// }
-		// 走缓存拿初始数据
-		// if($init) {
-		// 	$dats = PlotExt::setPlotCache();
-		// 	if(isset($dats['list']) && $dats['list']) {
-		// 		foreach ($dats['list'] as $key => $value) {
-		// 			// var_dump($value);exit;
-		// 			$dats['list'][$key]['pay'] = $showPay?$dats['list'][$key]['pay']:'暂无权限查看';
-		// 			// $dats['list'][$key]['distance'] = round($this->getDistance($value['distance']),2);
-		// 		}
-		// 	}
-		// 	$this->frame['data'] = $dats;
-		// } else {
 			if($infoid) {
 				$criteria->addCondition('id<>'.$infoid);
 			}
@@ -325,8 +304,9 @@ class PlotController extends ApiController{
 					// $companydes = ['id'=>$value->company_id,'name'=>$value->company_name];
 					// }
 					$wyw = '';
+					$companyNum = 0;
 					$wylx1 = $value->wylx;
-					if($wylx1) {
+					if($wylx1 && !$isShowCompanyNum) {
 						if(!is_array($wylx1)) 
 							$wylx1 = [$wylx1];
 						foreach ($wylx1 as $w) {
@@ -334,33 +314,10 @@ class PlotController extends ApiController{
 							$t && $wyw .= $t.' ';
 						}
 						$wyw = trim($wyw);
+					} elseif ($isShowCompanyNum) {
+						$companyNum = CooperateExt::model()->count("status=0 and hid=".$value->id);
 					}
-					
-					
-					// var_dump(Yii::app()->user->getIsGuest());exit;
-					// if(Yii::app()->user->getIsGuest()) {
-					// 	$pay = '';
-					// } elseif($pays = $value->pays) {
-					// 	$pay = $pays[0]['price'].(count($pays)>1?'('.count($pays).'个方案)':'');
-					// } else {
-					// 	$pay = '';
-					// }
 					$expire = '您尚未成为对接人';
-					// // var_dump($uid);exit;
-					// if($uid) {
-					// 	$expiret = Yii::app()->db->createCommand('select expire from plot_makert_user where uid='.$this->staff->id.' and hid='.$value->id)->queryScalar();
-					// 	if(!$expiret) {
-					// 		$expire = '等待付款';
-					// 	}elseif($expiret>0 && $expiret<time()) {
-					// 		$expire = '已到期';
-					// 	} elseif($expiret>0) {
-					// 		if($value->status) {
-					// 			$expire = '已上线';
-					// 		} else {
-					// 			$expire = '等待审核';
-					// 		}
-					// 	}
-					// }
 					// 自己发的才能编辑
 					if($this->staff&&$value->uid&&$value->uid==$this->staff->id) {
 						$can_edit = 1;
@@ -387,6 +344,7 @@ class PlotController extends ApiController{
 						'can_edit'=>$can_edit,
 						'expire'=>$this->staff&&$expire,
 						'distance'=>round($this->getDistance($value),2),
+						'companyNum'=>$companyNum,
 					];
 				}
 				$pager = $plots->pagination;
