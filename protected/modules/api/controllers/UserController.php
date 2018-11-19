@@ -1478,20 +1478,20 @@ class UserController extends ApiController{
 					'company'=>'',
 				];
 			}
-			if($u = $sub->user) {
-				$thirdArr = [
-					'name'=>$u->name,
-					'phone'=>$u->phone,
-					'tag'=>$sub->is_zf?'自访客':'分销信息',
-					'company'=>$sub->company?$sub->company->name:'',
-				];
-			}
 			if($u = $sub->market_user) {
-				$forthArr = [
+				$thirdArr = [
 					'name'=>$u->name,
 					'phone'=>$u->phone,
 					'tag'=>'市场对接',
 					'company'=>'',
+				];
+			}
+			if($u = $sub->user) {
+				$forthArr = [
+					'name'=>$u->name,
+					'phone'=>$u->phone,
+					'tag'=>$sub->is_zf?'自访客':'分销信息',
+					'company'=>$sub->company?$sub->company->name:'',
 				];
 			}
 		}
