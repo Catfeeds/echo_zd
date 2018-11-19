@@ -108,7 +108,6 @@ class IndexController extends ApiController
     }
     public function actionShort($id='')
     {
-        $id = hexdec($id);
         // $this->showUser();
         $this->redirect('/subwap/index.html?id='.$id);
     }

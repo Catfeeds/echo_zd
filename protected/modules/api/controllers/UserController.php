@@ -1352,8 +1352,12 @@ class UserController extends ApiController{
 	}
 
 
-	public function actionShowCode($id='')
+	public function actionShowCode($id='',$s=0)
 	{
+		// 十六进制
+		if($s=1) {
+			$id = hexdec($id);
+		}
 		$data = $imgs = [];
 		$sub = SubExt::model()->findByPk($id);
 		if(!$sub) {

@@ -157,7 +157,7 @@
     $(document).ready(function() {
         
         if(id != '') {
-            $.get('/api/user/showCode?id='+id,function(obj) {
+            $.get('/api/user/showCode?id='+id+'&s=1',function(obj) {
                 if(obj.status!="success") {
                     alert("参数错误");
                 } else {
