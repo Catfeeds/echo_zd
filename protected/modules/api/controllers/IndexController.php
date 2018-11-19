@@ -106,10 +106,10 @@ class IndexController extends ApiController
         $this->showUser();
         $this->redirect('/subwap/personallist.html');
     }
-    public function actionShort($id='')
+    public function actionShort($t='')
     {
         // $this->showUser();
-        $this->redirect('/subwap/index.html?id='.$id);
+        $this->redirect('/subwap/index.html?id='.$t);
     }
     public function actionRegister()
     {

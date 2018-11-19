@@ -1354,12 +1354,14 @@ class UserController extends ApiController{
 
 	public function actionShowCode($id='',$s=0)
 	{
-		// 十六进制
+		// 客户码
 		if($s=1) {
-			$id = hexdec($id);
+			$sub = SubExt::model()->find("code='$id'");
+		} else {
+			$sub = SubExt::model()->findByPk($id);
 		}
 		$data = $imgs = [];
-		$sub = SubExt::model()->findByPk($id);
+		
 		if(!$sub) {
 			return $this->returnError('参数错误');
 		}

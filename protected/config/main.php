@@ -176,7 +176,7 @@ $config1 = array(
                 'plot' => 'home/plot/list',
                 'ditu' => 'home/map/index',
                 'my' => 'wap/my/index',
-                's' => '/api/index/short',
+                's/<a:\d+>' => 'api/index/short/t/<a>',
                 //知识库
                 'baike' => 'home/baike/index',
                 'baike/l<cid:\d+>' =>'home/baike/list',
