@@ -1101,13 +1101,12 @@ class IndexController extends ApiController
             }
         }
     }
-
-    public function actionShort()
+    public function actionGetShort($value='id')
     {
-        $url = Yii::app()->file->url;
-        $url = $url;
-        // var_dump($url);exit;
-        $res = HttpHelper::post("https://dwz.cn/admin/create",['url'=>"http://www.baidu.com"],['Content-Type'=>'application/json']);
-        var_dump($res);exit;
+        if(isset(Yii::app()->file->url) && $url = Yii::app()->file->url) {
+            $url = $url."subwap/index.html?id=$value";
+            $res = HttpHelper::get("http://suo.im/api.php?url=$url");
+            var_dump($res);exit();
+        }
     }
 }

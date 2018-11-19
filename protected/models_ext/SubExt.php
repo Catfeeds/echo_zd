@@ -94,7 +94,7 @@ class SubExt extends Sub{
         }
         if($this->getIsNewRecord()) {
             // 如果有help_uid 说明辅助报备 则发短信给分销
-            
+
             // 如果是员工的话 就is_zf=1
             if($this->fx_phone && $staff = StaffExt::model()->find("phone='".$this->fx_phone."'")) {
                 $this->is_zf = 1;
@@ -175,6 +175,15 @@ class SubExt extends Sub{
             ),
             'BaseBehavior'=>'application.behaviors.BaseBehavior',
         );
+    }
+
+    public function getShort($value='id')
+    {
+        if(isset(Yii::app()->file->url) && $url = Yii::app()->file->url) {
+            $url = $url."subwap/index.html?id=$value";
+            $res = HttpHelper::get("http://suo.im/api.php?url=$url");
+            var_dump($res);exit();
+        }
     }
 
 }
