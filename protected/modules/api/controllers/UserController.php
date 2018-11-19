@@ -1453,8 +1453,16 @@ class UserController extends ApiController{
 			}
 				
 		} elseif($type==1) {
-			if($u = $sub->market_user) {
+			if($u = $sub->sale_user) {
 				$secondArr = [
+					'name'=>$u->name,
+					'phone'=>$u->phone,
+					'tag'=>'案场销售',
+					'company'=>'',
+				];
+			}
+			if($u = $sub->market_user) {
+				$thirdArr = [
 					'name'=>$u->name,
 					'phone'=>$u->phone,
 					'tag'=>'市场对接',
@@ -1462,7 +1470,7 @@ class UserController extends ApiController{
 				];
 			}
 			if($u = $sub->user) {
-				$thirdArr = [
+				$forthArr = [
 					'name'=>$u->name,
 					'phone'=>$u->phone,
 					'tag'=>$sub->is_zf?'自访客':'分销信息',
