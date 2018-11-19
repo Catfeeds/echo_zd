@@ -59,6 +59,7 @@ class FileComponent extends CApplicationComponent
     public $sitename;
     public $sitename1;
     public $msgsign;
+    public $url;
 
     /**
      * 获得随机文件名，用于要上传的文件

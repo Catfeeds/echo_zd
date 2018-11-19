@@ -1101,4 +1101,13 @@ class IndexController extends ApiController
             }
         }
     }
+
+    public function actionShort()
+    {
+        $url = Yii::app()->file->url;
+        $url = $url."subwap/index.html?id=252";
+        // var_dump($url);exit;
+        $res = HttpHelper::post("https://dwz.cn/de3rp2Fl",['url'=>$url]);
+        var_dump($res);exit;
+    }
 }
