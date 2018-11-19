@@ -93,9 +93,6 @@ class SubExt extends Sub{
             $this->qy_time = strtotime($this->qy_time);
         }
         if($this->getIsNewRecord()) {
-            // 如果有help_uid 说明辅助报备 则发短信给分销
-            if($user = $this->user)
-                SmsExt::sendMsg('发送客户码链接',$this->fx_phone,['name'=>$user->name,'khm'=>$this->getShort($this->id)]);
             // 如果是员工的话 就is_zf=1
             if($this->fx_phone && $staff = StaffExt::model()->find("phone='".$this->fx_phone."'")) {
                 $this->is_zf = 1;
@@ -140,6 +137,16 @@ class SubExt extends Sub{
         
             
         return parent::beforeValidate();
+    }
+
+    public function afterSave()
+    {
+        if($this->getIsNewRecord()) {
+            // 如果有help_uid 说明辅助报备 则发短信给分销
+            if($user = $this->user)
+                SmsExt::sendMsg('发送客户码链接',$this->fx_phone,['name'=>$user->name,'khm'=>$this->getShort($this->id),'kh'=>$this->name.$this->phone]);
+        }
+        parent::afterSave();
     }
 
     /**
