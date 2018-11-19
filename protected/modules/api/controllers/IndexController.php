@@ -1107,7 +1107,7 @@ class IndexController extends ApiController
         $url = Yii::app()->file->url;
         $url = $url."subwap/index.html?id=252";
         // var_dump($url);exit;
-        $res = HttpHelper::post("https://dwz.cn/de3rp2Fl",['url'=>$url]);
+        $res = HttpHelper::post("https://dwz.cn/admin/create",['url'=>$url]);
         var_dump($res);exit;
     }
 }
