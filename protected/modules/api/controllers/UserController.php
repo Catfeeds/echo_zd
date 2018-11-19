@@ -1389,6 +1389,8 @@ class UserController extends ApiController{
 			'note'=>SiteExt::model()->getAttr('qjpz','subnote'),
 			'imgs'=>$imgs,
 			'image'=>Yii::app()->request->getHostInfo().'/'.$image,
+			'sitename'=>Yii::app()->file->sitename,
+			'xcximg'=>ImageTools::fixImage(SiteExt::getAttr('qjpz','xcximg')),
 		];
 		$this->frame['data'] = $data;
 

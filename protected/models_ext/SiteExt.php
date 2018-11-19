@@ -63,6 +63,7 @@ class SiteExt extends Site{
         'companynotice'=>'',
         'companyname'=>'',
         'qdbhq'=>'',
+        'xcximg'=>'',
     ];
     public static $cateName = [
         'qjpz' => '全局配置',
@@ -75,6 +76,7 @@ class SiteExt extends Site{
         'qjpz'=> [
             'pcIndexImages'=>['type'=>'multiImage','max'=>5,'name'=>'首页幻灯片'],
             'ttpic'=>['type'=>'image','max'=>1,'name'=>'喜讯图片'],
+            'xcximg'=>['type'=>'image','max'=>1,'name'=>'小程序码'],
             'indexmarquee'=>['type'=>'text','name'=>'头条内容'],
             'topword'=>['type'=>'text','name'=>'楼盘置顶文案'],
             'companyname'=>['type'=>'text','name'=>'公司名'],
