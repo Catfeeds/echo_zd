@@ -1107,7 +1107,7 @@ class IndexController extends ApiController
         $url = Yii::app()->file->url;
         $url = $url;
         // var_dump($url);exit;
-        $res = HttpHelper::post("https://dwz.cn/admin/create",['url'=>"http://www.baidu.com"],['Content-Type'=>'application/json; charset=UTF-8']);
+        $res = HttpHelper::post("https://dwz.cn/admin/create",['url'=>"http://www.baidu.com"],['Content-Type'=>'application/json']);
         var_dump($res);exit;
     }
 }
