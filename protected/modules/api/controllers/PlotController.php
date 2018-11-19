@@ -949,7 +949,7 @@ class PlotController extends ApiController{
 					$obj->save();
 					if($plot->cotz && $staff = StaffExt::model()->findByPk($plot->cotz)) {
 
-						SmsExt::sendMsg('在线签约通知',$staff->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name,'pro'=>$plot->title]);
+						SmsExt::sendMsg('在线签约通知',$staff->phone,['comname'=>($user->companyinfo?$user->companyinfo->name:'').$user->name.$user->phone,'pro'=>$plot->title]);
 					}
 				} else {
 					$this->returnError('您已经提交申请，请勿重复提交');
