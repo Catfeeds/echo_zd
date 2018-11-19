@@ -1396,27 +1396,29 @@ class UserController extends ApiController{
 
 	public function actionSubInfo($id='',$type='')
 	{
-		$data = $pros = $imgs = $firstArr = $secondArr = $thirdArr = $imgpros = [];
+		$data = $pros = $imgs = $firstArr = $secondArr = $thirdArr = $forthArr = $imgpros = [];
 		$sub = SubExt::model()->findByPk($id);
 		$subArr  = SubExt::$status;
 		if(!$sub) {
 			return $this->returnError('参数错误');
 		}
-		if($pross = $sub->pros) {
-			foreach ($pross as $key => $value) {
-				if($value->status==3) {
-					$note = "房号：".($sub->house_no?$sub->house_no:'暂无')."<br>面积：".($sub->size?$sub->size:'暂无')."<br>合同金额：".($sub->sale_price?$sub->sale_price:'暂无');
-				} else {
-					$note = $value->status?$value->note:(($sub->id_no?('身份证号码：'.$sub->id_no.'<br>'):'').'预计到访时间：'.($sub->time?date('Y-m-d H:i',$sub->time):'暂无').'<br>到访人数：'.$sub->visit_num.'<br>备注：'.$sub->note);
-				}
-				$pros[] = [
-					'id'=>$value->id,
-					'name'=>($value->user?$value->user->name:($value->staffObj?$value->staffObj->name:'')).'添加了'.$subArr[$value->status],
-					'time'=>date('m-d H:i',$value->created),
-					'note'=>$note,
-				];
-			}
-		}
+		// if($pross = $sub->pros) {
+		// 	foreach ($pross as $key => $value) {
+		// 		$us = $value->user;
+		// 		$st = $value->staffObj;
+		// 		if($value->status==3) {
+		// 			$note = "房号：".($sub->house_no?$sub->house_no:'暂无')."<br>面积：".($sub->size?$sub->size:'暂无')."<br>合同金额：".($sub->sale_price?$sub->sale_price:'暂无');
+		// 		} else {
+		// 			$note = $value->status?$value->note:(($sub->id_no?('身份证号码：'.$sub->id_no.'<br>'):'').'预计到访时间：'.($sub->time?date('Y-m-d H:i',$sub->time):'暂无').'<br>到访人数：'.$sub->visit_num.'<br>备注：'.$sub->note);
+		// 		}
+		// 		$pros[] = [
+		// 			'id'=>$value->id,
+		// 			'name'=>($us?('经纪人-'.$us->name):($st?(StaffExt::$is_jls[$st->is_jl].'-'.$st->name):'')).'添加了'.$subArr[$value->status],
+		// 			'time'=>date('m-d H:i',$value->created),
+		// 			'note'=>$note,
+		// 		];
+		// 	}
+		// }
 		if($subimgs = $sub->imgs) {
 			foreach ($subimgs as $key => $value) {
 				$imguser = $value->getUser();
@@ -1484,6 +1486,14 @@ class UserController extends ApiController{
 					'company'=>$sub->company?$sub->company->name:'',
 				];
 			}
+			if($u = $sub->market_user) {
+				$forthArr = [
+					'name'=>$u->name,
+					'phone'=>$u->phone,
+					'tag'=>'市场对接',
+					'company'=>'',
+				];
+			}
 		}
 
 		$subArr = array_slice($subArr, 0,-1);
@@ -1496,13 +1506,50 @@ class UserController extends ApiController{
 			// 'vip_name'=>$sub->name,
 			// 'vip_phone'=>$sub->phone,
 			// 'vip_tag'=>'客户姓名',
-			'pros'=>$pros,
+			// 'pros'=>$pros,
 			'imgpros'=>$imgpros,
 			'imgs'=>$imgs,
 			'secondArr'=>$secondArr,
 			'firstArr'=>$firstArr,
 			'thirdArr'=>$thirdArr,
+			'forthArr'=>$forthArr,
 			'user_phone'=>$sub->phone,
+		];
+		$this->frame['data'] = $data;
+	}
+
+	public function actionGetSubPros($sid='')
+	{
+		$sub = SubExt::model()->findByPk($sid);
+		$imgs = $imgpros  = $pros = [];
+		if($pross = $sub->pros) {
+			foreach ($pross as $key => $value) {
+				$us = $value->user;
+				$st = $value->staffObj;
+				if($value->status==3) {
+					$note = "房号：".($sub->house_no?$sub->house_no:'暂无')."<br>面积：".($sub->size?$sub->size:'暂无')."<br>合同金额：".($sub->sale_price?$sub->sale_price:'暂无');
+				} else {
+					$note = $value->status?$value->note:(($sub->id_no?('身份证号码：'.$sub->id_no.'<br>'):'').'预计到访时间：'.($sub->time?date('Y-m-d H:i',$sub->time):'暂无').'<br>到访人数：'.$sub->visit_num.'<br>备注：'.$sub->note);
+				}
+				$pros[] = [
+					'id'=>$value->id,
+					'name'=>($us?('经纪人-'.$us->name):($st?(StaffExt::$is_jls[$st->is_jl].'-'.$st->name):'')).'添加了'.SubExt::$status[$value->status],
+					'time'=>date('m-d H:i',$value->created),
+					'note'=>$note,
+				];
+			}
+		}
+		// if($subimgs = $sub->imgs) {
+		// 	foreach ($subimgs as $key => $value) {
+		// 		$imguser = $value->getUser();
+		// 		$imgs[] = ['key'=>$value->url,'imageURL'=>ImageTools::fixImage($value->url)];
+		// 		$imgpros[] = ['name'=>$imguser?$imguser->name:'用户','time'=>date('m-d H:i',$value->created)];
+		// 	}
+		// }
+		$data = [
+			'pros'=>$pros,
+			// 'imgpros'=>$imgpros,
+			// 'imgs'=>$imgs,
 		];
 		$this->frame['data'] = $data;
 	}
@@ -1599,7 +1646,7 @@ class UserController extends ApiController{
 			$imgs = $imgpros = [];
 			$data['sid'] = Yii::app()->request->getPost('sid','');
 			$data['uid'] = Yii::app()->request->getPost('uid','');
-			$data['user_type'] = Yii::app()->request->getPost('user_type',0);
+			$data['user_type'] = Yii::app()->request->getPost('type',0);
 			$imgs = Yii::app()->request->getPost('imgs',[]);
 			if(!$data['sid']) {
 				return $this->returnError('参数错误');
