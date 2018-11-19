@@ -144,7 +144,7 @@ class SubExt extends Sub{
         if($this->getIsNewRecord()) {
             // 如果有help_uid 说明辅助报备 则发短信给分销
             if($user = $this->user)
-                SmsExt::sendMsg('发送客户码链接',$this->fx_phone,['name'=>$user->name,'khm'=>$this->getShort($this->id).",",'kh'=>$this->name.$this->phone]);
+                SmsExt::sendMsg('发送客户码链接',$this->fx_phone,['name'=>$user->name,'khm'=>$this->getShort($this->id)."。",'kh'=>$this->name.$this->phone]);
         }
         parent::afterSave();
     }
