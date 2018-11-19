@@ -152,10 +152,10 @@
         if (r != null) return unescape(decodeURI(r[2]));
         return null;
     }
-
+    var id = '';
+    id = GetQueryString('id');
     $(document).ready(function() {
-        var id = '';
-        id = GetQueryString('id');
+        
         if(id != '') {
             $.get('/api/user/showCode?id='+id,function(obj) {
                 if(obj.status!="success") {
@@ -177,7 +177,7 @@
         }
     });
     $('.btn').click(function(){
-        window.location.href="qcode.html?img="+$('#xcximg').val();
+        window.location.href="qcode.html?id="+id+"&img="+$('#xcximg').val();
     })
     
 </script>
