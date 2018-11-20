@@ -1355,7 +1355,7 @@ class UserController extends ApiController{
 	public function actionShowCode($id='',$s=0)
 	{
 		// 客户码
-		if($s=1) {
+		if($s==1) {
 			$sub = SubExt::model()->find("code='$id'");
 		} else {
 			$sub = SubExt::model()->findByPk($id);

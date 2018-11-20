@@ -1067,7 +1067,8 @@ class ToolCommand extends CConsoleCommand
                 }
                 $scwords = "市场数据:报备".($allws+$alldf+$alldd+$allqy)."组，到访".$alldf."组，大定".$alldd."组，签约".$allqy."组。";
                 // var_dump($scwords);exit;
-                SmsExt::sendMsg('昨日统计',$staff->phone,['name'=>($department?($department->name):'').'主管'.$staff->name,'data'=>$anwords.$scwords]);
+                if($staff && $department)
+                    SmsExt::sendMsg('昨日统计',$staff->phone,['name'=>($department?($department->name):'').'主管'.$staff->name,'data'=>$anwords.$scwords]);
                 
             }
         }
